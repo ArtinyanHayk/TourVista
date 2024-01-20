@@ -51,6 +51,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //dusa qcm
+        try{
         imagePickLaunch = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
 
                 result -> {
@@ -63,6 +65,10 @@ public class ProfileFragment extends Fragment {
                     }
                 }
         );
+        }
+        catch(Exception e){
+
+        }
     }
 
     public ProfileFragment() {
@@ -82,6 +88,7 @@ public class ProfileFragment extends Fragment {
         progressBar = view.findViewById(R.id.profile_progress_bar);
         updateProfileBtn = view.findViewById(R.id.profile_update_btn);
         logoutBtn = view.findViewById(R.id.logout_btn);
+
         getUserData();
         updateProfileBtn.setOnClickListener(v -> {
             updateBtnClick();
