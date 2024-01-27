@@ -14,6 +14,17 @@ public class FirbaseUtil {
     public static String currentUsersId() {
         return FirebaseAuth.getInstance().getUid();
     }
+    //
+    public static String currentPostsId() {
+        return FirebaseAuth.getInstance().getUid();
+    }
+    public static DocumentReference currentPostsDetails() {
+        return FirebaseFirestore.getInstance().collection("Posts").document(currentPostsId());
+    }
+    public static CollectionReference allPostsCollectionReference() {
+        return FirebaseFirestore.getInstance().collection("Posts");
+    }
+    //
 
     public static DocumentReference currentUsersDetails() {
         return FirebaseFirestore.getInstance().collection("users").document(currentUsersId());
