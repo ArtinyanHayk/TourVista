@@ -24,6 +24,10 @@ public class FirbaseUtil {
     public static CollectionReference allPostsCollectionReference() {
         return FirebaseFirestore.getInstance().collection("Posts");
     }
+    public  static StorageReference getCurrentPostPicStorageRef(){
+        return FirebaseStorage.getInstance().getReference().child("Post_pic").
+                child(FirbaseUtil.currentPostsId());
+    }
     //
 
     public static DocumentReference currentUsersDetails() {

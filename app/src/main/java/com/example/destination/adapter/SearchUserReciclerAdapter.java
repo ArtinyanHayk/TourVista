@@ -46,7 +46,7 @@ public class SearchUserReciclerAdapter extends FirestoreRecyclerAdapter<UserMode
     @NonNull
     @Override
     public UserModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-      //  View view = LayoutInflater.from(context).inflate(R.layout.search_user_recycler_row,parent,false);
+     //   View view = LayoutInflater.from(context).inflate(R.layout.search_user_recycler_row,parent,false);
         return null;// new UserModelViewHolder(view);
     }
 
