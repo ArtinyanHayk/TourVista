@@ -46,7 +46,7 @@ public class FirbaseUtil {
         return FirebaseFirestore.getInstance().collection("users");
     }
 
-    public static DocumentReference getChatroomReherence(String ChatroomId) {
+    public static DocumentReference getChatroomReference(String ChatroomId) {
 
         return FirebaseFirestore.getInstance().collection("chatrooms").document(ChatroomId);
     }

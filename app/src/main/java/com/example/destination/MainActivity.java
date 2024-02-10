@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.destination.utils.FirbaseUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        FirbaseUtil.currentPostsId();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         networkFragment = new NetworkFragment();
