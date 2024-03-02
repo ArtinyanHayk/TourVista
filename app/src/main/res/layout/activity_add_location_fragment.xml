@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:gravity="center">
 
-  <ImageView
+  <ImageButton
       android:id="@+id/add_image_view"
       android:layout_width="300dp"
       android:layout_height="300dp"
@@ -32,7 +32,6 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_margin="10dp"
-      android:enabled="false"
       android:hint="Tags"
       android:inputType="textCapWords"
       android:padding="10dp" />

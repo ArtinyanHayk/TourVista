@@ -49,28 +49,29 @@ public class NetworkFragment extends Fragment {
        //stex inflater.inflate(R.layout.network_fragment, container, false)
 
 
-
-    // reference = FirebaseFirestore.getInstance().collection("Posts").document(user.getUid());
-    //  list = new ArrayList<>();
-    //  adapter = new HomeAdapter(list,getContext());
-    //  recyclerView.setAdapter(adapter);
-    //  loadDataFromFirestore();
+//KARA STEXIC DURS QCI/ZORV
+   reference = FirebaseFirestore.getInstance().collection("Posts").document(user.getUid());
+    list = new ArrayList<>();
+    adapter = new HomeAdapter(list,getContext());
+    recyclerView.setAdapter(adapter);
+    loadDataFromFirestore();
 
 
     }
     private void init(View view){
-     //   recyclerView = view.findViewById(R.id.recyclerView);
-     //   recyclerView.setHasFixedSize(true);
-     //   recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-     //   FirebaseAuth auth = FirebaseAuth.getInstance();
-     //   user = auth.getCurrentUser();
+        //KARA STEXIC DURS QCI/ZOROV
+       recyclerView = view.findViewById(R.id.recyclerView);
+       recyclerView.setHasFixedSize(true);
+       recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+       FirebaseAuth auth = FirebaseAuth.getInstance();
+       user = auth.getCurrentUser();
     }
 
     private void loadDataFromFirestore(){
-      //  list.add(new HomeModel("TourVista","29/01/24","","","123456",2009));
-      //  list.add(new HomeModel("TourVista","30/01/24","","","123457",2007));
-      //  list.add(new HomeModel("TourVista","31/01/24","","","123458",15));
-      //  list.add(new HomeModel("TourVista","01/02/24","","","123459",1000));
+       list.add(new HomeModel("TourVista","30/01/24","","","123456",2007,"FoolYere1","InYere1"));
+    //   list.add(new HomeModel("TourVista","30/01/24","","","123457",2007));
+    //   list.add(new HomeModel("TourVista","31/01/24","","","123458",15));
+    //   list.add(new HomeModel("TourVista","01/02/24","","","123459",1000));
 //??
         adapter.notifyDataSetChanged();
     }
