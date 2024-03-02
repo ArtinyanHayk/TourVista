@@ -10,7 +10,6 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -28,26 +27,24 @@ import com.example.destination.model.UserModel;
 import com.example.destination.utils.AndroidUtil;
 import com.example.destination.utils.FirbaseUtil;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.storage.UploadTask;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
+public class Add_location_Fragment extends Fragment {
 
-public class ProfileFragment extends Fragment {
+
+
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //dusa qcm
+
 
     }
 
-    public ProfileFragment() {
+    public Add_location_Fragment() {
 
     }
 
@@ -57,19 +54,6 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        View view = inflater.inflate(R.layout.activity_profile_fragment, container, false);
-
-
-        return view;
+        return inflater.inflate(R.layout.activity_add_location_fragment, container, false);
     }
-
-
-
-
-
-
-
-
-
-
 }

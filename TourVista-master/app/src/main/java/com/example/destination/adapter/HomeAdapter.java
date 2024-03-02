@@ -88,7 +88,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             likeCountTv = itemView.findViewById(R.id.likes);
             likeBtn = itemView.findViewById(R.id.like);
             commentBtn = itemView.findViewById(R.id.comment);
-            descriptionTv = itemView.findViewById(R.id.description);
+            descriptionTv = itemView.findViewById(R.id.statusTV);
             shareBtn = itemView.findViewById(R.id.share);
             addLocationBtn = itemView.findViewById(R.id.get_location);
             favoriteBtn = itemView.findViewById(R.id.favorite);
