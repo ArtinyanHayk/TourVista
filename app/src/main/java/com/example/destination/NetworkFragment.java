@@ -68,7 +68,7 @@ public class NetworkFragment extends Fragment {
     }
 
     private void loadDataFromFirestore(){
-       list.add(new HomeModel("TourVista","30/01/24","","","123456",2007,"FoolYere1","InYere1"));
+      // list.add(new HomeModel("TourVista","30/01/24","","","123456",2007,"FoolYere1","InYere1"));
     //   list.add(new HomeModel("TourVista","30/01/24","","","123457",2007));
     //   list.add(new HomeModel("TourVista","31/01/24","","","123458",15));
     //   list.add(new HomeModel("TourVista","01/02/24","","","123459",1000));
