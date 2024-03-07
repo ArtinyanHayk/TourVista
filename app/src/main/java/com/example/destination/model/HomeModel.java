@@ -3,13 +3,12 @@ package com.example.destination.model;
 import com.google.firebase.Timestamp;
 
 public class HomeModel {
-    private String username, timestapmp,profileImage, postImage, uid;
+    private String username, timestapmp, profileImage, postImage, uid, description, tag;
     private int likeCount;
 
     public HomeModel() {
     }
 
-<<<<<<< Updated upstream
     public String getDescription() {
         return description;
     }
@@ -26,8 +25,6 @@ public class HomeModel {
         this.tag = tag;
     }
 
-=======
->>>>>>> Stashed changes
     public HomeModel(String username, String timestapmp, String profileImage, String postImage, String uid, int likeCount) {
         this.username = username;
         this.timestapmp = timestapmp;
@@ -35,11 +32,8 @@ public class HomeModel {
         this.postImage = postImage;
         this.uid = uid;
         this.likeCount = likeCount;
-<<<<<<< Updated upstream
         //this.tag = tag;
         //this.description = description;
-=======
->>>>>>> Stashed changes
     }
 
     public String getUsername() {

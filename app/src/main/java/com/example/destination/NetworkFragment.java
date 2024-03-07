@@ -39,7 +39,6 @@ public class NetworkFragment extends Fragment {
         return inflater.inflate(R.layout.network_fragment, container, false);
     }
 
-<<<<<<< Updated upstream
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
@@ -79,37 +78,3 @@ public class NetworkFragment extends Fragment {
         }
     }
 }
-=======
-       return null;//inflater.inflate(R.layout.network_fragment, container, false);
-   }
-   public void onViewCreated(@NonNull View view,  Bundle savedInstanceState) {
-       super.onViewCreated(view, savedInstanceState);
-       init(view);
-      // reference = FirebaseFirestore.getInstance().collection("Posts").document(user.getUid());
-       list = new ArrayList<>();
-       adapter = new HomeAdapter(list,getContext());
-       recyclerView.setAdapter(adapter);
-       loadDataFromFirestore();
-
-
-    }
-    private void init(View view){
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-    }
-
-    private void loadDataFromFirestore(){
-        list.add(new HomeModel("TourVista","29/01/24","","","123456",2009));
-        list.add(new HomeModel("TourVista","30/01/24","","","123457",2007));
-        list.add(new HomeModel("TourVista","31/01/24","","","123458",15));
-        list.add(new HomeModel("TourVista","01/02/24","","","123459",1000));
-//??
-        adapter.notifyDataSetChanged();
-    }
-
-
-}
->>>>>>> Stashed changes

@@ -1,10 +1,6 @@
 package com.example.destination;
 
-<<<<<<< Updated upstream
 import static com.example.destination.utils.ImageContent.loadSavedImages;
-=======
-import static com.example.destination.utils.FirbaseUtil.logout;
->>>>>>> Stashed changes
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -13,21 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
-<<<<<<< Updated upstream
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-=======
-import com.example.destination.R;
-import com.example.destination.model.UserModel;
-import com.example.destination.utils.AndroidUtil;
-import com.example.destination.utils.FirbaseUtil;
-import com.github.dhaval2404.imagepicker.ImagePicker;
->>>>>>> Stashed changes
 
 import com.example.destination.adapter.GalleryAdapter;
 import com.example.destination.model.GalleryImages;
@@ -37,35 +26,21 @@ import java.util.List;
 
 public class Add_location_Fragment extends Fragment {
 
-<<<<<<< Updated upstream
     EditText descET;
     private ImageView imageView;
     private RecyclerView recyclerView;
     private ImageButton backBtn, nextBtn;
     private GalleryAdapter adapter;
     private List<GalleryImages> list;
-=======
-
-
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
->>>>>>> Stashed changes
 
     public Add_location_Fragment() {
 
     }
 
-    @SuppressLint({"CutPasteId", "MissingInflatedId"})
+    @SuppressLint({"CutPasteId", "MissingInflatedId", "RestrictedApi"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-<<<<<<< Updated upstream
         return inflater.inflate(R.layout.activity_add_location_fragment, container, false);
     }
 
@@ -102,10 +77,3 @@ public class Add_location_Fragment extends Fragment {
 }
 
 
-=======
-
-
-        return null;
-    }
-}
->>>>>>> Stashed changes
