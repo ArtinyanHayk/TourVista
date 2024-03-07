@@ -32,7 +32,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     @NonNull
     @Override
     public HomeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item, parent, false);
         return new HomeHolder(view);
     }
 
@@ -42,17 +42,22 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         holder.timeTv.setText(list.get(position).getTimestapmp());
 
         int count = list.get(position).getLikeCount();
-        if(count == 0) {
+        if (count == 0) {
             holder.likeCountTv.setVisibility(View.INVISIBLE);
         } else if (count == 1) {
             holder.likeCountTv.setText(count + "like");
+<<<<<<< Updated upstream
 
+        } else {
+=======
+            
         } else{
+>>>>>>> Stashed changes
             holder.likeCountTv.setText(count + "like");
         }
 
         Random random = new Random();
-        int color = Color.argb(255,random.nextInt(256),random.nextInt(256),random.nextInt(256));
+        int color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
 
         Glide.with(context.getApplicationContext())
                 .load(list.get(position).getProfileImage())
@@ -71,15 +76,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         return list.size();
     }
 
-    static class HomeHolder extends RecyclerView.ViewHolder{
+    static class HomeHolder extends RecyclerView.ViewHolder {
         private ImageView profileImage;
-        private TextView userNameTv,publisherTv, timeTv,likeCountTv, descriptionTv;
+        private TextView userNameTv, publisherTv, timeTv, likeCountTv, descriptionTv;
         private ImageView imageView;
-        private ImageButton likeBtn, commentBtn, shareBtn, addLocationBtn, favoriteBtn;
+        private ImageButton likeBtn, commentBtn, shareBtn, getLocationBtn, favoriteBtn;
 
         public HomeHolder(@NonNull View itemView) {
             super(itemView);
-            profileImage = itemView.findViewById(R.id.profile_image_view);
+            profileImage = itemView.findViewById(R.id.image_profile);
             //?
             imageView = itemView.findViewById(R.id.post_image);
             userNameTv = itemView.findViewById(R.id.username);
@@ -88,12 +93,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             likeCountTv = itemView.findViewById(R.id.likes);
             likeBtn = itemView.findViewById(R.id.like);
             commentBtn = itemView.findViewById(R.id.comment);
-            descriptionTv = itemView.findViewById(R.id.statusTV);
+            descriptionTv = itemView.findViewById(R.id.description);
             shareBtn = itemView.findViewById(R.id.share);
-            addLocationBtn = itemView.findViewById(R.id.get_location);
+            getLocationBtn = itemView.findViewById(R.id.get_location);
             favoriteBtn = itemView.findViewById(R.id.favorite);
-
-
 
 
         }

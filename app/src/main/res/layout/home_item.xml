@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <LinearLayout
-            
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -53,7 +53,7 @@
                 android:layout_height="30dp"
                 android:id="@+id/like"
                 android:src="@drawable/like"
-                android:backgroundTint="?attr/selectableItemBackgroundBorderless"/>
+               />
             <ImageButton
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -61,7 +61,6 @@
                 android:src="@drawable/share"
                 android:layout_toRightOf="@id/comment"
                 android:layout_marginLeft="10dp"
-                android:backgroundTint="?attr/selectableItemBackgroundBorderless"
                 android:background="@color/black"
                 />
             <ImageButton
@@ -71,7 +70,7 @@
                 android:src="@drawable/comment"
                 android:layout_toRightOf="@id/like"
                 android:layout_marginLeft="10dp"
-                android:backgroundTint="?attr/selectableItemBackgroundBorderless"
+
                 />
             <ImageButton
                 android:layout_width="30dp"
@@ -80,7 +79,7 @@
                 android:src="@drawable/add_location"
                 android:layout_toLeftOf="@id/favorite"
                 android:layout_marginRight="10dp"
-                android:backgroundTint="?attr/selectableItemBackgroundBorderless"
+
                 />
             <ImageButton
                 android:layout_width="30dp"
@@ -89,7 +88,7 @@
                 android:src="@drawable/favorite"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="10dp"
-                android:backgroundTint="?attr/selectableItemBackgroundBorderless"
+
                 />
         </RelativeLayout>
         <TextView

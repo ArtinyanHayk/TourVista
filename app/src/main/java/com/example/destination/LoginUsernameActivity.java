@@ -23,12 +23,6 @@ public class LoginUsernameActivity extends AppCompatActivity {
     ProgressBar  progressBar;
     UserModel userModel;
     String phoneNumber;
-    ////
-    int folowers = 0;
-    int folowing = 0;
-    int imageURL;
-    String status;
-    ////
 
 
     @Override
@@ -57,10 +51,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
         if(userModel != null){
             userModel.setUserName(username);
         }else{
-            userModel = new UserModel(phoneNumber,username, Timestamp.now(),FirbaseUtil.currentUsersId(),
-                    ////////////////////////////
-                    folowers,folowing,imageURL, status
-                       );
+            userModel = new UserModel(phoneNumber,username, Timestamp.now(),FirbaseUtil.currentUsersId() );
         }
         FirbaseUtil.currentUsersDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

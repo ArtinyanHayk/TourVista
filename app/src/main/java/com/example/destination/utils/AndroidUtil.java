@@ -29,9 +29,6 @@ public class AndroidUtil {
     public static  void setProfilPic(Context context, Uri imageUri, ImageView imageView ){
         Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(imageView);
     }
-    public static  void setPostPic(Context context, Uri imageUri, ImageView imageView ){
-        Glide.with(context).load(imageUri).into(imageView);
-    }
 
 
 }

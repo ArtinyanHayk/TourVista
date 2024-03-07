@@ -9,38 +9,18 @@ public class UserModel {
     private String userName;
     private Timestamp createdTimesetap;
     private String userId;
-    //// UserModel_um kan u getter setter
-   int folowers;
-   int folowing;
-   int imageURL;
-   String status;
-    ////
  //   private ImageView imageView;
 
     public UserModel() {
     }
 
-    public UserModel(String phone, String userName, Timestamp createdTimesetap,String userId,int folowers,int imageURL,int folowing,String status
-    ) {
+    public UserModel(String phone, String userName, Timestamp createdTimesetap,String userId) {
         this.phone = phone;
         this.userName = userName;
         this.createdTimesetap = createdTimesetap;
         this.userId =  userId;
-        ////
-       this.folowing = folowing;
-       this.folowers = folowers;
-       this.imageURL =  imageURL;
-       this.status = status;
-        ////
+
     }
-    public String getStatus() {return status;}
-    public void setStatus(String status) {this.status = status;}
-    public int getFolowers() {return folowers;}
-    public void setFolowers(int folowers) {this.folowers = folowers;}
-    public int getFolowing() {return folowing;}
-    public void setFolowing(int folowing) {this.folowing = folowing;}
-    public int getImageURL() {return imageURL;}
-    public void setImageURL(int imageURL) {this.imageURL = imageURL;}
 
     public String getPhone() {
         return phone;
