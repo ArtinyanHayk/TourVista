@@ -1,55 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Add_location_Fragment"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:context=".Add_location_Fragment">
 
-  <RelativeLayout
-      android:id="@+id/layout"
-      android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:gravity="center_vertical">
+    <RelativeLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_vertical">
 
-    <ImageButton
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:background="@drawable/back_icon"
-        android:id="@+id/back_btn"
-        android:layout_alignParentStart="true"/>
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/back_icon" />
 
-    <ImageButton
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:id="@+id/next_btn"
-        android:background="@drawable/next_icon"
-        android:layout_alignParentEnd="true"/>
-  </RelativeLayout>
+        <ImageButton
+            android:id="@+id/next_btn"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/next_icon"
+            android:visibility="gone" />
+    </RelativeLayout>
 
-  <EditText
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:id="@+id/descriptionET"
-      android:background="@android:color/transparent"
-      android:minLines="12"
-      android:layout_below="@id/layout"/>
+    <EditText
+        android:id="@+id/descriptionET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout"
+        android:background="@android:color/transparent"
+        android:minLines="12" />
 
-  <ImageView
-      android:layout_width="match_parent"
-      android:layout_height="250dp"
-      android:id="@+id/imageView"
-      app:contentDescription="null"
-      android:layout_below="@id/descriptionET"
-      android:background="@color/my_primary"
-      android:visibility="gone"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/descriptionET"
+        android:background="#000"
+        android:layout_margin="6dp"
+        android:id="@+id/view"/>
 
-  <androidx.recyclerview.widget.RecyclerView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:id="@+id/recyclerView"
-      android:layout_below="@id/imageView"/>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@id/view"
+        android:background="@color/my_primary"
+        android:visibility="gone"
+        app:contentDescription="null" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView" />
 
 </RelativeLayout>

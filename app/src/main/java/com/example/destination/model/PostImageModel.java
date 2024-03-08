@@ -3,13 +3,17 @@ package com.example.destination.model;
 import java.util.Date;
 
 public class PostImageModel {
-    private String imageUrl,id;
-    private Date timeSetup;
+    private String imageUrl, id, description;
+    private Date timeStamp;
 
-    public PostImageModel(String imageUrl, String id, Date timeSetup) {
+    public PostImageModel() {
+    }
+
+    public PostImageModel(String imageUrl, String id, String description, Date timeSetup) {
         this.imageUrl = imageUrl;
         this.id = id;
-        this.timeSetup = timeSetup;
+        this.description = description;
+        this.timeStamp = timeSetup;
     }
 
     public String getImageUrl() {
@@ -28,11 +32,19 @@ public class PostImageModel {
         this.id = id;
     }
 
-    public Date getTimeSetup() {
-        return timeSetup;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTimeSetup(Date timeSetup) {
-        this.timeSetup = timeSetup;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Date timeSetup) {
+        this.timeStamp = timeSetup;
     }
 }

@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -66,6 +67,10 @@ dependencies {
 
 
         implementation("de.hdodenhof:circleimageview:3.1.0")
+
+        implementation("com.karumi:dexter:6.2.3")
+
+
 
 
     }
