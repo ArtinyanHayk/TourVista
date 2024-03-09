@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -46,6 +47,7 @@ public class ProfileFragment extends Fragment {
     FirestoreRecyclerAdapter<PostImageModel, PostImageHolder> adapter;
     String uid;
     FirebaseAuth auth;
+    private ImageButton editProfileButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +97,7 @@ public class ProfileFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         countLayout = view.findViewById(R.id.countLayout);
+        editProfileButton = view.findViewById(R.id.edit_profileImage);
     }
 
     public void loadBasicData() {

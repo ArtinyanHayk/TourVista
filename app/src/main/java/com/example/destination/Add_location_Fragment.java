@@ -2,6 +2,7 @@ package com.example.destination;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -65,8 +67,13 @@ public class Add_location_Fragment extends Fragment {
        @Override
        public void onActivityResult(Uri o) {
            if(o == null){
+
                Toast.makeText(getContext(), "No image Selected", Toast.LENGTH_SHORT).show();
            }else{
+               ///
+               Uri image = o;
+               ///
+
                Glide.with(getContext().getApplicationContext())
                        .load(o)
                        .into(imageView);
@@ -98,9 +105,10 @@ public class Add_location_Fragment extends Fragment {
         list = new ArrayList<>();
         adapter = new GalleryAdapter(list);
         recyclerView.setAdapter(adapter);
-      //
-      // launcher.launch(new PickVisualMediaRequest.Builder().setMediaType
-      //         (ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
+        ///////////////
+      imageView.setOnClickListener(v -> launcher.launch(new PickVisualMediaRequest.Builder().setMediaType
+              (ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
+        //////////////
 
 
 
@@ -167,6 +175,11 @@ public class Add_location_Fragment extends Fragment {
         map.put("timestamp", FieldValue.serverTimestamp());
         map.put("id", id);
 
+        map.put("profileImage", String.valueOf(user.getPhotoUrl()));
+        map.put("username", user.getDisplayName() );
+        map.put("likeCount", 0);
+        //getLocation
+
         reference.document(id).set(map)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -232,6 +245,7 @@ public class Add_location_Fragment extends Fragment {
             }
         });
     }
+
 }
 
 

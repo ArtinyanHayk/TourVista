@@ -89,13 +89,16 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (tab.getPosition()) {
                     case 0:
-                        tabLayout.getTabAt(0).setIcon(R.drawable.map_icon);
+                        tabLayout.getTabAt(0);
+                                //.setIcon(R.drawable.map_icon);
                         break;
                     case 1:
-                        tabLayout.getTabAt(1).setIcon(R.drawable.add_icon);
+                        tabLayout.getTabAt(1);
+                                //.setIcon(R.drawable.add_icon);
                         break;
                     case 2:
-                        tabLayout.getTabAt(2).setIcon(R.drawable.person_icon);
+                        tabLayout.getTabAt(2);
+                                //.setIcon(R.drawable.person_icon);
                         break;
                 }
 
@@ -106,13 +109,16 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (tab.getPosition()) {
                     case 0:
-                        tabLayout.getTabAt(0).setIcon(R.drawable.map_home_icon);
+                        tabLayout.getTabAt(0);
+                        //.setIcon(R.drawable.map_home_icon);
                         break;
                     case 1:
-                        tabLayout.getTabAt(1).setIcon(R.drawable.add_location_icon);
+                        tabLayout.getTabAt(1);
+                        //.setIcon(R.drawable.add_location_icon);
                         break;
                     case 2:
-                        tabLayout.getTabAt(2).setIcon(R.drawable.account_icon);
+                        tabLayout.getTabAt(2);
+                        //.setIcon(R.drawable.account_icon);
                         break;
                 }
 

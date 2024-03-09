@@ -54,6 +54,7 @@
         android:orientation="horizontal">
 
 
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
             android:layout_width="100dp"
@@ -67,6 +68,22 @@
             android:src="@drawable/person_icon"
             app:civ_border_color="@color/light_gray"
             app:civ_border_width="2sp" />
+        <ImageButton
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/edit_ic"
+            android:background="@drawable/ic_circle"
+            android:elevation="3dp"
+            android:id="@+id/edit_profileImage"
+            android:layout_toRightOf="@id/profile_image"
+            android:layout_below="@id/profile_image"
+            android:layout_marginTop="-40dp"
+            android:layout_marginLeft="-45dp"/>
+
+
+
+
+
 
         <LinearLayout
             android:layout_marginTop="30dp"
@@ -93,7 +110,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:maxLines="2"
                 android:text="User is an avid traveler, exploring diverse cultures and landscapes with a curiosity-driven spirit."
                 android:textColor="@color/dark_gray"
                 android:textSize="13dp"
