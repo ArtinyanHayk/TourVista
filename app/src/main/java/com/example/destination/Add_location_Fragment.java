@@ -2,10 +2,11 @@ package com.example.destination;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.destination.adapter.GalleryAdapter;
 import com.example.destination.model.GalleryImages;
-import com.github.dhaval2404.imagepicker.provider.CropProvider;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -54,41 +54,42 @@ import java.util.Map;
 
 public class Add_location_Fragment extends Fragment {
 
-    EditText descET;
+    private EditText descET;
     private ImageView imageView;
     private RecyclerView recyclerView;
     private ImageButton backBtn, nextBtn;
     private GalleryAdapter adapter;
     private List<GalleryImages> list;
-    Uri imageUri;
+    private Uri imageUri;
     private FirebaseUser user;
-    /////
-   ActivityResultLauncher<PickVisualMediaRequest> launcher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), new ActivityResultCallback<Uri>() {
-       @Override
-       public void onActivityResult(Uri o) {
-           if(o == null){
+    private Dialog dialog;
 
-               Toast.makeText(getContext(), "No image Selected", Toast.LENGTH_SHORT).show();
-           }else{
-               ///
-               Uri image = o;
-               ///
+    private ActivityResultLauncher<PickVisualMediaRequest> launcher =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(),
+                    new ActivityResultCallback<Uri>() {
+                        @Override
+                        public void onActivityResult(Uri o) {
+                            if (o == null) {
+                                Toast.makeText(getContext(), "No image Selected", Toast.LENGTH_SHORT).show();
+                            } else {
+                                imageUri = o;
+                                imageView.setVisibility(View.VISIBLE);
+                                nextBtn.setVisibility(View.VISIBLE);
 
-               Glide.with(getContext().getApplicationContext())
-                       .load(o)
-                       .into(imageView);
+                                Glide.with(getContext().getApplicationContext())
+                                        .load(o)
+                                        .into(imageView);
 
-           }
-       }
-   });
-   /////
+                                // Вызываем clickListener только после выбора изображения
+                                clickListener();
+                            }
+                        }
+                    });
 
     public Add_location_Fragment() {
-
     }
 
-
-        @SuppressLint({"CutPasteId", "MissingInflatedId", "RestrictedApi"})
+    @SuppressLint({"CutPasteId", "MissingInflatedId", "RestrictedApi"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,67 +98,65 @@ public class Add_location_Fragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
         init(view);
+
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setHasFixedSize(true);
         list = new ArrayList<>();
         adapter = new GalleryAdapter(list);
         recyclerView.setAdapter(adapter);
-        ///////////////
-      imageView.setOnClickListener(v -> launcher.launch(new PickVisualMediaRequest.Builder().setMediaType
-              (ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
-        //////////////
 
+        imageView.setOnClickListener(v -> launcher.launch(
+                new PickVisualMediaRequest.Builder().setMediaType(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
+        nextBtn.setOnClickListener(v -> {
+            Log.d("ButtonClick", "Next button clicked!");
 
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageReference = storage.getReference().child("Post Images/"
+                    + System.currentTimeMillis());
+            dialog.show();
+            storageReference.putFile(imageUri)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            storageReference.getDownloadUrl().addOnSuccessListener(uri ->
+                                    uploadData(uri.toString()));
+                        } else {
+                            dialog.dismiss();
+                            Toast.makeText(getContext(),
+                                    "Failed to upload post", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
+    }
 
-        clickListener();
+    private void init(View view) {
+        descET = view.findViewById(R.id.descriptionET);
+        imageView = view.findViewById(R.id.imageView);
+        backBtn = view.findViewById(R.id.back_btn);
+        nextBtn = view.findViewById(R.id.next_btn);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.loading_dialog);
+        dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),
+                R.drawable.dialog_bg, null));
+        dialog.setCancelable(false);
     }
 
     private void clickListener() {
         adapter.sendImage(pickUri -> {
-            imageUri = pickUri;
             Glide.with(getContext())
                     .load(pickUri)
                     .into(imageView);
 
+            imageUri = pickUri;
             imageView.setVisibility(View.VISIBLE);
             nextBtn.setVisibility(View.VISIBLE);
 
-           // CropImage.activity(pickUri)
-           //         .setGuidelines(CropImageView.GuideLines.ON)
-           //         .setAspectRatio(4,3)
-           //         .start(getContext(),Add.this);
 
-
-        });
-
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageReference = storage.getReference().child("/Post Images"
-                        + System.currentTimeMillis());
-                storageReference.putFile(imageUri)
-                        .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                if (task.isSuccessful()) {
-
-                                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            uploadData(uri.toString());
-
-                                        }
-                                    });
-
-                                }
-                            }
-                        });
-            }
         });
     }
 
@@ -176,76 +175,74 @@ public class Add_location_Fragment extends Fragment {
         map.put("id", id);
 
         map.put("profileImage", String.valueOf(user.getPhotoUrl()));
-        map.put("username", user.getDisplayName() );
+        String username = user.getDisplayName();
+        if (username == null || username.isEmpty()) {
+            // Имя пользователя не установлено или пусто, выполните необходимые действия
+            Log.e("NoUsername", "Username is null or empty");
+        } else {
+            // Имя пользователя доступно, используйте его для передачи в Firestore
+            map.put("username", username);
+        }
         map.put("likeCount", 0);
-        //getLocation
+        map.put("comments", "");
+        map.put("uid", user.getUid());
 
         reference.document(id).set(map)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            System.out.println();
-                        } else {
-                            Toast.makeText(getContext(), "Error:" + task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Firestore", "Document uploaded successfully");
+                        Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e("Firestore", "Error uploading document: " + task.getException());
+                        Toast.makeText(getContext(), "Error:" + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
                     }
+                    dialog.dismiss();
                 });
-
     }
 
-    private void init(View view) {
-        descET = view.findViewById(R.id.descriptionET);
-        imageView = view.findViewById(R.id.imageView);
-        backBtn = view.findViewById(R.id.back_btn);
-        nextBtn = view.findViewById(R.id.next_btn);
-        recyclerView = view.findViewById(R.id.recyclerView);
-
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    @Override
     public void onResume() {
+
         super.onResume();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Dexter.withContext(getContext())
-                        .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .withListener(new MultiplePermissionsListener() {
-                            @Override
-                            public void onPermissionsChecked(MultiplePermissionsReport report) {
-                                if (report.areAllPermissionsGranted()) {
-                                    File file = new File(Environment.getExternalStorageDirectory().toString() + "/Dowload");
-                                    if (file.exists()) {
+        getActivity().runOnUiThread(() -> {
+            Dexter.withContext(getContext())
+                    .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new MultiplePermissionsListener() {
+                        @Override
+                        public void onPermissionsChecked(MultiplePermissionsReport report) {
+                            if (report.areAllPermissionsGranted()) {
 
-                                        File[] files = file.listFiles();
+                                File file = new File(Environment.getExternalStorageDirectory().toString() + "/Download");
+                                if (file.exists()) {
 
-                                        for (File file1 : files) {
-                                            if (file1.getAbsolutePath().endsWith(".jpg") || file1.getAbsolutePath().endsWith(".png")) {
-                                                list.add(new GalleryImages(Uri.fromFile(file1)));
-                                                adapter.notifyDataSetChanged();
-                                            }
+                                    File[] files = file.listFiles();
+
+
+
+                                    // Очистите список перед добавлением новых данных
+
+
+                                    for (File file1 : files) {
+                                        if (file1.getAbsolutePath().endsWith(".jpg") || file1.getAbsolutePath().endsWith(".png")) {
+                                            list.add(new GalleryImages(Uri.fromFile(file1)));
                                         }
                                     }
+
+                                    // Переместите вызов notifyDataSetChanged за пределы цикла
                                 }
                             }
+                            // Вызовите notifyDataSetChanged после заполнения списка
+                            adapter.notifyDataSetChanged();
+                        }
 
-                            @Override
-                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
 
-                            }
-                        }).check();
-
-
-            }
+                        }
+                    }).check();
         });
     }
 
+
+
 }
-
-

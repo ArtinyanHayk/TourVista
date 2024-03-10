@@ -2,6 +2,8 @@ package com.example.destination.model;
 
 import android.widget.ImageView;
 
+import androidx.room.Entity;
+
 import com.google.firebase.Timestamp;
 
 public class UserModel {

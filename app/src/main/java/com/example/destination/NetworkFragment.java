@@ -1,5 +1,8 @@
 package com.example.destination;
 
+import static com.google.firebase.database.core.RepoManager.clear;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +36,7 @@ public class NetworkFragment extends Fragment {
     HomeAdapter adapter;
     private List<HomeModel> list;
     private FirebaseUser user;
-    DocumentReference reference;
+
     Date curent_date;
 
     public NetworkFragment() {
@@ -50,12 +53,7 @@ public class NetworkFragment extends Fragment {
         init(view);
         curent_date = new Date();
 
-        if (user != null) {
-            reference = FirebaseFirestore.getInstance().collection("Posts").document(user.getUid());
-        } else {
-            // Обработка случая, когда пользователь не аутентифицирован
-            // Можно взять другие меры, например, перенаправить на экран входа
-        }
+
         list = new ArrayList<>();
         adapter = new HomeAdapter(list, getContext());
         recyclerView.setAdapter(adapter);
@@ -72,39 +70,48 @@ public class NetworkFragment extends Fragment {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void loadDataFromFirestore() {
-        //  if (reference != null) {
-        //     list.add(new HomeModel("Marsed",String.valueOf(curent_date),"", "","1234",333));
-        //      list.add(new HomeModel("TourVista","01/12/2024","", "","1234",333));
-        //      list.add(new HomeModel("Karen","01/12/2024","", "","1234",333));
-        //      list.add(new HomeModel("Hayk","01/12/2024","", "","1234",333));
-        //      adapter.notifyDataSetChanged();
-        //  } else {
-//
-        //  }
-       CollectionReference reference = FirebaseFirestore.getInstance().collection("users")
-               .document(user.getUid())
-               .collection("Post Images");
+        CollectionReference reference = FirebaseFirestore.getInstance().collection("users")
+                .document(user.getUid())
+                .collection("Post Images");
 
-       reference.addSnapshotListener( new EventListener<QuerySnapshot>() {
-           @Override
-           public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-               if (error != null) {
-                  Log.e("Error:", error.getMessage());
-                   return;
-               }
-               assert value != null;
+        reference.addSnapshotListener((value, error) -> {
+            if (error != null) {
+                Log.e("Error:", error.getMessage());
+                return;
+            }
+            if (value == null || value.isEmpty()) {
+                return; // Нет данных в снимке, просто выходим
+            }
 
-              for (QueryDocumentSnapshot snapshot : value) {
+            // Очистить список перед добавлением новых данных
+            list.clear();
 
-              }
+            for (QueryDocumentSnapshot snapshot : value) {
+                if (!snapshot.exists()) {
+                    continue;
+                }
 
-
-           }
-
-
-       });
-        adapter.notifyDataSetChanged();
-
+                HomeModel model = snapshot.toObject(HomeModel.class);
+                // Добавляем данные в список
+                list.add(new HomeModel(
+                        model.getUsername(),
+                        model.getProfileImage(),
+                        model.getImageUrl(),
+                        model.getUid(),
+                        model.getDescription(),
+                        model.getTag(),
+                        model.getComments(),
+                        model.getId(),
+                        model.getTimestapmp(),
+                        model.getLikeCount()
+                ));
+            }
+            // Обновляем адаптер после того, как все данные добавлены
+            adapter.notifyDataSetChanged();
+        });
     }
+
+
 }

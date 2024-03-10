@@ -18,38 +18,45 @@
             android:id="@+id/back_btn"
             android:layout_width="34dp"
             android:layout_height="34dp"
-            android:padding="4dp"
-            android:foreground="?attr/selectableItemBackground"
             android:layout_alignParentStart="true"
             android:background="@drawable/ic_circle"
-            android:src="@drawable/back_icon"
-            android:elevation="3dp"/>
+            android:elevation="3dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="4dp"
+            android:src="@drawable/back_icon" />
+
 
         <ImageButton
             android:id="@+id/next_btn"
-            android:padding="4dp"
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/next_icon"
             android:background="@drawable/ic_circle"
-            android:visibility="gone" />
+            android:elevation="3dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="4dp"
+            android:src="@drawable/next_icon"
+            />
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:layout_below="@id/layout">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            >
 
             <EditText
                 android:id="@+id/descriptionET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
                 android:background="@android:color/transparent"
                 android:minLines="12" />
 
@@ -57,7 +64,6 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/descriptionET"
                 android:layout_margin="6dp"
                 android:background="#000" />
 
@@ -65,7 +71,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:layout_below="@id/view"
+
                 android:layout_marginHorizontal="30dp"
                 android:background="@drawable/radius20"
                 android:scaleType="centerCrop"
@@ -76,8 +82,8 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/imageView" />
-        </RelativeLayout>
+                />
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>

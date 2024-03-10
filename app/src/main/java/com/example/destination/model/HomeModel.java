@@ -1,23 +1,30 @@
 package com.example.destination.model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.ServerTimestamp;
+
+import java.util.Date;
 
 public class HomeModel {
-    private String username, timestapmp, profileImage, postImage, uid, description, tag, comments;
+    ///timestapmp
+    private String username,  profileImage, imageUrl, uid, description, tag, comments,id;
+    @ServerTimestamp
+    private Date timestapmp;
     private int likeCount;
 
     public HomeModel() {
     }
 
-    public HomeModel(String username, String timestapmp, String profileImage, String postImage, String uid, String description, String tag, String comments, int likeCount) {
+    public HomeModel(String username, String profileImage, String imageUrl, String uid, String description, String tag, String comments, String id, Date timestapmp, int likeCount) {
         this.username = username;
-        this.timestapmp = timestapmp;
         this.profileImage = profileImage;
-        this.postImage = postImage;
+        this.imageUrl = imageUrl;
         this.uid = uid;
         this.description = description;
         this.tag = tag;
         this.comments = comments;
+        this.id = id;
+        this.timestapmp = timestapmp;
         this.likeCount = likeCount;
     }
 
@@ -29,14 +36,6 @@ public class HomeModel {
         this.username = username;
     }
 
-    public String getTimestapmp() {
-        return timestapmp;
-    }
-
-    public void setTimestapmp(String timestapmp) {
-        this.timestapmp = timestapmp;
-    }
-
     public String getProfileImage() {
         return profileImage;
     }
@@ -45,12 +44,12 @@ public class HomeModel {
         this.profileImage = profileImage;
     }
 
-    public String getPostImage() {
-        return postImage;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setPostImage(String postImage) {
-        this.postImage = postImage;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getUid() {
@@ -85,6 +84,22 @@ public class HomeModel {
         this.comments = comments;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getTimestapmp() {
+        return timestapmp;
+    }
+
+    public void setTimestapmp(Date timestapmp) {
+        this.timestapmp = timestapmp;
+    }
+
     public int getLikeCount() {
         return likeCount;
     }
@@ -93,3 +108,6 @@ public class HomeModel {
         this.likeCount = likeCount;
     }
 }
+
+
+

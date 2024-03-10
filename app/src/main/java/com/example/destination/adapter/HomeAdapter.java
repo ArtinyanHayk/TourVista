@@ -1,5 +1,6 @@
 package com.example.destination.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -36,20 +37,23 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         return new HomeHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull HomeHolder holder, int position) {
         holder.userNameTv.setText(list.get(position).getUsername());
-        holder.timeTv.setText(list.get(position).getTimestapmp());
+        holder.timeTv.setText("" + list.get(position).getTimestapmp());
 
         int count = list.get(position).getLikeCount();
         if (count == 0) {
-            holder.likeCountTv.setVisibility(View.INVISIBLE);
+           // holder.likeCountTv.setVisibility(View.INVISIBLE);
+            holder.likeCountTv.setText(count + " like");
         } else if (count == 1) {
-            holder.likeCountTv.setText(count + "like");
+            holder.likeCountTv.setText(count + " like");
 
         } else {
-            holder.likeCountTv.setText(count + "like");
+            holder.likeCountTv.setText(count + " like");
         }
+        holder.descriptionTv.setText(list.get(position).getDescription());
 
         Random random = new Random();
         int color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
@@ -60,7 +64,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
                 .timeout(6500)
                 .into(holder.profileImage);
         Glide.with(context.getApplicationContext())
-                .load(list.get(position).getPostImage())
+                .load(list.get(position).getImageUrl())
                 .placeholder(new ColorDrawable(color))
                 .timeout(7000)
                 .into(holder.imageView);
@@ -73,7 +77,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
     static class HomeHolder extends RecyclerView.ViewHolder {
         private ImageView profileImage;
-        private TextView userNameTv, publisherTv, timeTv, likeCountTv, descriptionTv;
+        private TextView userNameTv,  timeTv, likeCountTv, descriptionTv;
         private ImageView imageView;
         private ImageButton likeBtn, commentBtn, shareBtn, getLocationBtn, favoriteBtn;
 
@@ -83,12 +87,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             //?
             imageView = itemView.findViewById(R.id.post_image);
             userNameTv = itemView.findViewById(R.id.username);
-            publisherTv = itemView.findViewById(R.id.publisher);
             timeTv = itemView.findViewById(R.id.time);
-            likeCountTv = itemView.findViewById(R.id.likes);
+            likeCountTv = itemView.findViewById(R.id.likeCountTv);
+            descriptionTv = itemView.findViewById(R.id.descTv);
             likeBtn = itemView.findViewById(R.id.like);
             commentBtn = itemView.findViewById(R.id.comment);
-            descriptionTv = itemView.findViewById(R.id.statusTV);
             shareBtn = itemView.findViewById(R.id.share);
             getLocationBtn = itemView.findViewById(R.id.get_location);
             favoriteBtn = itemView.findViewById(R.id.favorite);
