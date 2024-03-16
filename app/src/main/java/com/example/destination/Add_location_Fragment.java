@@ -3,6 +3,7 @@ package com.example.destination;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,6 +22,8 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -54,6 +57,7 @@ import java.util.Map;
 
 public class Add_location_Fragment extends Fragment {
 
+
     private EditText descET;
     private ImageView imageView;
     private RecyclerView recyclerView;
@@ -63,6 +67,7 @@ public class Add_location_Fragment extends Fragment {
     private Uri imageUri;
     private FirebaseUser user;
     private Dialog dialog;
+
 
     private ActivityResultLauncher<PickVisualMediaRequest> launcher =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(),
@@ -161,8 +166,10 @@ public class Add_location_Fragment extends Fragment {
     }
 
     public void uploadData(String imageURL) {
-        CollectionReference reference = FirebaseFirestore.getInstance().collection("users")
-                .document(user.getUid()).collection("Post Images");
+        //CollectionReference reference = FirebaseFirestore.getInstance().collection("users")
+        //        .document(user.getUid()).collection("Post Images");
+        CollectionReference reference = FirebaseFirestore.getInstance().collection("posts");
+
 
         String description = descET.getText().toString();
         String id = reference.document().getId();
@@ -202,37 +209,36 @@ public class Add_location_Fragment extends Fragment {
     }
 
     public void onResume() {
-
         super.onResume();
+
         getActivity().runOnUiThread(() -> {
+
             Dexter.withContext(getContext())
                     .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     .withListener(new MultiplePermissionsListener() {
+                        @SuppressLint("NotifyDataSetChanged")
                         @Override
                         public void onPermissionsChecked(MultiplePermissionsReport report) {
                             if (report.areAllPermissionsGranted()) {
-
+                                Log.e("Permissions", "WRITE_EXTERNAL_STORAGE permission granted");
                                 File file = new File(Environment.getExternalStorageDirectory().toString() + "/Download");
                                 if (file.exists()) {
-
+                                    Log.e("Directory", "Download directory exists");
                                     File[] files = file.listFiles();
-
-
-
-                                    // Очистите список перед добавлением новых данных
-
-
+                                    Log.e("Files", "Number of files in directory: " + files.length);
                                     for (File file1 : files) {
                                         if (file1.getAbsolutePath().endsWith(".jpg") || file1.getAbsolutePath().endsWith(".png")) {
+                                            Log.e("File", "Adding file to list: " + file1.getAbsolutePath());
                                             list.add(new GalleryImages(Uri.fromFile(file1)));
                                         }
                                     }
-
-                                    // Переместите вызов notifyDataSetChanged за пределы цикла
+                                    adapter.notifyDataSetChanged();
+                                } else {
+                                    Log.e("Directory", "Download directory does not exist");
                                 }
+                            } else {
+                                Log.e("Permissions", "WRITE_EXTERNAL_STORAGE permission denied");
                             }
-                            // Вызовите notifyDataSetChanged после заполнения списка
-                            adapter.notifyDataSetChanged();
                         }
 
                         @Override

@@ -51,7 +51,7 @@ public class NetworkFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-        curent_date = new Date();
+         curent_date = new Date();
 
 
         list = new ArrayList<>();
@@ -72,9 +72,8 @@ public class NetworkFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void loadDataFromFirestore() {
-        CollectionReference reference = FirebaseFirestore.getInstance().collection("users")
-                .document(user.getUid())
-                .collection("Post Images");
+        CollectionReference reference = FirebaseFirestore.getInstance().collection("posts");
+
 
         reference.addSnapshotListener((value, error) -> {
             if (error != null) {

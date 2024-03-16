@@ -10,12 +10,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.destination.model.HomeModel;
 import com.example.destination.model.UserModel;
 import com.example.destination.utils.FirbaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginUsernameActivity extends AppCompatActivity {
     EditText usernameInput;
@@ -28,6 +31,8 @@ public class LoginUsernameActivity extends AppCompatActivity {
     int folowing = 0;
     int imageURL;
     String status;
+    FirebaseUser user;
+
     ////
 
 
@@ -39,6 +44,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
         finish_btn = findViewById(R.id.login_finish_btn);
         progressBar = findViewById(R.id.login_progress_bar_3);
         phoneNumber = getIntent().getExtras().getString("phone");
+
         getUserName();
         finish_btn.setOnClickListener(v -> {
             setUserName();
@@ -63,6 +69,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
                        );
         }
         FirbaseUtil.currentUsersDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 setInProgress(false);
