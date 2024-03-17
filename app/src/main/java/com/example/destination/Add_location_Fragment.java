@@ -67,6 +67,7 @@ public class Add_location_Fragment extends Fragment {
     private Uri imageUri;
     private FirebaseUser user;
     private Dialog dialog;
+    public static int list_size = 0;
 
 
     private ActivityResultLauncher<PickVisualMediaRequest> launcher =
@@ -206,49 +207,34 @@ public class Add_location_Fragment extends Fragment {
                     }
                     dialog.dismiss();
                 });
+        list_size++;
     }
 
     public void onResume() {
         super.onResume();
 
-        getActivity().runOnUiThread(() -> {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED) {
 
-            Dexter.withContext(getContext())
-                    .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .withListener(new MultiplePermissionsListener() {
-                        @SuppressLint("NotifyDataSetChanged")
-                        @Override
-                        public void onPermissionsChecked(MultiplePermissionsReport report) {
-                            if (report.areAllPermissionsGranted()) {
-                                Log.e("Permissions", "WRITE_EXTERNAL_STORAGE permission granted");
-                                File file = new File(Environment.getExternalStorageDirectory().toString() + "/Download");
-                                if (file.exists()) {
-                                    Log.e("Directory", "Download directory exists");
-                                    File[] files = file.listFiles();
-                                    Log.e("Files", "Number of files in directory: " + files.length);
-                                    for (File file1 : files) {
-                                        if (file1.getAbsolutePath().endsWith(".jpg") || file1.getAbsolutePath().endsWith(".png")) {
-                                            Log.e("File", "Adding file to list: " + file1.getAbsolutePath());
-                                            list.add(new GalleryImages(Uri.fromFile(file1)));
-                                        }
-                                    }
-                                    adapter.notifyDataSetChanged();
-                                } else {
-                                    Log.e("Directory", "Download directory does not exist");
-                                }
-                            } else {
-                                Log.e("Permissions", "WRITE_EXTERNAL_STORAGE permission denied");
-                            }
-                        }
-
-                        @Override
-                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-
-                        }
-                    }).check();
-        });
+            File directory = new File(Environment.getExternalStorageDirectory(), "Download");
+            if (directory.exists() && directory.isDirectory()) {
+                File[] files = directory.listFiles();
+                for (File file : files) {
+                    if (file.isFile() && (file.getName().endsWith(".jpg") || file.getName().endsWith(".png"))) {
+                        // Добавляем файлы в ваш список
+                        list.add(new GalleryImages(Uri.fromFile(file)));
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            } else {
+                Log.e("Directory", "Download directory does not exist");
+            }
+        } else {
+            // Запрос разрешений, если они не предоставлены
+            //   ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO}, REQUEST_CODE);
+        }
     }
-
 
 
 }

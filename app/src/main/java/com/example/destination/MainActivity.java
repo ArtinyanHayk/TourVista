@@ -1,10 +1,15 @@
 package com.example.destination;
-
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.destination.adapter.ViewPagerAdapter;
@@ -19,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     ViewPagerAdapter pagerAdapter;
+    private static final String READ_STORAGE_PERMISSION = Manifest.permission.READ_EXTERNAL_STORAGE;
+    private static final String READ_MEDIA_IMAGES = Manifest.permission.READ_MEDIA_IMAGES;
+    private static final String READ_MEDIA_VIDEO = Manifest.permission.READ_MEDIA_VIDEO;
+    private static final String READ_MEDIA_AUDIO = Manifest.permission.READ_MEDIA_AUDIO;
+    private static final String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private final int REQUEST_CODE = 11;
 
 
     @SuppressLint("WrongViewCast")
@@ -34,10 +45,63 @@ public class MainActivity extends AppCompatActivity {
         //search_btn.setOnClickListener(v -> {
         //    Intent intent = new Intent(MainActivity.this,search_Activity.class);
         //    startActivity(intent);
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         showPermissionDialog();
+////////////////////////////////////////////////////////////////////////////////////////////////////////
         init();
         addTabs();
 
     }
+
+    private void showPermissionDialog() {
+        if(ContextCompat.checkSelfPermission(this,READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this,READ_MEDIA_AUDIO )== PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this,READ_MEDIA_VIDEO )== PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this,LOCATION_PERMISSION )== PackageManager.PERMISSION_GRANTED)
+
+        {
+            Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            ActivityCompat.requestPermissions(this,new String[]{LOCATION_PERMISSION,READ_MEDIA_IMAGES,READ_MEDIA_AUDIO,READ_MEDIA_VIDEO},REQUEST_CODE);
+            //showPermissionDialog();
+        }
+    }
+
+
+    @Override
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
+        if(requestCode == REQUEST_CODE){
+
+            if(grantResults.length > 0){
+
+                if(grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED || grantResults[2] != PackageManager.PERMISSION_GRANTED
+                        || grantResults[3] != PackageManager.PERMISSION_GRANTED){
+
+                    showPermissionDialog();
+
+                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
+
+                }
+               // else{
+               //
+               // }
+
+          }
+
+        }else{
+            showPermissionDialog();
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
 
     //       bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
     //           @Override

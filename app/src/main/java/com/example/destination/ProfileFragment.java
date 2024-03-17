@@ -213,6 +213,7 @@ public class ProfileFragment extends Fragment {
     public void loadBasicData() {
         DocumentReference userRef = FirebaseFirestore.getInstance().collection("users")
                 .document(user.getUid());
+
         userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -221,8 +222,9 @@ public class ProfileFragment extends Fragment {
                 }
                 if (value.exists()) {
                     String userName = value.getString("userName");
-                    Long followers = value.getLong("followers");
+                    Long followers = value.getLong("folowers");
                     String profileURL = value.getString("imageURL");
+
 
                     if (userName != null) {
                         nameTv.setText(userName);
@@ -246,10 +248,7 @@ public class ProfileFragment extends Fragment {
     /////////////KAXELOVA ASSHXATM
 
     private void loadPostsImages() {
-        uid = isMyProfile ? user.getUid() : "";
-
-        DocumentReference reference = FirebaseFirestore.getInstance().collection("users").document(uid);
-        Query query = reference.collection("Images");
+        Query query = FirebaseFirestore.getInstance().collection("postImages");
 
         FirestoreRecyclerOptions<PostImageModel> options = new FirestoreRecyclerOptions.Builder<PostImageModel>()
                 .setQuery(query, PostImageModel.class)
