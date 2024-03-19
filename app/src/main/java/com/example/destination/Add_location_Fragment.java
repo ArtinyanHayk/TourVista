@@ -209,6 +209,7 @@ public class Add_location_Fragment extends Fragment {
                 });
         list_size++;
     }
+    @Override
 
     public void onResume() {
         super.onResume();

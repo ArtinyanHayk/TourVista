@@ -55,51 +55,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showPermissionDialog() {
-        if(ContextCompat.checkSelfPermission(this,READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this,READ_MEDIA_AUDIO )== PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this,READ_MEDIA_VIDEO )== PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this,LOCATION_PERMISSION )== PackageManager.PERMISSION_GRANTED)
-
-        {
+        if ((ContextCompat.checkSelfPermission(this, READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED)
+                && ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
+            // Если все разрешения уже предоставлены, показываем сообщение об этом
+            Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
+        } else if (ContextCompat.checkSelfPermission(this, READ_STORAGE_PERMISSION) == PackageManager.PERMISSION_GRANTED  &&
+            ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED){
             Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
         }
-        else{
-            ActivityCompat.requestPermissions(this,new String[]{LOCATION_PERMISSION,READ_MEDIA_IMAGES,READ_MEDIA_AUDIO,READ_MEDIA_VIDEO},REQUEST_CODE);
-            //showPermissionDialog();
+        else {
+            // Если разрешения не предоставлены, запрашиваем их
+            ActivityCompat.requestPermissions(this, new String[]{LOCATION_PERMISSION, READ_MEDIA_IMAGES, READ_MEDIA_AUDIO, READ_MEDIA_VIDEO}, REQUEST_CODE);
         }
     }
-
 
     @Override
-
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-
-        if(requestCode == REQUEST_CODE){
-
-            if(grantResults.length > 0){
-
-                if(grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED || grantResults[2] != PackageManager.PERMISSION_GRANTED
-                        || grantResults[3] != PackageManager.PERMISSION_GRANTED){
-
-                    showPermissionDialog();
-
-                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
-
+        // Проверяем, был ли запрос на разрешения с нашим кодом запроса
+        if (requestCode == REQUEST_CODE) {
+            // Проверяем, что результаты запроса не пусты
+            if (grantResults.length > 0) {
+                // Проверяем, все ли разрешения были предоставлены
+                boolean allPermissionsGranted = true;
+                for (int result : grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        allPermissionsGranted = false;
+                        break;
+                    }
                 }
-               // else{
-               //
-               // }
-
-          }
-
-        }else{
-            showPermissionDialog();
+                if (allPermissionsGranted) {
+                    // Если все разрешения предоставлены, показываем сообщение об этом
+                    Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Если какое-либо разрешение было отклонено, показываем сообщение об этом
+                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // Если результаты запроса пусты, повторно запрашиваем разрешения
+                showPermissionDialog();
+            }
         }
     }
-
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 

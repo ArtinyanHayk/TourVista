@@ -134,6 +134,7 @@ public class ProfileFragment extends Fragment {
                     }
                 }
         );
+        ////Error profili nkar@ poxelu het;
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +146,7 @@ public class ProfileFragment extends Fragment {
                         createIntent(new Function1<Intent, Unit>() {
                             @Override
                             public Unit invoke(Intent intent) {
+                                Log.e("Image eror", "eror");
                                 imagePickLaunch.launch(intent);
                                 return null;
                             }
@@ -155,11 +157,13 @@ public class ProfileFragment extends Fragment {
     }
 
     private void uploadImage(Uri uri) {
+
         StorageReference reference = FirebaseStorage.getInstance().getReference().child("Profile Image").child(FirbaseUtil.currentPostsId());
         reference.putFile(uri)
                 .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
                         progressDialog.dismiss(); // Скрыть индикатор загрузки
 
                         if (task.isSuccessful()) {
@@ -247,8 +251,11 @@ public class ProfileFragment extends Fragment {
     }
     /////////////KAXELOVA ASSHXATM
 
+
+    /////////////KAXELOVA ASSHXATM
+
     private void loadPostsImages() {
-        Query query = FirebaseFirestore.getInstance().collection("postImages");
+        Query query = FirebaseFirestore.getInstance().collection("posts");
 
         FirestoreRecyclerOptions<PostImageModel> options = new FirestoreRecyclerOptions.Builder<PostImageModel>()
                 .setQuery(query, PostImageModel.class)
@@ -273,6 +280,7 @@ public class ProfileFragment extends Fragment {
             }
         };
     }
+
 
     private static class PostImageHolder extends RecyclerView.ViewHolder {
         private final ImageView imageView;
