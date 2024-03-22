@@ -49,12 +49,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp">
-            <ImageButton
+            <CheckBox
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:id="@+id/like"
-                android:src="@drawable/like"
-               />
+                android:button="@drawable/heart_check"
+                />
             <ImageButton
                 android:layout_width="30dp"
                 android:layout_height="30dp"

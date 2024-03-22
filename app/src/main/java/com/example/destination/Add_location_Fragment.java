@@ -22,7 +22,6 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -32,7 +31,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.destination.adapter.GalleryAdapter;
 import com.example.destination.model.GalleryImages;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -40,7 +38,6 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 
 import java.io.File;
 import java.util.ArrayList;
@@ -164,6 +161,8 @@ public class Add_location_Fragment extends Fragment {
         //        .document(user.getUid()).collection("Post Images");
         CollectionReference reference = FirebaseFirestore.getInstance().collection("userPosts");
 
+        List<String> list = new ArrayList<>();
+
 
         String description = descET.getText().toString();
         String id = reference.document().getId();
@@ -184,7 +183,7 @@ public class Add_location_Fragment extends Fragment {
             // Имя пользователя доступно, используйте его для передачи в Firestore
             map.put("username", username);
         }
-        map.put("likeCount", 0);
+        map.put("likeCount", list);
         map.put("comments", "");
         map.put("uid", user.getUid());
 
@@ -202,23 +201,24 @@ public class Add_location_Fragment extends Fragment {
                 });
 
     }
+
     @Override
 //Ashxatuma
     public void onResume() {
         super.onResume();
-        Log.e("Code works!4","Are you sure?");
+        Log.e("Code works!4", "Are you sure?");
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 || (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED)) {
-            Log.e("Code works!3","Are you sure?");
+            Log.e("Code works!3", "Are you sure?");
             File directory = new File(Environment.getExternalStorageDirectory(), "/Download");
             if (directory.exists() && directory.isDirectory()) {
                 File[] files = directory.listFiles();
-                Log.e("Code works!2","Are you sure?");
+                Log.e("Code works!2", "Are you sure?");
                 for (File file : files) {
                     if (file.isFile() && (file.getName().endsWith(".jpg") || file.getName().endsWith(".png"))) {
-                        Log.e("Code works!","Are you sure?");
+                        Log.e("Code works!", "Are you sure?");
                         // Добавляем файлы в ваш список
                         list.add(new GalleryImages(Uri.fromFile(file)));
 

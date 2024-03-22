@@ -4,18 +4,20 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 public class HomeModel {
     ///timestapmp
     private String username,  profileImage, imageUrl, uid, description, tag, comments,id;
     @ServerTimestamp
     private Date timestapmp;
-    private int likeCount;
+    private List<String> likes;
+
 
     public HomeModel() {
     }
 
-    public HomeModel(String username, String profileImage, String imageUrl, String uid, String description, String tag, String comments, String id, Date timestapmp, int likeCount) {
+    public HomeModel(String username, String profileImage, String imageUrl, String uid, String description, String tag, String comments, String id, Date timestapmp, List<String> likes) {
         this.username = username;
         this.profileImage = profileImage;
         this.imageUrl = imageUrl;
@@ -25,7 +27,15 @@ public class HomeModel {
         this.comments = comments;
         this.id = id;
         this.timestapmp = timestapmp;
-        this.likeCount = likeCount;
+        this.likes = likes;
+    }
+
+    public List<String> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<String> likes) {
+        this.likes = likes;
     }
 
     public String getUsername() {
@@ -100,13 +110,7 @@ public class HomeModel {
         this.timestapmp = timestapmp;
     }
 
-    public int getLikeCount() {
-        return likeCount;
-    }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
 }
 
 

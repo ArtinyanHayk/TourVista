@@ -1,5 +1,6 @@
 package com.example.destination;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.google.firebase.database.core.RepoManager.clear;
 
 import android.annotation.SuppressLint;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +31,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NetworkFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -37,6 +41,7 @@ public class NetworkFragment extends Fragment {
     private List<HomeModel> list;
     private FirebaseUser user;
 
+    private List<String>  likeList;
     Date curent_date;
 
     public NetworkFragment() {
@@ -53,11 +58,49 @@ public class NetworkFragment extends Fragment {
         init(view);
          curent_date = new Date();
 
+         likeList = new ArrayList<>();
+
 
         list = new ArrayList<>();
         adapter = new HomeAdapter(list, getContext());
         recyclerView.setAdapter(adapter);
         loadDataFromFirestore();
+
+        adapter.OnPressed(new HomeAdapter.OnPressed() {
+
+            @Override
+            public void onLiked(int position, String id, String uid, List<String> likeList, boolean isChecked) {
+                DocumentReference reference = FirebaseFirestore.getInstance().collection("userPosts").document(id);
+
+                if (likeList == null) {
+                    likeList = new ArrayList<>();
+                }
+
+                if (likeList.contains(user.getUid()) && isChecked) {
+                    likeList.remove(user.getUid()); // Unlike
+                } else  {
+                    likeList.add(user.getUid()); // Like
+                }
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("likeCount", likeList);
+
+                reference.update(map)
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.w(TAG, "Error updating document", e);
+                            Toast.makeText(getContext(), "Error updating document", Toast.LENGTH_SHORT).show();
+                        });
+
+            }
+
+            @Override
+            public void onComment(int position, String id, String comment) {
+
+            }
+        });
     }
 
     private void init(View view) {
@@ -75,7 +118,9 @@ public class NetworkFragment extends Fragment {
         CollectionReference reference = FirebaseFirestore.getInstance().collection("userPosts");
 
 
+
         reference.addSnapshotListener((value, error) -> {
+            Log.e("reference updated", "reference");
             if (error != null) {
                 Log.e("Error:", error.getMessage());
                 return;
@@ -93,6 +138,8 @@ public class NetworkFragment extends Fragment {
                 }
 
                 HomeModel model = snapshot.toObject(HomeModel.class);
+                if (model.getLikes() == null){
+                    Log.e("null","null");                }
                 // Добавляем данные в список
                 list.add(new HomeModel(
                         model.getUsername(),
@@ -104,7 +151,7 @@ public class NetworkFragment extends Fragment {
                         model.getComments(),
                         model.getId(),
                         model.getTimestapmp(),
-                        model.getLikeCount()
+                        model.getLikes()
                 ));
             }
             // Обновляем адаптер после того, как все данные добавлены
@@ -112,6 +159,10 @@ public class NetworkFragment extends Fragment {
 
         });
     }
+
+
+
+
 
 
 }
