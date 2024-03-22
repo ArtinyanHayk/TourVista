@@ -32,9 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.destination.adapter.GalleryAdapter;
 import com.example.destination.model.GalleryImages;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -42,12 +40,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -169,7 +162,7 @@ public class Add_location_Fragment extends Fragment {
     public void uploadData(String imageURL) {
         //CollectionReference reference = FirebaseFirestore.getInstance().collection("users")
         //        .document(user.getUid()).collection("Post Images");
-        CollectionReference reference = FirebaseFirestore.getInstance().collection("posts");
+        CollectionReference reference = FirebaseFirestore.getInstance().collection("userPosts");
 
 
         String description = descET.getText().toString();
@@ -207,24 +200,28 @@ public class Add_location_Fragment extends Fragment {
                     }
                     dialog.dismiss();
                 });
-        list_size++;
+
     }
     @Override
-
+//Ashxatuma
     public void onResume() {
         super.onResume();
+        Log.e("Code works!4","Are you sure?");
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED) {
-
-            File directory = new File(Environment.getExternalStorageDirectory(), "Download");
+                || (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED)) {
+            Log.e("Code works!3","Are you sure?");
+            File directory = new File(Environment.getExternalStorageDirectory(), "/Download");
             if (directory.exists() && directory.isDirectory()) {
                 File[] files = directory.listFiles();
+                Log.e("Code works!2","Are you sure?");
                 for (File file : files) {
                     if (file.isFile() && (file.getName().endsWith(".jpg") || file.getName().endsWith(".png"))) {
+                        Log.e("Code works!","Are you sure?");
                         // Добавляем файлы в ваш список
                         list.add(new GalleryImages(Uri.fromFile(file)));
+
                     }
                 }
                 adapter.notifyDataSetChanged();

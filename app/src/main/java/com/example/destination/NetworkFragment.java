@@ -72,7 +72,7 @@ public class NetworkFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void loadDataFromFirestore() {
-        CollectionReference reference = FirebaseFirestore.getInstance().collection("posts");
+        CollectionReference reference = FirebaseFirestore.getInstance().collection("userPosts");
 
 
         reference.addSnapshotListener((value, error) -> {
@@ -100,7 +100,7 @@ public class NetworkFragment extends Fragment {
                         model.getImageUrl(),
                         model.getUid(),
                         model.getDescription(),
-                        model.getTag(),
+                        "model.getTag()",
                         model.getComments(),
                         model.getId(),
                         model.getTimestapmp(),
@@ -109,6 +109,7 @@ public class NetworkFragment extends Fragment {
             }
             // Обновляем адаптер после того, как все данные добавлены
             adapter.notifyDataSetChanged();
+
         });
     }
 

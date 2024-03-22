@@ -101,6 +101,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         init(view);
 
+
         if (isMyProfile) {
             followBtn.setVisibility(View.GONE);
             countLayout.setVisibility(View.VISIBLE);
@@ -212,6 +213,8 @@ public class ProfileFragment extends Fragment {
         user = auth.getCurrentUser();
         countLayout = view.findViewById(R.id.countLayout);
         editProfileButton = view.findViewById(R.id.edit_profileImage);
+        postCountTv = view.findViewById(R.id.postsTv);
+
     }
 
     public void loadBasicData() {
@@ -228,6 +231,8 @@ public class ProfileFragment extends Fragment {
                     String userName = value.getString("userName");
                     Long followers = value.getLong("folowers");
                     String profileURL = value.getString("imageURL");
+                    postCountTv.setText(Integer.toString(Add_location_Fragment.list_size));
+
 
 
                     if (userName != null) {
@@ -255,7 +260,7 @@ public class ProfileFragment extends Fragment {
     /////////////KAXELOVA ASSHXATM
 
     private void loadPostsImages() {
-        Query query = FirebaseFirestore.getInstance().collection("posts");
+        Query query = FirebaseFirestore.getInstance().collection("userPosts");
 
         FirestoreRecyclerOptions<PostImageModel> options = new FirestoreRecyclerOptions.Builder<PostImageModel>()
                 .setQuery(query, PostImageModel.class)
