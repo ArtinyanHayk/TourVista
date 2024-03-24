@@ -58,14 +58,17 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             List<String> likeList = list.get(position).getLikes();
             int count = likeList.size();
             if (count == 0) {
+                Log.e("0like","work");
                 holder.likeCountTv.setText(count + " like");
             } else if (count == 1) {
+                Log.e("1like","work");
                 holder.likeCountTv.setText(count + " like");
             } else {
+                Log.e("likes","work");
                 holder.likeCountTv.setText(count + " likes");
             }
 
-            if (likeList.contains(user.getUid())) {
+            if(likeList.contains(user.getUid())) {
                 holder.likeCheckBox.setChecked(true);
             } else {
                 holder.likeCheckBox.setChecked(false);
@@ -103,11 +106,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     public int getItemCount() {
         return list.size();
     }
+    ////////////////
     public  interface OnPressed{
         void onLiked(int position,String id,String  uid, List<String> likeList,boolean isChecked);
         void onComment(int position,String id,String comment);
 
     }
+    ///////////////
     public void OnPressed(OnPressed onPressed){
         this.onPressed = onPressed;
     }

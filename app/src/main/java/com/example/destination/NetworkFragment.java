@@ -19,10 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.destination.adapter.HomeAdapter;
 import com.example.destination.model.HomeModel;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -41,7 +43,7 @@ public class NetworkFragment extends Fragment {
     private List<HomeModel> list;
     private FirebaseUser user;
 
-    private List<String>  likeList;
+
     Date curent_date;
 
     public NetworkFragment() {
@@ -58,7 +60,7 @@ public class NetworkFragment extends Fragment {
         init(view);
          curent_date = new Date();
 
-         likeList = new ArrayList<>();
+
 
 
         list = new ArrayList<>();
@@ -76,7 +78,7 @@ public class NetworkFragment extends Fragment {
                     likeList = new ArrayList<>();
                 }
 
-                if (likeList.contains(user.getUid()) && isChecked) {
+                if (likeList.contains(user.getUid()) ) {
                     likeList.remove(user.getUid()); // Unlike
                 } else  {
                     likeList.add(user.getUid()); // Like
@@ -84,15 +86,17 @@ public class NetworkFragment extends Fragment {
 
                 Map<String, Object> map = new HashMap<>();
                 map.put("likeCount", likeList);
-
                 reference.update(map)
                         .addOnSuccessListener(aVoid -> {
                             Log.d(TAG, "DocumentSnapshot successfully updated!");
+                            loadDataFromFirestore();
                         })
                         .addOnFailureListener(e -> {
                             Log.w(TAG, "Error updating document", e);
                             Toast.makeText(getContext(), "Error updating document", Toast.LENGTH_SHORT).show();
                         });
+
+
 
             }
 
@@ -119,6 +123,9 @@ public class NetworkFragment extends Fragment {
 
 
 
+
+
+
         reference.addSnapshotListener((value, error) -> {
             Log.e("reference updated", "reference");
             if (error != null) {
@@ -130,7 +137,9 @@ public class NetworkFragment extends Fragment {
             }
 
             // Очистить список перед добавлением новых данных
-            list.clear();
+          list.clear();
+
+
 
             for (QueryDocumentSnapshot snapshot : value) {
                 if (!snapshot.exists()) {
@@ -138,9 +147,7 @@ public class NetworkFragment extends Fragment {
                 }
 
                 HomeModel model = snapshot.toObject(HomeModel.class);
-                if (model.getLikes() == null){
-                    Log.e("null","null");                }
-                // Добавляем данные в список
+
                 list.add(new HomeModel(
                         model.getUsername(),
                         model.getProfileImage(),
@@ -150,14 +157,16 @@ public class NetworkFragment extends Fragment {
                         "model.getTag()",
                         model.getComments(),
                         model.getId(),
-                        model.getTimestapmp(),
-                        model.getLikes()
+                        ((Timestamp) snapshot.get("timestamp")).toDate(),
+                        (List<String>) snapshot.get("likeCount")
                 ));
             }
             // Обновляем адаптер после того, как все данные добавлены
             adapter.notifyDataSetChanged();
 
+
         });
+
     }
 
 

@@ -183,7 +183,7 @@ public class Add_location_Fragment extends Fragment {
             // Имя пользователя доступно, используйте его для передачи в Firestore
             map.put("username", username);
         }
-        map.put("likeCount", list);
+            map.put("likeCount", list);
         map.put("comments", "");
         map.put("uid", user.getUid());
 
