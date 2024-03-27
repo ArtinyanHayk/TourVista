@@ -3,6 +3,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -57,14 +58,17 @@ public class MainActivity extends AppCompatActivity {
     private void showPermissionDialog() {
         if ((ContextCompat.checkSelfPermission(this, READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this, READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED)
-                && ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
+                && ContextCompat.checkSelfPermission(this, READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED) ||
+                (ContextCompat.checkSelfPermission(this, READ_STORAGE_PERMISSION) == PackageManager.PERMISSION_GRANTED
+                        && ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED)) {
             // Если все разрешения уже предоставлены, показываем сообщение об этом
             Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
-        } else if (ContextCompat.checkSelfPermission(this, READ_STORAGE_PERMISSION) == PackageManager.PERMISSION_GRANTED  &&
-            ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
         }
+       //else if (ContextCompat.checkSelfPermission(this, READ_STORAGE_PERMISSION) == PackageManager.PERMISSION_GRANTED  &&
+       //    ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED){
+       //    Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
+       // }
         else {
             // Если разрешения не предоставлены, запрашиваем их
             ActivityCompat.requestPermissions(this, new String[]{LOCATION_PERMISSION, READ_MEDIA_IMAGES, READ_MEDIA_AUDIO, READ_MEDIA_VIDEO}, REQUEST_CODE);
@@ -74,15 +78,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d("generate Toast","1");
 
         // Проверяем, был ли запрос на разрешения с нашим кодом запроса
         if (requestCode == REQUEST_CODE) {
+            Log.d("generate Toast","2");
             // Проверяем, что результаты запроса не пусты
             if (grantResults.length > 0) {
+                Log.d("generate Toast","3");
                 // Проверяем, все ли разрешения были предоставлены
                 boolean allPermissionsGranted = true;
                 for (int result : grantResults) {
                     if (result != PackageManager.PERMISSION_GRANTED) {
+                        Log.d("generate Toast","4");
                         allPermissionsGranted = false;
                         break;
                     }
@@ -95,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
                 }
             } else {
+                Log.d("generate Toast","5");
                 // Если результаты запроса пусты, повторно запрашиваем разрешения
                 showPermissionDialog();
             }

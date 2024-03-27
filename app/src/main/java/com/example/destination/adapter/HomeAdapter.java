@@ -13,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -82,11 +83,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
         Random random = new Random();
         int color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
-
+if(list.get(position).getProfileImage() != null){
+    //Toast.makeText(context, list.get(position).getProfileImage(), Toast.LENGTH_SHORT).show();
+}
         Glide.with(context.getApplicationContext())
                 .load(list.get(position).getProfileImage())
                 .placeholder(R.drawable.ic_person)
-                .timeout(6500)
+                .timeout(7000)
                 .into(holder.profileImage);
         Glide.with(context.getApplicationContext())
                 .load(list.get(position).getImageUrl())

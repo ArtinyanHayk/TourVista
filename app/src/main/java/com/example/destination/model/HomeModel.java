@@ -1,6 +1,5 @@
 package com.example.destination.model;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
@@ -8,34 +7,26 @@ import java.util.List;
 
 public class HomeModel {
     ///timestapmp
-    private String username,  profileImage, imageUrl, uid, description, tag, comments,id;
+    private String  profileImage, imageUrl, uid, description, comments,id;
+    private String username;
     @ServerTimestamp
     private Date timestapmp;
-    private List<String> likes;
+     private List<String> likes;
 
 
     public HomeModel() {
     }
 
-    public HomeModel(String username, String profileImage, String imageUrl, String uid, String description, String tag, String comments, String id, Date timestapmp, List<String> likes) {
-        this.username = username;
+    public HomeModel(String profileImage, String imageUrl, String uid, String description, String comments, String id, Date timestapmp, List<String> likes,String userName) {
         this.profileImage = profileImage;
         this.imageUrl = imageUrl;
         this.uid = uid;
         this.description = description;
-        this.tag = tag;
         this.comments = comments;
         this.id = id;
         this.timestapmp = timestapmp;
         this.likes = likes;
-    }
-
-    public List<String> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<String> likes) {
-        this.likes = likes;
+        this.username = userName;
     }
 
     public String getUsername() {
@@ -78,14 +69,6 @@ public class HomeModel {
         this.description = description;
     }
 
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
     public String getComments() {
         return comments;
     }
@@ -110,7 +93,13 @@ public class HomeModel {
         this.timestapmp = timestapmp;
     }
 
+    public List<String> getLikes() {
+        return likes;
+    }
 
+    public void setLikes(List<String> likes) {
+        this.likes = likes;
+    }
 }
 
 

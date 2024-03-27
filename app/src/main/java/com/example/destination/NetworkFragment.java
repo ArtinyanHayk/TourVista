@@ -78,7 +78,7 @@ public class NetworkFragment extends Fragment {
                     likeList = new ArrayList<>();
                 }
 
-                if (likeList.contains(user.getUid()) ) {
+                if (likeList.contains(user.getUid())  ) {
                     likeList.remove(user.getUid()); // Unlike
                 } else  {
                     likeList.add(user.getUid()); // Like
@@ -146,19 +146,22 @@ public class NetworkFragment extends Fragment {
                     continue;
                 }
 
-                HomeModel model = snapshot.toObject(HomeModel.class);
 
+                HomeModel model = snapshot.toObject(HomeModel.class);
+                //if(model.getProfileImage() != null){
+                //    Toast.makeText(getContext(), model.getProfileImage(), Toast.LENGTH_SHORT).show();
+                //}
                 list.add(new HomeModel(
-                        model.getUsername(),
                         model.getProfileImage(),
                         model.getImageUrl(),
-                        model.getUid(),
-                        model.getDescription(),
-                        "model.getTag()",
-                        model.getComments(),
                         model.getId(),
-                        ((Timestamp) snapshot.get("timestamp")).toDate(),
-                        (List<String>) snapshot.get("likeCount")
+                        model.getDescription(),
+                        model.getComments(),
+                        model.getUid(),
+                        model.getTimestapmp(),
+                        model.getLikes(),
+                        model.getUsername()
+
                 ));
             }
             // Обновляем адаптер после того, как все данные добавлены

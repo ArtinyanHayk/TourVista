@@ -202,36 +202,13 @@ public class Add_location_Fragment extends Fragment {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
 //Ashxatuma
     public void onResume() {
         super.onResume();
-        Log.e("Code works!4", "Are you sure?");
-
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                || (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED)) {
-            Log.e("Code works!3", "Are you sure?");
-            File directory = new File(Environment.getExternalStorageDirectory(), "/Download");
-            if (directory.exists() && directory.isDirectory()) {
-                File[] files = directory.listFiles();
-                Log.e("Code works!2", "Are you sure?");
-                for (File file : files) {
-                    if (file.isFile() && (file.getName().endsWith(".jpg") || file.getName().endsWith(".png"))) {
-                        Log.e("Code works!", "Are you sure?");
-                        // Добавляем файлы в ваш список
-                        list.add(new GalleryImages(Uri.fromFile(file)));
-
-                    }
-                }
                 adapter.notifyDataSetChanged();
-            } else {
-                Log.e("Directory", "Download directory does not exist");
-            }
-        } else {
-            // Запрос разрешений, если они не предоставлены
-            //   ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO}, REQUEST_CODE);
-        }
+
     }
 
 
