@@ -39,6 +39,7 @@
             android:src="@drawable/next_icon"
             android:visibility="gone"
             />
+
     </RelativeLayout>
 
     <ScrollView
@@ -46,28 +47,39 @@
         android:layout_height="match_parent"
         android:layout_below="@id/layout">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_gravity="center"
 
             >
+            <ImageButton
+                android:id="@+id/set_locaion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/add_location_icon"
+                android:layout_marginBottom="50dp"
+                >
+
+            </ImageButton>
+
+
 
             <EditText
                 android:id="@+id/descriptionET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="0dp"
                 android:background="@android:color/transparent"
-                android:minLines="12" />
+                 />
 
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="6dp"
-                android:background="#000" />
+                android:background="@color/dark_gray" />
 
             <ImageView
                 android:id="@+id/imageView"

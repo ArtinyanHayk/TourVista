@@ -3,6 +3,7 @@ package com.example.destination;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,7 +52,7 @@ public class Add_location_Fragment extends Fragment {
     private EditText descET;
     private ImageView imageView;
     private RecyclerView recyclerView;
-    private ImageButton backBtn, nextBtn;
+    private ImageButton backBtn, nextBtn,setLocation;
     private GalleryAdapter adapter;
     private List<GalleryImages> list;
     private Uri imageUri;
@@ -103,6 +104,12 @@ public class Add_location_Fragment extends Fragment {
         adapter = new GalleryAdapter(list);
         recyclerView.setAdapter(adapter);
 
+        setLocation.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(),LocationForPost.class);
+            startActivity(intent);
+
+        });
+
         imageView.setOnClickListener(v -> launcher.launch(
                 new PickVisualMediaRequest.Builder().setMediaType(
                         ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
@@ -133,6 +140,7 @@ public class Add_location_Fragment extends Fragment {
         backBtn = view.findViewById(R.id.back_btn);
         nextBtn = view.findViewById(R.id.next_btn);
         recyclerView = view.findViewById(R.id.recyclerView);
+        setLocation = view.findViewById(R.id.set_locaion);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         dialog = new Dialog(getContext());
