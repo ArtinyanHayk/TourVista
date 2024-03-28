@@ -58,7 +58,7 @@ public class NetworkFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-         curent_date = new Date();
+        curent_date = new Date();
 
 
 
@@ -78,7 +78,8 @@ public class NetworkFragment extends Fragment {
                     likeList = new ArrayList<>();
                 }
 
-                if (likeList.contains(user.getUid())  ) {
+                if (likeList.contains(user.getUid()) ) {
+                    Log.e("unlike","-");
                     likeList.remove(user.getUid()); // Unlike
                 } else  {
                     likeList.add(user.getUid()); // Like
@@ -137,7 +138,7 @@ public class NetworkFragment extends Fragment {
             }
 
             // Очистить список перед добавлением новых данных
-          list.clear();
+            list.clear();
 
 
 
@@ -146,22 +147,19 @@ public class NetworkFragment extends Fragment {
                     continue;
                 }
 
-
                 HomeModel model = snapshot.toObject(HomeModel.class);
-                //if(model.getProfileImage() != null){
-                //    Toast.makeText(getContext(), model.getProfileImage(), Toast.LENGTH_SHORT).show();
-                //}
+
                 list.add(new HomeModel(
+
                         model.getProfileImage(),
                         model.getImageUrl(),
-                        model.getId(),
+                        model.getUid(),
                         model.getDescription(),
                         model.getComments(),
-                        model.getUid(),
+                        model.getId(),
                         model.getTimestapmp(),
-                        model.getLikes(),
+                        (List<String>) snapshot.get("likeCount"),
                         model.getUsername()
-
                 ));
             }
             // Обновляем адаптер после того, как все данные добавлены
