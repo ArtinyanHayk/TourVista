@@ -1,5 +1,6 @@
 package com.example.destination.model;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
@@ -9,6 +10,8 @@ public class HomeModel {
     ///timestapmp
     private String  profileImage, imageUrl, uid, description, comments,id;
     private String username;
+    private double latitude;
+    private double longitude;
     @ServerTimestamp
     private Date timestapmp;
      private List<String> likes;
@@ -17,16 +20,34 @@ public class HomeModel {
     public HomeModel() {
     }
 
-    public HomeModel(String profileImage, String imageUrl, String uid, String description, String comments, String id, Date timestapmp, List<String> likes,String userName) {
+    public HomeModel(String profileImage, String imageUrl, String uid, String description, String comments, String id, String username, double latitude, double longitude, Date timestapmp, List<String> likes) {
         this.profileImage = profileImage;
         this.imageUrl = imageUrl;
         this.uid = uid;
         this.description = description;
         this.comments = comments;
         this.id = id;
+        this.username = username;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.timestapmp = timestapmp;
         this.likes = likes;
-        this.username = userName;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getUsername() {

@@ -157,9 +157,11 @@ public class NetworkFragment extends Fragment {
                         model.getDescription(),
                         model.getComments(),
                         model.getId(),
+                        model.getUsername(),
+                        model.getLatitude(),
+                        model.getLongitude(),
                         model.getTimestapmp(),
-                        (List<String>) snapshot.get("likeCount"),
-                        model.getUsername()
+                        (List<String>) snapshot.get("likeCount")
                 ));
             }
             // Обновляем адаптер после того, как все данные добавлены

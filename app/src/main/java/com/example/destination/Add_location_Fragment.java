@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.destination.adapter.GalleryAdapter;
 import com.example.destination.model.GalleryImages;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -59,6 +60,7 @@ public class Add_location_Fragment extends Fragment {
     private FirebaseUser user;
     private Dialog dialog;
     public static int list_size = 0;
+    public static LatLng finallatLang;
 
 
     private ActivityResultLauncher<PickVisualMediaRequest> launcher =
@@ -104,7 +106,15 @@ public class Add_location_Fragment extends Fragment {
         adapter = new GalleryAdapter(list);
         recyclerView.setAdapter(adapter);
 
+
+
         setLocation.setOnClickListener(v -> {
+            if(finallatLang == null) {
+                Log.e("finallLatLang","null");
+            }else {
+                Log.e("finallLatLang","!null");
+                Toast.makeText(getContext(), Double.toString(finallatLang.latitude), Toast.LENGTH_SHORT).show();
+            }
             Intent intent = new Intent(getActivity(),LocationForPost.class);
             startActivity(intent);
 
@@ -169,6 +179,7 @@ public class Add_location_Fragment extends Fragment {
         //        .document(user.getUid()).collection("Post Images");
         CollectionReference reference = FirebaseFirestore.getInstance().collection("userPosts");
 
+
         List<String> list = new ArrayList<>();
 
 
@@ -181,6 +192,9 @@ public class Add_location_Fragment extends Fragment {
         map.put("imageUrl", imageURL);
         map.put("timestamp", FieldValue.serverTimestamp());
         map.put("id", id);
+        map.put("location latitude", finallatLang.latitude);
+        map.put("location longitude", finallatLang.longitude);
+
 
         map.put("profileImage", String.valueOf(user.getPhotoUrl()));
         String username = user.getDisplayName();

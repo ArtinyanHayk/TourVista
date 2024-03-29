@@ -6,7 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -24,10 +28,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import android.location.Location;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 public class LocationForPost extends AppCompatActivity implements OnMapReadyCallback {
@@ -36,12 +43,22 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private SearchView mapSearchView;
+    private ImageButton add;
+    /////////////
+
+    ////////////
+    private boolean locationChanged = false;
 
 
+    @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
+
         mapSearchView = findViewById(R.id.mapSearch);
+        add = findViewById(R.id.add);
+
+
 
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -64,7 +81,11 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
                     }
                     if (addressList != null && !addressList.isEmpty()) {
                         Address address = addressList.get(0);
+                        /////
+                        locationChanged = true;
+                        ////
                         LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
+                        Add_location_Fragment.finallatLang = latLng;
                         myMap.clear();
                         myMap.addMarker(new MarkerOptions().position(latLng).title(location));
                         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
@@ -83,6 +104,18 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
         });
 
 
+        add.setOnClickListener(v -> {
+              // Установите нужные данные
+           // Intent intent = new Intent(LocationForPost.this, MainActivity.class);
+           // intent.putExtra("Location of post", 1);
+           // startActivity(intent);
+            finish();
+
+
+
+        });
+
+
 
     }
 
@@ -95,6 +128,7 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
         task.addOnSuccessListener(location -> {
             if (location != null){
                 currentLocation = location;
+                ///??
                 SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
                 mapFragment.getMapAsync(LocationForPost.this);
             }
@@ -106,9 +140,10 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
     public void onMapReady(@NonNull GoogleMap googleMap) {
         myMap = googleMap;
 
-        LatLng sydney = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        myMap.addMarker(new MarkerOptions().position(sydney).title("My Location"));
-        myMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng myLocation = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+        Add_location_Fragment.finallatLang = myLocation;
+        myMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
+        myMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
 
     }
 
