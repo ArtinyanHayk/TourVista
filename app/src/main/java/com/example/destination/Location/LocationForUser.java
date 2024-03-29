@@ -1,68 +1,67 @@
-package com.example.destination;
+package com.example.destination.Location;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-import android.Manifest.permission;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.example.destination.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-
-import android.location.Location;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
-
-public class LocationForPost extends AppCompatActivity implements OnMapReadyCallback {
+public class LocationForUser extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap myMap;
     private final int FINE_PERMISSION_CODE = 1;
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private SearchView mapSearchView;
-    private ImageButton add;
+    private LatLng location;
+
     /////////////
+    private Double latitude;
+    private Double longitude;
 
     ////////////
-    private boolean locationChanged = false;
+
+
 
 
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
+        setContentView(R.layout.activity_location_for_user);
 
         mapSearchView = findViewById(R.id.mapSearch);
-        add = findViewById(R.id.add);
-
-
-
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
         getLastLocation();
+
+
+
+//
 
         mapSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -71,7 +70,7 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
                 List<Address> addressList = null;
 
                 if(location != null){
-                    Geocoder geocoder = new Geocoder(LocationForPost.this);
+                    Geocoder geocoder = new Geocoder(LocationForUser.this);
                     try{
                         addressList = geocoder.getFromLocationName(location,1);
                     } catch (IOException e) {
@@ -82,15 +81,15 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
                     if (addressList != null && !addressList.isEmpty()) {
                         Address address = addressList.get(0);
                         /////
-                        locationChanged = true;
+
                         ////
                         LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
-                        Add_location_Fragment.finallatLang = latLng;
+
                         myMap.clear();
                         myMap.addMarker(new MarkerOptions().position(latLng).title(location));
                         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                     } else {
-                        Toast.makeText(LocationForPost.this, "Такого места не существует", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LocationForUser.this, "Такого места не существует", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -104,23 +103,14 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
         });
 
 
-        add.setOnClickListener(v -> {
-              // Установите нужные данные
-           // Intent intent = new Intent(LocationForPost.this, MainActivity.class);
-           // intent.putExtra("Location of post", 1);
-           // startActivity(intent);
-            finish();
 
-
-
-        });
 
 
 
     }
 
     private void getLastLocation() {
-        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION},FINE_PERMISSION_CODE);
             return;
         }
@@ -130,7 +120,7 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
                 currentLocation = location;
                 ///??
                 SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-                mapFragment.getMapAsync(LocationForPost.this);
+                mapFragment.getMapAsync(LocationForUser.this);
             }
 
         });
@@ -140,10 +130,20 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
     public void onMapReady(@NonNull GoogleMap googleMap) {
         myMap = googleMap;
 
-        LatLng myLocation = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        Add_location_Fragment.finallatLang = myLocation;
-        myMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
-        myMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+         LatLng myLocation = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+        MarkerOptions userMarkerOtions = new MarkerOptions().position(myLocation).title("My Location");
+        userMarkerOtions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
+         myMap.addMarker(userMarkerOtions);
+         //myMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+        location = getIntent().getParcelableExtra("Location");
+////
+        Toast.makeText(this, Double.toString(location.latitude) + "  " + Double.toString(location.longitude), Toast.LENGTH_SHORT).show();
+        // //Toast.makeText(this, Double.toString(latLng.latitude), Toast.LENGTH_SHORT).show();
+        MarkerOptions postMarkerOtions = new MarkerOptions().position(location).title("Posted location");
+        postMarkerOtions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        myMap.addMarker(postMarkerOtions);
+        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,10));
 
     }
 

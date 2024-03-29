@@ -10,8 +10,7 @@ public class HomeModel {
     ///timestapmp
     private String  profileImage, imageUrl, uid, description, comments,id;
     private String username;
-    private double latitude;
-    private double longitude;
+    private LatLng location;
     @ServerTimestamp
     private Date timestapmp;
      private List<String> likes;
@@ -20,7 +19,7 @@ public class HomeModel {
     public HomeModel() {
     }
 
-    public HomeModel(String profileImage, String imageUrl, String uid, String description, String comments, String id, String username, double latitude, double longitude, Date timestapmp, List<String> likes) {
+    public HomeModel(String profileImage, String imageUrl, String uid, String description, String comments, String id, String username, LatLng location, Date timestapmp, List<String> likes) {
         this.profileImage = profileImage;
         this.imageUrl = imageUrl;
         this.uid = uid;
@@ -28,26 +27,18 @@ public class HomeModel {
         this.comments = comments;
         this.id = id;
         this.username = username;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.location = location;
         this.timestapmp = timestapmp;
         this.likes = likes;
     }
 
-    public double getLatitude() {
-        return latitude;
+
+    public LatLng getLocation() {
+        return location;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setLocation(LatLng location) {
+        this.location = location;
     }
 
     public String getUsername() {

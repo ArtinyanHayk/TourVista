@@ -1,9 +1,9 @@
 package com.example.destination;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-import static com.google.firebase.database.core.RepoManager.clear;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,24 +12,21 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.destination.Location.LocationForUser;
 import com.example.destination.adapter.HomeAdapter;
 import com.example.destination.model.HomeModel;
-import com.google.firebase.Timestamp;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -105,6 +102,17 @@ public class NetworkFragment extends Fragment {
             public void onComment(int position, String id, String comment) {
 
             }
+
+            @Override
+            public void onGetLocation(int position, String id, String uid, LatLng location) {
+
+                 Toast.makeText(getContext(), Double.toString(location.latitude) + "  " +Double.toString(location.longitude)  , Toast.LENGTH_SHORT).show();
+                 Intent intent = new Intent(getActivity(), LocationForUser.class);
+                 intent.putExtra("Location",location);
+                 startActivity(intent);
+
+
+            }
         });
     }
 
@@ -146,8 +154,15 @@ public class NetworkFragment extends Fragment {
                 if (!snapshot.exists()) {
                     continue;
                 }
+                // if( snapshot.getDouble("location latitude") == 0.0){
+                //     Log.e("double111","null");
+                // }
 
                 HomeModel model = snapshot.toObject(HomeModel.class);
+                GeoPoint geoPoint = (GeoPoint) snapshot.get("Location");
+               //assert geoPoint != null;
+               //Toast.makeText(getContext(), geoPoint.toString(), Toast.LENGTH_SHORT).show();
+
 
                 list.add(new HomeModel(
 
@@ -158,8 +173,7 @@ public class NetworkFragment extends Fragment {
                         model.getComments(),
                         model.getId(),
                         model.getUsername(),
-                        model.getLatitude(),
-                        model.getLongitude(),
+                        new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude()),
                         model.getTimestapmp(),
                         (List<String>) snapshot.get("likeCount")
                 ));

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.destination.R;
 import com.example.destination.model.HomeModel;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -98,7 +99,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
                 list.get(position).getId(),
                 list.get(position).getUsername(),
                 list.get(position).getUid(),
-                list.get(position).getLikes());
+                list.get(position).getLikes(),
+                list.get(position).getLocation());
+
+
     }
 
 
@@ -110,6 +114,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     public  interface OnPressed{
         void onLiked(int position,String id,String  uid, List<String> likeList,boolean isChecked);
         void onComment(int position,String id,String comment);
+        void onGetLocation(int position, String id, String  uid, LatLng location);
 
     }
     ///////////////
@@ -145,11 +150,18 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
         }
 
-        public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes) {
+        public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes,LatLng location) {
             likeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     onPressed.onLiked(position,id,uid,likes,isChecked);
+                }
+            });
+
+            getLocationBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onPressed.onGetLocation(position,id,uid,location);
                 }
             });
         }
