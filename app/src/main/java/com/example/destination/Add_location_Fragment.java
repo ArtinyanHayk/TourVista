@@ -231,3 +231,8 @@ public class Add_location_Fragment extends Fragment {
 
 
 }
+
+
+// 40°50'21.0"N 44°27'31.9"E
+
+// 40°47'52.2"N 44°31'25.2"E
