@@ -100,6 +100,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
                 list.get(position).getUsername(),
                 list.get(position).getUid(),
                 list.get(position).getLikes(),
+                list.get(position).getComments(),
                 list.get(position).getLocation());
 
 
@@ -113,7 +114,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     ////////////////
     public  interface OnPressed{
         void onLiked(int position,String id,String  uid, List<String> likeList,boolean isChecked);
-        void onComment(int position,String id,String comment);
+        ///stex comment list@ petqa obyektanman ban lini
+        void onComment(int position,String id,String uid,String commentlist);
         void onGetLocation(int position, String id, String  uid, LatLng location);
 
     }
@@ -150,7 +152,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
         }
 
-        public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes,LatLng location) {
+        public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes,String comments,LatLng location) {
             likeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -164,6 +166,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
                     onPressed.onGetLocation(position,id,uid,location);
                 }
             });
+
+            commentBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onPressed.onComment(position,id,uid,comments);
+                }
+            });
+
         }
     }
 

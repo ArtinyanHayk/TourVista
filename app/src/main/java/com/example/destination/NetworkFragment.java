@@ -3,12 +3,19 @@ package com.example.destination;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.destination.Location.LocationForUser;
 import com.example.destination.adapter.HomeAdapter;
+import com.example.destination.databinding.ActivityMainBinding;
 import com.example.destination.model.HomeModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +35,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import org.checkerframework.common.subtyping.qual.Bottom;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,9 +49,12 @@ public class NetworkFragment extends Fragment {
     HomeAdapter adapter;
     private List<HomeModel> list;
     private FirebaseUser user;
+    List<String> list222;
 
 
     Date curent_date;
+    private ActivityMainBinding binding;
+
 
     public NetworkFragment() {
     }
@@ -50,12 +63,16 @@ public class NetworkFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.network_fragment, container, false);
+        //return inflater.inflate(R.layout.network_fragment,binding.getRoot());
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         curent_date = new Date();
+       list222 = new ArrayList<>();
+       binding = ActivityMainBinding.inflate(getLayoutInflater());
+
 
 
 
@@ -99,9 +116,13 @@ public class NetworkFragment extends Fragment {
             }
 
             @Override
-            public void onComment(int position, String id, String comment) {
+            public void onComment(int position, String id, String uid, String commentlist) {
+                //showDialog();
+                    Commets_BottomSheet commetsBottomSheet = new Commets_BottomSheet();
+                    commetsBottomSheet.show(getActivity().getSupportFragmentManager(), "comment bottom sheet dialog");
 
             }
+
 
             @Override
             public void onGetLocation(int position, String id, String uid, LatLng location) {
@@ -115,6 +136,29 @@ public class NetworkFragment extends Fragment {
             }
         });
     }
+   // private void showBottomDialog() {
+//
+   //     final Dialog dialog = new Dialog(this);
+   //     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+   //     dialog.setContentView(R.layout.bottomsheetlayout);
+//
+   //     LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
+   //     LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
+   //     LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
+   //     ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+
+    private void showDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.commentbottomsheetlayout);
+        RelativeLayout EditTextt  = dialog.findViewById(R.id.comment_edit_text);
+        //stex dra mechi baner@ pti lni voncor EDITTEXT SENDBUTTON
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
 
     private void init(View view) {
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -122,6 +166,9 @@ public class NetworkFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+
+
+
 
 
     }
@@ -164,13 +211,14 @@ public class NetworkFragment extends Fragment {
                //Toast.makeText(getContext(), geoPoint.toString(), Toast.LENGTH_SHORT).show();
 
 
+
                 list.add(new HomeModel(
 
                         model.getProfileImage(),
                         model.getImageUrl(),
                         model.getUid(),
                         model.getDescription(),
-                        model.getComments(),
+                        "list222",
                         model.getId(),
                         model.getUsername(),
                         new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude()),

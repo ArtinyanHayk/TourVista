@@ -202,7 +202,7 @@ public class Add_location_Fragment extends Fragment {
             map.put("username", username);
         }
             map.put("likeCount", list);
-        map.put("comments", "");
+        map.put("comments",list);
         map.put("uid", user.getUid());
 
         reference.document(id).set(map)
