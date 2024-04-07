@@ -3,34 +3,45 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
- >
+    >
 
     <ImageView
         android:id="@+id/close"
         android:layout_width="140dp"
-        android:layout_height="10dp"
-        android:src="@drawable/remove_ic"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
-        android:layout_margin="7dp"
-        android:scaleType="centerCrop"/>
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginBottom="7dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/remove_ic" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/close"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="40dp"
+        android:id="@+id/recyclerView"
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginBottom="30dp"
         >
 
 
-    <EditText
-        android:id="@+id/comment_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:paddingHorizontal="15dp"
-        android:hint="@string/write_your_comment"
-        android:textColorHint="@color/dark_gray"
-        android:background="@drawable/coment_edit_text_rounder_corner"
-        android:layout_toStartOf="@+id/send_comment_btn"/>
+        <EditText
+            android:id="@+id/comment_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingHorizontal="15dp"
+            android:hint="@string/write_your_comment"
+            android:textColorHint="@color/dark_gray"
+            android:background="@drawable/coment_edit_text_rounder_corner"
+            android:layout_toStartOf="@+id/send_comment_btn"/>
 
         <ImageButton
             android:id="@+id/send_comment_btn"

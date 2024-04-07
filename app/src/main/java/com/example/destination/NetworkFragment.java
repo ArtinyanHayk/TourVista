@@ -4,6 +4,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -26,8 +30,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.destination.Location.LocationForUser;
 import com.example.destination.adapter.HomeAdapter;
 import com.example.destination.databinding.ActivityMainBinding;
+import com.example.destination.databinding.CommentbottomsheetlayoutBinding;
 import com.example.destination.model.HomeModel;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -50,6 +58,7 @@ public class NetworkFragment extends Fragment {
     private List<HomeModel> list;
     private FirebaseUser user;
     List<String> list222;
+    private List<String> commentLikes;
 
 
     Date curent_date;
@@ -70,8 +79,12 @@ public class NetworkFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         curent_date = new Date();
+        /////////////////////////////////
        list222 = new ArrayList<>();
+       commentLikes = new ArrayList<>();
+       /////////////////////////////////
        binding = ActivityMainBinding.inflate(getLayoutInflater());
+
 
 
 
@@ -118,8 +131,16 @@ public class NetworkFragment extends Fragment {
             @Override
             public void onComment(int position, String id, String uid, String commentlist) {
                 //showDialog();
-                    Commets_BottomSheet commetsBottomSheet = new Commets_BottomSheet();
-                    commetsBottomSheet.show(getActivity().getSupportFragmentManager(), "comment bottom sheet dialog");
+                Commets_BottomSheet fragment = new Commets_BottomSheet();
+                Bundle args = new Bundle();
+                args.putInt("position", position);
+                args.putString("id", id);
+                args.putString("uid", uid);
+                args.putString("commentlist", commentlist);
+                fragment.setArguments(args);
+
+                    fragment.show(getActivity().getSupportFragmentManager(), "comment bottom sheet dialog");
+
 
             }
 
@@ -136,29 +157,29 @@ public class NetworkFragment extends Fragment {
             }
         });
     }
-   // private void showBottomDialog() {
-//
-   //     final Dialog dialog = new Dialog(this);
-   //     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-   //     dialog.setContentView(R.layout.bottomsheetlayout);
-//
-   //     LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
-   //     LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
-   //     LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
-   //     ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+//  // private void showBottomDialog() {
+///
+//  //     final Dialog dialog = new Dialog(this);
+//  //     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//  //     dialog.setContentView(R.layout.bottomsheetlayout);
+///
+//  //     LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
+//  //     LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
+//  //     LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
+//  //     ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
 
-    private void showDialog() {
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.commentbottomsheetlayout);
-        RelativeLayout EditTextt  = dialog.findViewById(R.id.comment_edit_text);
-        //stex dra mechi baner@ pti lni voncor EDITTEXT SENDBUTTON
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-    }
+//   private void showDialog() {
+//       final Dialog dialog = new Dialog(getActivity());
+//       dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//       dialog.setContentView(R.layout.commentbottomsheetlayout);
+//       RelativeLayout EditTextt  = dialog.findViewById(R.id.comment_edit_text);
+//       //stex dra mechi baner@ pti lni voncor EDITTEXT SENDBUTTON
+//       dialog.show();
+//       dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+//       dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//       dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//       dialog.getWindow().setGravity(Gravity.BOTTOM);
+//   }
 
     private void init(View view) {
         recyclerView = view.findViewById(R.id.recyclerView);
