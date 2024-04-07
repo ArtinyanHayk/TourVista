@@ -13,6 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="7dp"
         android:scaleType="centerCrop"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
