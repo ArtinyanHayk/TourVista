@@ -8,7 +8,7 @@ import java.util.List;
 
 public class HomeModel {
     ///timestapmp
-    private String  profileImage, imageUrl, uid, description, comments,id;
+    private String  profileImage, imageUrl, uid, description, id;
     private String username;
     private LatLng location;
     @ServerTimestamp
@@ -19,12 +19,11 @@ public class HomeModel {
     public HomeModel() {
     }
 
-    public HomeModel(String profileImage, String imageUrl, String uid, String description, String comments, String id, String username, LatLng location, Date timestapmp, List<String> likes) {
+    public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username, LatLng location, Date timestapmp, List<String> likes) {
         this.profileImage = profileImage;
         this.imageUrl = imageUrl;
         this.uid = uid;
         this.description = description;
-        this.comments = comments;
         this.id = id;
         this.username = username;
         this.location = location;
@@ -81,13 +80,7 @@ public class HomeModel {
         this.description = description;
     }
 
-    public String getComments() {
-        return comments;
-    }
 
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
 
     public String getId() {
         return id;

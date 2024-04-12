@@ -81,7 +81,7 @@ public class NetworkFragment extends Fragment {
         curent_date = new Date();
         /////////////////////////////////
        list222 = new ArrayList<>();
-       commentLikes = new ArrayList<>();
+       //commentLikes = new ArrayList<>();
        /////////////////////////////////
        binding = ActivityMainBinding.inflate(getLayoutInflater());
 
@@ -129,16 +129,14 @@ public class NetworkFragment extends Fragment {
             }
 
             @Override
-            public void onComment(int position, String id, String uid, String commentlist) {
+            public void onComment(int position, String id, String uid) {
                 //showDialog();
                 Commets_BottomSheet fragment = new Commets_BottomSheet();
                 Bundle args = new Bundle();
                 args.putInt("position", position);
                 args.putString("id", id);
                 args.putString("uid", uid);
-                args.putString("commentlist", commentlist);
                 fragment.setArguments(args);
-
                     fragment.show(getActivity().getSupportFragmentManager(), "comment bottom sheet dialog");
 
 
@@ -239,7 +237,6 @@ public class NetworkFragment extends Fragment {
                         model.getImageUrl(),
                         model.getUid(),
                         model.getDescription(),
-                        "list222",
                         model.getId(),
                         model.getUsername(),
                         new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude()),
