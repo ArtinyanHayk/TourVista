@@ -20,7 +20,7 @@ public class Start_Activity extends AppCompatActivity {
                 if(FirbaseUtil.isLoggedIn()){
                     startActivity(new Intent(Start_Activity.this,MainActivity.class));
                 }else{
-                    startActivity(new Intent(Start_Activity.this,loginPhoneNumberActivity.class));
+                    startActivity(new Intent(Start_Activity.this,Registration.class));
                 }
 
                 finish();
