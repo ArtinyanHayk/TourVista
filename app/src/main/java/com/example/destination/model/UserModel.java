@@ -14,7 +14,7 @@ public class UserModel {
     //// UserModel_um kan u getter setter
    int folowers;
    int folowing;
-   int imageURL;
+   String imageURL;
    String status;
     ////
  //   private ImageView imageView;
@@ -22,7 +22,7 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(String phone, String userName, Timestamp createdTimesetap,String userId,int folowers,int imageURL,int folowing,String status
+    public UserModel(String phone, String userName, Timestamp createdTimesetap,String userId,int folowers,String imageURL,int folowing,String status
     ) {
         this.phone = phone;
         this.userName = userName;
@@ -41,8 +41,8 @@ public class UserModel {
     public void setFolowers(int folowers) {this.folowers = folowers;}
     public int getFolowing() {return folowing;}
     public void setFolowing(int folowing) {this.folowing = folowing;}
-    public int getImageURL() {return imageURL;}
-    public void setImageURL(int imageURL) {this.imageURL = imageURL;}
+    public String getImageURL() {return imageURL;}
+    public void setImageURL(String imageURL) {this.imageURL = imageURL;}
 
     public String getPhone() {
         return phone;

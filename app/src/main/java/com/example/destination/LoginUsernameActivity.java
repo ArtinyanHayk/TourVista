@@ -29,7 +29,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
     ////
     int folowers = 0;
     int folowing = 0;
-    int imageURL;
+    String imageURL;
     String status;
     FirebaseUser user;
 
@@ -65,7 +65,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
         }else{
             userModel = new UserModel(phoneNumber,username, Timestamp.now(),FirbaseUtil.currentUsersId(),
                     ////////////////////////////
-                    folowers,folowing,imageURL, status
+                    folowers,imageURL,folowing, status
                        );
         }
         FirbaseUtil.currentUsersDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {

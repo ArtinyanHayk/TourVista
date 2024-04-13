@@ -29,6 +29,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Date;
+
 public class Login extends AppCompatActivity {
     EditText Email,Password;
     Button loginBtn;
@@ -37,6 +39,7 @@ public class Login extends AppCompatActivity {
     ProgressBar progressBar;
     UserModel userModel;
     FirebaseUser user;
+    FirebaseUser fuser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,39 +78,43 @@ public class Login extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             //check if user is verified
-                            FirebaseUser fuser = fAuth.getCurrentUser();
+                             fuser = fAuth.getCurrentUser();
                             assert fuser != null;
                             if(fuser.isEmailVerified()){
 
 
                                 CollectionReference reference = FirebaseFirestore.getInstance().collection("users");
-                                reference.whereEqualTo("id", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                reference.whereEqualTo("id", fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                         if (queryDocumentSnapshots.isEmpty()) {
+                                            Toast.makeText(Login.this, "Accaunt created", Toast.LENGTH_SHORT).show();
                                             // Аккаунт с таким email не существует
+                                            DocumentReference userDoc = reference.document(fuser.getUid());
                                             userModel.setUserName(getIntent().getExtras().getString("name"));
                                             userModel.setFolowers(0);
                                             userModel.setUserId(user.getUid());
                                             userModel.setFolowing(123);
                                             userModel.setPhone("null");
-
-                                            userModel.setCreatedTimesetap(new Timestamp(new java.util.Date(System.currentTimeMillis())));
+                                            userModel.setPhone("0");
+                                            userModel.setCreatedTimesetap(new Timestamp(new Date(System.currentTimeMillis())));
                                             userModel.setStatus("");
-                                            reference.add(userModel).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+                                            userDoc.set(userModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
-                                                public void onSuccess(DocumentReference documentReference) {
-                                                    if(task.isSuccessful()){
-                                                        progressBar.setVisibility(View.GONE);
-                                                        Intent intent = new Intent(Login.this,MainActivity.class);
-                                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                        startActivity(intent);
-                                                        finish();
+                                                public void onSuccess(Void unused) {
 
+                                                    progressBar.setVisibility(View.GONE);
+                                                    Intent intent = new Intent(Login.this,MainActivity.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    startActivity(intent);
+                                                    finish();
 
-                                                    }
                                                 }
                                             });
+
+
+
                                         } else {
                                             // Аккаунт с таким email уже существует
                                             progressBar.setVisibility(View.GONE);

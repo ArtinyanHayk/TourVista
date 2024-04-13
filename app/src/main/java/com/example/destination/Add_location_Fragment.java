@@ -1,8 +1,12 @@
 package com.example.destination;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +62,7 @@ public class Add_location_Fragment extends Fragment {
     private Dialog dialog;
     public static int list_size = 0;
     public static LatLng finallatLang;
+    //Gps chlnelu depqum dusa qcm
 
 
     private ActivityResultLauncher<PickVisualMediaRequest> launcher =

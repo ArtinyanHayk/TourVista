@@ -2,6 +2,7 @@ package com.example.destination.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,14 +25,26 @@ import com.example.destination.model.HomeModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.List;
 import java.util.Random;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.widget.ImageView;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
-    private List<HomeModel> list;
+    private static List<HomeModel> list;
     Context context;
     static OnPressed onPressed;
+
+
 
     public HomeAdapter(List<HomeModel> list, Context context) {
         this.list = list;
@@ -44,28 +58,22 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         return new HomeHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull HomeHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeHolder holder,  int position) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
         holder.userNameTv.setText(list.get(position).getUsername());
         holder.timeTv.setText("" + list.get(position).getTimestapmp());
 
-
-
         if (list.get(position).getLikes() != null) {
-            Log.e("!null","likes");
             List<String> likeList = list.get(position).getLikes();
             int count = likeList.size();
             if (count == 0) {
-                Log.e("0like","work");
                 holder.likeCountTv.setText(count + " like");
             } else if (count == 1) {
-                Log.e("1like","work");
                 holder.likeCountTv.setText(count + " like");
             } else {
-                Log.e("likes","work");
                 holder.likeCountTv.setText(count + " likes");
             }
 
@@ -95,86 +103,87 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
                 .timeout(7000)
                 .into(holder.imageView);
 
+        // Dynamic height calculation for ImageView
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int screenWidth = displayMetrics.widthPixels;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(context.getResources(), R.drawable.map_icon, options);
+        float aspectRatio = options.outWidth / (float) options.outHeight;
+        int calculatedHeight = (int) (screenWidth / aspectRatio);
+        ViewGroup.LayoutParams layoutParams = holder.imageView.getLayoutParams();
+        layoutParams.height = calculatedHeight;
+        holder.imageView.setLayoutParams(layoutParams);
+
         holder.clickListener(position,
                 list.get(position).getId(),
                 list.get(position).getUsername(),
                 list.get(position).getUid(),
                 list.get(position).getLikes(),
                 list.get(position).getLocation());
-
-
     }
-
 
     @Override
     public int getItemCount() {
         return list.size();
     }
-    ////////////////
-    public  interface OnPressed{
-        void onLiked(int position,String id,String  uid, List<String> likeList,boolean isChecked);
-        ///stex comment list@ petqa obyektanman ban lini
-        void onComment(int position,String id,String uid);
-        void onGetLocation(int position, String id, String  uid, LatLng location);
 
+    public interface OnPressed {
+        void onLiked(int position, String id, String uid, List<String> likeList, boolean isChecked);
+        void onComment(int position, String id, String uid);
+        void onGetLocation(int position, String id, String uid, LatLng location);
     }
-    ///////////////
-    public void OnPressed(OnPressed onPressed){
+
+    public void OnPressed(OnPressed onPressed) {
         this.onPressed = onPressed;
     }
 
     static class HomeHolder extends RecyclerView.ViewHolder {
         private ImageView profileImage;
-        private TextView userNameTv,  timeTv, likeCountTv, descriptionTv;
+        private TextView userNameTv, timeTv, likeCountTv, descriptionTv;
         private ImageView imageView;
         private CheckBox likeCheckBox;
-        private ImageButton  commentBtn, shareBtn, getLocationBtn, favoriteBtn;
-
-
-
+        private ImageButton commentBtn, shareBtn, getLocationBtn, favoriteBtn;
 
         public HomeHolder(@NonNull View itemView) {
             super(itemView);
             profileImage = itemView.findViewById(R.id.image_profile);
-            //?
             imageView = itemView.findViewById(R.id.post_image);
             userNameTv = itemView.findViewById(R.id.username);
             timeTv = itemView.findViewById(R.id.time);
             likeCountTv = itemView.findViewById(R.id.likeCountTv);
             descriptionTv = itemView.findViewById(R.id.descTv);
-            likeCheckBox  = itemView.findViewById(R.id.like);
+            likeCheckBox = itemView.findViewById(R.id.like);
             commentBtn = itemView.findViewById(R.id.comment);
             shareBtn = itemView.findViewById(R.id.share);
             getLocationBtn = itemView.findViewById(R.id.get_location);
             favoriteBtn = itemView.findViewById(R.id.favorite);
 
 
+
         }
 
-        public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes,LatLng location) {
+        public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes, LatLng location) {
             likeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    onPressed.onLiked(position,id,uid,likes,isChecked);
+                    onPressed.onLiked(position, id, uid, likes, isChecked);
                 }
             });
 
             getLocationBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onPressed.onGetLocation(position,id,uid,location);
+                    onPressed.onGetLocation(position, id, uid, location);
                 }
             });
 
             commentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onPressed.onComment(position,id,uid);
+                    onPressed.onComment(position, id, uid);
                 }
             });
-
         }
     }
-
-
 }
