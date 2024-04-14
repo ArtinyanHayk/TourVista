@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
+import java.util.Date;
 
 public class Registration extends AppCompatActivity {
     public static final String Tag = "Tag";
@@ -39,6 +41,7 @@ public class Registration extends AppCompatActivity {
     ProgressBar progressBar;
     UserModel userModel;
     FirebaseUser user;
+    LinearLayout regByPhone;
 
 
 
@@ -55,12 +58,22 @@ public class Registration extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginText);
         fullName = findViewById(R.id.fullName);
         progressBar = findViewById(R.id.progressBar);
+        regByPhone = findViewById(R.id.reg_by_phone);
 
         userModel = new UserModel();
 
         fAuth = FirebaseAuth.getInstance();
 
-        user = fAuth.getCurrentUser();
+        regByPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(Registration.this, loginPhoneNumberActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent1);
+            }
+        });
+
+
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,11 +106,34 @@ public class Registration extends AppCompatActivity {
                      public void onComplete(@NonNull Task<AuthResult> task) {
                          if(task.isSuccessful()){
 
-                             Toast.makeText(Registration.this, "Account crated", Toast.LENGTH_SHORT).show();
-                             Intent intent = new Intent(Registration.this,Login.class);
-                             intent.putExtra("name",name);
-                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
-                             startActivity(intent);
+                           user = fAuth.getCurrentUser();
+
+                             DocumentReference reference = FirebaseFirestore.getInstance().collection("users").document(user.getUid());
+
+                             userModel.setUserName(name);
+                             userModel.setFolowers(0);
+                             userModel.setUserId(user.getUid());
+                             userModel.setFolowing(123);
+                             userModel.setPhone("null");
+                             userModel.setPhone("0");
+                             userModel.setCreatedTimesetap(new Timestamp(new Date(System.currentTimeMillis())));
+                             userModel.setStatus("");
+
+                             reference.set(userModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                 @Override
+                                 public void onSuccess(Void unused) {
+                                     Toast.makeText(Registration.this, "Account crated", Toast.LENGTH_SHORT).show();
+
+                                     Intent intent = new Intent(Registration.this,Login.class);
+                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
+                                     startActivity(intent);
+                                 }
+                             });
+
+
+
+
+
 
 
 

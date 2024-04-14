@@ -47,7 +47,7 @@ public class LoginOtpActivity extends AppCompatActivity {
  Button nextBtn;
  ProgressBar progressBar;
  TextView resendOtpTextView;
- FirebaseAuth mAuth = FirebaseAuth.getInstance();
+ FirebaseAuth mAuth;
  String verificationCode;
  PhoneAuthProvider.ForceResendingToken resendingToken;
 
@@ -61,6 +61,7 @@ public class LoginOtpActivity extends AppCompatActivity {
   nextBtn = findViewById(R.id.login_next_btn);
   progressBar = findViewById(R.id.login_progress_bar2);
   resendOtpTextView = findViewById(R.id.resend_code_textview);
+  mAuth = FirebaseAuth.getInstance();
 
   phoneNumber = getIntent().getExtras().getString("phone");
   sendOtp(phoneNumber, false);

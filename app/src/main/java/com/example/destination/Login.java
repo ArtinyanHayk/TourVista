@@ -83,55 +83,13 @@ public class Login extends AppCompatActivity {
                             if(fuser.isEmailVerified()){
 
 
-                                CollectionReference reference = FirebaseFirestore.getInstance().collection("users");
-                                reference.whereEqualTo("id", fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        if (queryDocumentSnapshots.isEmpty()) {
-                                            Toast.makeText(Login.this, "Accaunt created", Toast.LENGTH_SHORT).show();
-                                            // Аккаунт с таким email не существует
-                                            DocumentReference userDoc = reference.document(fuser.getUid());
-                                            userModel.setUserName(getIntent().getExtras().getString("name"));
-                                            userModel.setFolowers(0);
-                                            userModel.setUserId(user.getUid());
-                                            userModel.setFolowing(123);
-                                            userModel.setPhone("null");
-                                            userModel.setPhone("0");
-                                            userModel.setCreatedTimesetap(new Timestamp(new Date(System.currentTimeMillis())));
-                                            userModel.setStatus("");
 
-                                            userDoc.set(userModel).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
+                                progressBar.setVisibility(View.GONE);
 
-                                                    progressBar.setVisibility(View.GONE);
                                                     Intent intent = new Intent(Login.this,MainActivity.class);
                                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
                                                     startActivity(intent);
                                                     finish();
-
-                                                }
-                                            });
-
-
-
-                                        } else {
-                                            // Аккаунт с таким email уже существует
-                                            progressBar.setVisibility(View.GONE);
-                                            Intent intent = new Intent(Login.this,MainActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            startActivity(intent);
-                                            finish();
-                                            // Вы можете обработать это здесь, например, показать сообщение пользователю
-                                        }
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Обработка ошибки
-                                    }
-                                });
-
 
 
                             }else{
