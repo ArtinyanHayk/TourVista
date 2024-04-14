@@ -66,6 +66,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(list.get(position).getLocation() == null){
+            Toast.makeText(context, "gone", Toast.LENGTH_SHORT).show();
             holder.getLocationBtn.setVisibility(View.GONE);
         }
 

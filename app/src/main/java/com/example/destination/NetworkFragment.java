@@ -265,7 +265,7 @@ public class NetworkFragment extends Fragment {
 
 
                 if(geoPoint == null){
-                    Toast.makeText(getContext(), "must gone", Toast.LENGTH_SHORT).show();
+
                     list.add(new HomeModel(
 
                             model.getProfileImage(),

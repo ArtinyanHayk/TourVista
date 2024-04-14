@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.example.destination.utils.FirbaseUtil;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Start_Activity extends AppCompatActivity {
 
@@ -17,7 +18,7 @@ public class Start_Activity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(FirbaseUtil.isLoggedIn()){
+                if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
                     startActivity(new Intent(Start_Activity.this,MainActivity.class));
                 }else{
                     startActivity(new Intent(Start_Activity.this,Registration.class));
