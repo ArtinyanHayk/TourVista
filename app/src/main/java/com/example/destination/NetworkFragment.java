@@ -3,11 +3,14 @@ package com.example.destination;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -131,13 +135,15 @@ public class NetworkFragment extends Fragment {
             @Override
             public void onComment(int position, String id, String uid) {
                 //showDialog();
-                Commets_BottomSheet fragment = new Commets_BottomSheet();
-                Bundle args = new Bundle();
-                args.putInt("position", position);
-                args.putString("id", id);
-                args.putString("uid", uid);
-                fragment.setArguments(args);
+
+                    Commets_BottomSheet fragment = new Commets_BottomSheet();
+                    Bundle args = new Bundle();
+                    args.putInt("position", position);
+                    args.putString("id", id);
+                    args.putString("uid", uid);
+                    fragment.setArguments(args);
                     fragment.show(getActivity().getSupportFragmentManager(), "comment bottom sheet dialog");
+
 
 
             }
@@ -145,11 +151,15 @@ public class NetworkFragment extends Fragment {
 
             @Override
             public void onGetLocation(int position, String id, String uid, LatLng location) {
-
-                 Toast.makeText(getContext(), Double.toString(location.latitude) + "  " +Double.toString(location.longitude)  , Toast.LENGTH_SHORT).show();
-                 Intent intent = new Intent(getActivity(), LocationForUser.class);
-                 intent.putExtra("Location",location);
-                 startActivity(intent);
+                if(isGPSEnabled()) {
+                    Toast.makeText(getContext(), Double.toString(location.latitude) + "  " + Double.toString(location.longitude), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), LocationForUser.class);
+                    intent.putExtra("Location", location);
+                    startActivity(intent);
+                }
+                else{
+                    showGPSEnableDialog();
+                }
 
 
             }
@@ -178,6 +188,30 @@ public class NetworkFragment extends Fragment {
 //       dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 //       dialog.getWindow().setGravity(Gravity.BOTTOM);
 //   }
+
+    private  boolean isGPSEnabled() {
+        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+    private void showGPSEnableDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("To view the location, turn on GPS")
+                .setCancelable(false)
+                .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancel",  new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.dialog_bg,null));
+        alert.show();
+    }
+
 
     private void init(View view) {
         recyclerView = view.findViewById(R.id.recyclerView);

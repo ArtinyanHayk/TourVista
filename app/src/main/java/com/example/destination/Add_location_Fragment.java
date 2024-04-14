@@ -1,11 +1,13 @@
 package com.example.destination;
 
+import static androidx.core.content.ContextCompat.getDrawable;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,9 +23,11 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -47,6 +51,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 public class Add_location_Fragment extends Fragment {
 
@@ -62,6 +68,7 @@ public class Add_location_Fragment extends Fragment {
     private Dialog dialog;
     public static int list_size = 0;
     public static LatLng finallatLang;
+
     //Gps chlnelu depqum dusa qcm
 
 
@@ -107,8 +114,7 @@ public class Add_location_Fragment extends Fragment {
         list = new ArrayList<>();
         adapter = new GalleryAdapter(list);
         recyclerView.setAdapter(adapter);
-
-
+        finallatLang = null;
 
         setLocation.setOnClickListener(v -> {
             if(finallatLang == null) {
@@ -117,8 +123,12 @@ public class Add_location_Fragment extends Fragment {
                 Log.e("finallLatLang","!null");
                 Toast.makeText(getContext(), Double.toString(finallatLang.latitude), Toast.LENGTH_SHORT).show();
             }
-            Intent intent = new Intent(getActivity(), LocationForPost.class);
-            startActivity(intent);
+            if (isGPSEnabled()) {
+                Intent intent = new Intent(getActivity(), LocationForPost.class);
+                startActivity(intent);
+            }else{
+                showGPSEnableDialog();
+            }
 
         });
 
@@ -160,6 +170,30 @@ public class Add_location_Fragment extends Fragment {
         dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),
                 R.drawable.dialog_bg, null));
         dialog.setCancelable(false);
+    }
+
+    private  boolean isGPSEnabled() {
+        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    private void showGPSEnableDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("GPS is disabled. Do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancel",  new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.dialog_bg,null));
+        alert.show();
     }
 
     private void clickListener() {
@@ -216,7 +250,13 @@ public class Add_location_Fragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("Firestore", "Document uploaded successfully");
+                        imageView.setImageURI(null);
+                        nextBtn.setVisibility(View.GONE);
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
+                        descET.setText(null);
+                        finallatLang = null;
                         Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+
                     } else {
                         Log.e("Firestore", "Error uploading document: " + task.getException());
                         Toast.makeText(getContext(), "Error:" + task.getException().getMessage(),
