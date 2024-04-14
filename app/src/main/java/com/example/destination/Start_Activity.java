@@ -18,9 +18,12 @@ public class Start_Activity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
-                    startActivity(new Intent(Start_Activity.this,MainActivity.class));
-                }else{
+                if(FirbaseUtil.isLoggedIn()){
+                    if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+                        startActivity(new Intent(Start_Activity.this,MainActivity.class));
+                    }
+                }
+               else{
                     startActivity(new Intent(Start_Activity.this,Registration.class));
                 }
 

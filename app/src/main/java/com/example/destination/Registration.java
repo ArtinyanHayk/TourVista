@@ -5,12 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,6 +46,7 @@ public class Registration extends AppCompatActivity {
     UserModel userModel;
     FirebaseUser user;
     LinearLayout regByPhone;
+    ImageView imageView;
 
 
 
@@ -59,6 +64,18 @@ public class Registration extends AppCompatActivity {
         fullName = findViewById(R.id.fullName);
         progressBar = findViewById(R.id.progressBar);
         regByPhone = findViewById(R.id.reg_by_phone);
+        imageView = findViewById(R.id.imageView);
+
+        DisplayMetrics displayMetrics = Registration.this.getResources().getDisplayMetrics();
+        int screenWidth = displayMetrics.widthPixels;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(Registration.this.getResources(), R.drawable.map_icon, options);
+        float aspectRatio = options.outWidth / (float) options.outHeight;
+        int calculatedHeight = (int) (screenWidth / aspectRatio);
+        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+        layoutParams.height = calculatedHeight;
+        imageView.setLayoutParams(layoutParams);
 
         userModel = new UserModel();
 

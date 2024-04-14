@@ -3,14 +3,19 @@ package com.example.destination;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +45,9 @@ public class Login extends AppCompatActivity {
     UserModel userModel;
     FirebaseUser user;
     FirebaseUser fuser;
+    ImageView imageView;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +59,18 @@ public class Login extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         progressBar = findViewById(R.id.progressBar);
         forgetTextLink = findViewById(R.id.forgotPassword);
+        imageView = findViewById(R.id.imageView);
+
+        DisplayMetrics displayMetrics = Login.this.getResources().getDisplayMetrics();
+        int screenWidth = displayMetrics.widthPixels;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(Login.this.getResources(), R.drawable.map_icon, options);
+        float aspectRatio = options.outWidth / (float) options.outHeight;
+        int calculatedHeight = (int) (screenWidth / aspectRatio);
+        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+        layoutParams.height = calculatedHeight;
+        imageView.setLayoutParams(layoutParams);
 
         fAuth = FirebaseAuth.getInstance();
         userModel = new UserModel();

@@ -8,4 +8,6 @@
     <color name="dark_gray">#505050</color>
     <color name="phone_gray">#C8FFFFFF</color>
     <color name="extra_light_gray">#D2FFFFFF</color>
+    <color name="comment_bg_gray">#BDBDBD</color>
+
 </resources>
