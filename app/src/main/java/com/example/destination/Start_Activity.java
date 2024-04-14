@@ -21,6 +21,9 @@ public class Start_Activity extends AppCompatActivity {
                 if(FirbaseUtil.isLoggedIn()){
                     if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
                         startActivity(new Intent(Start_Activity.this,MainActivity.class));
+                    } else if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                        startActivity(new Intent(Start_Activity.this,MainActivity.class));
+
                     }
                 }
                else{
