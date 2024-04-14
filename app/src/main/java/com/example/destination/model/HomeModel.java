@@ -18,6 +18,17 @@ public class HomeModel {
 
     public HomeModel() {
     }
+    public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username,  Date timestapmp, List<String> likes) {
+        this.profileImage = profileImage;
+        this.imageUrl = imageUrl;
+        this.uid = uid;
+        this.description = description;
+        this.id = id;
+        this.username = username;
+
+        this.timestapmp = timestapmp;
+        this.likes = likes;
+    }
 
     public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username, LatLng location, Date timestapmp, List<String> likes) {
         this.profileImage = profileImage;

@@ -230,19 +230,34 @@ public class NetworkFragment extends Fragment {
                //Toast.makeText(getContext(), geoPoint.toString(), Toast.LENGTH_SHORT).show();
 
 
+                if(geoPoint == null){
+                    Toast.makeText(getContext(), "must gone", Toast.LENGTH_SHORT).show();
+                    list.add(new HomeModel(
 
-                list.add(new HomeModel(
+                            model.getProfileImage(),
+                            model.getImageUrl(),
+                            model.getUid(),
+                            model.getDescription(),
+                            model.getId(),
+                            model.getUsername(),
+                            model.getTimestapmp(),
+                            (List<String>) snapshot.get("likeCount")
+                    ));
+                }
+                else {
+                    list.add(new HomeModel(
 
-                        model.getProfileImage(),
-                        model.getImageUrl(),
-                        model.getUid(),
-                        model.getDescription(),
-                        model.getId(),
-                        model.getUsername(),
-                        new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude()),
-                        model.getTimestapmp(),
-                        (List<String>) snapshot.get("likeCount")
-                ));
+                            model.getProfileImage(),
+                            model.getImageUrl(),
+                            model.getUid(),
+                            model.getDescription(),
+                            model.getId(),
+                            model.getUsername(),
+                            new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()),
+                            model.getTimestapmp(),
+                            (List<String>) snapshot.get("likeCount")
+                    ));
+                }
             }
             // Обновляем адаптер после того, как все данные добавлены
             adapter.notifyDataSetChanged();

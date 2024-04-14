@@ -25,6 +25,7 @@ import com.example.destination.model.HomeModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneMultiFactorAssertion;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -37,11 +38,13 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     private static List<HomeModel> list;
-    Context context;
+    private static Context context;
     static OnPressed onPressed;
 
 
@@ -61,6 +64,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     @Override
     public void onBindViewHolder(@NonNull HomeHolder holder,  int position) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(list.get(position).getLocation() == null){
+            holder.getLocationBtn.setVisibility(View.GONE);
+        }
 
 
         holder.userNameTv.setText(list.get(position).getUsername());
@@ -143,7 +150,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         private TextView userNameTv, timeTv, likeCountTv, descriptionTv;
         private ImageView imageView;
         private CheckBox likeCheckBox;
-        private ImageButton commentBtn, shareBtn, getLocationBtn, favoriteBtn;
+        private  ImageButton commentBtn, shareBtn, getLocationBtn, favoriteBtn;
 
         public HomeHolder(@NonNull View itemView) {
             super(itemView);
@@ -161,6 +168,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
 
 
+
+
+
+
         }
 
         public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes, LatLng location) {
@@ -174,6 +185,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             getLocationBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     onPressed.onGetLocation(position, id, uid, location);
                 }
             });

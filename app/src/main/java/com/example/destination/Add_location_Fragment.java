@@ -194,7 +194,9 @@ public class Add_location_Fragment extends Fragment {
         map.put("imageUrl", imageURL);
         map.put("timestamp", FieldValue.serverTimestamp());
         map.put("id", id);
-        map.put("Location", new GeoPoint(finallatLang.latitude,finallatLang.longitude));
+        if(finallatLang != null) {
+            map.put("Location", new GeoPoint(finallatLang.latitude, finallatLang.longitude));
+        }
 
 
         map.put("profileImage", String.valueOf(user.getPhotoUrl()));
