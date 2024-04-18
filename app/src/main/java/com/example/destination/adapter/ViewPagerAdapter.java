@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.example.destination.Add_location_Fragment;
+import com.example.destination.Add_location_Fragment2;
 import com.example.destination.NetworkFragment;
 import com.example.destination.ProfileFragment;
 
@@ -28,7 +28,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 return new NetworkFragment();
 
             case 1:
-                return new Add_location_Fragment();
+                return new Add_location_Fragment2();
 
             case 2:
                 return new ProfileFragment();

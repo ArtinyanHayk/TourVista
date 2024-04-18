@@ -51,7 +51,7 @@
             android:name=".MyAccount"
             android:exported="false" />
         <activity
-            android:name=".Add_location_Fragment"
+            android:name=".Add_location_Fragment2"
             android:exported="false" />
         <activity
             android:name=".ProfileFragment"
@@ -82,6 +82,9 @@
         </activity>
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Add_location"
             android:exported="false" />
         <activity
             android:name=".ImageCropper.CropperActivity"

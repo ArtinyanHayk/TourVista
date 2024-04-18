@@ -2,6 +2,7 @@ package com.example.destination;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     ProfileFragment profileFragment;
     NotificationFragment notificationFragment;
     ChatsFragment chatsFragment;
+    Add_location addLocation;
 
 
     private TabLayout tabLayout;
@@ -72,10 +74,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Toast.makeText(MainActivity.this, "selected", Toast.LENGTH_SHORT).show();
                 if (item.getItemId() == R.id.network) {
-                    Toast.makeText(MainActivity.this, "network  ", Toast.LENGTH_SHORT).show();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, networkFragment).commit();
+                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, networkFragment).commit();
                 }
                 if (item.getItemId() == R.id.profile) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, profileFragment).commit();
@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.chats) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, chatsFragment).commit();
                 }
+                if (item.getItemId() == R.id.Add_post) {
+                    startActivity(new Intent(MainActivity.this, Add_location.class));
+                     }
                 return true;
             }
         });

@@ -1,37 +1,29 @@
 package com.example.destination;
 
-import static androidx.core.content.ContextCompat.getDrawable;
-import static androidx.core.content.ContextCompat.getSystemService;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.destination.Location.LocationForPost;
@@ -51,12 +43,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 
-public class Add_location_Fragment extends Fragment {
-
-
+public class Add_location extends AppCompatActivity {
     private EditText descET;
     private ImageView imageView;
     private RecyclerView recyclerView;
@@ -67,7 +55,7 @@ public class Add_location_Fragment extends Fragment {
     private FirebaseUser user;
     private Dialog dialog;
     public static int list_size = 0;
-    public static LatLng finallatLang;
+    public  LatLng finallatLang;
 
     //Gps chlnelu depqum dusa qcm
 
@@ -78,13 +66,13 @@ public class Add_location_Fragment extends Fragment {
                         @Override
                         public void onActivityResult(Uri o) {
                             if (o == null) {
-                                Toast.makeText(getContext(), "No image Selected", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Add_location.this, "No image Selected", Toast.LENGTH_SHORT).show();
                             } else {
                                 imageUri = o;
                                 imageView.setVisibility(View.VISIBLE);
                                 nextBtn.setVisibility(View.VISIBLE);
 
-                                Glide.with(getContext().getApplicationContext())
+                                Glide.with(Add_location.this.getApplicationContext())
                                         .load(o)
                                         .into(imageView);
 
@@ -94,37 +82,28 @@ public class Add_location_Fragment extends Fragment {
                         }
                     });
 
-    public Add_location_Fragment() {
-    }
-
-    @SuppressLint({"CutPasteId", "MissingInflatedId", "RestrictedApi"})
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_add_location_fragment, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        init(view);
-
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_location);
+        init();
         recyclerView.setHasFixedSize(true);
         list = new ArrayList<>();
         adapter = new GalleryAdapter(list);
         recyclerView.setAdapter(adapter);
-        finallatLang = null;
+        if(getIntent().getExtras() != null && getIntent().getExtras().get("Longitude") != null && getIntent().getExtras().get("Latitude") != null) {
+            finallatLang = new LatLng((Double) getIntent().getExtras().get("Latitude"),(Double) getIntent().getExtras().get("Longitude"));
+        }
 
         setLocation.setOnClickListener(v -> {
             if(finallatLang == null) {
                 Log.e("finallLatLang","null");
             }else {
                 Log.e("finallLatLang","!null");
-                Toast.makeText(getContext(), Double.toString(finallatLang.latitude), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Add_location.this, Double.toString(finallatLang.latitude), Toast.LENGTH_SHORT).show();
             }
             if (isGPSEnabled()) {
-                Intent intent = new Intent(getActivity(), LocationForPost.class);
+                Intent intent = new Intent(Add_location.this, LocationForPost.class);
                 startActivity(intent);
             }else{
                 showGPSEnableDialog();
@@ -149,23 +128,23 @@ public class Add_location_Fragment extends Fragment {
                                     uploadData(uri.toString()));
                         } else {
                             dialog.dismiss();
-                            Toast.makeText(getContext(),
+                            Toast.makeText(Add_location.this,
                                     "Failed to upload post", Toast.LENGTH_SHORT).show();
                         }
                     });
         });
     }
 
-    private void init(View view) {
-        descET = view.findViewById(R.id.descriptionET);
-        imageView = view.findViewById(R.id.imageView);
-        backBtn = view.findViewById(R.id.back_btn);
-        nextBtn = view.findViewById(R.id.next_btn);
-        recyclerView = view.findViewById(R.id.recyclerView);
-        setLocation = view.findViewById(R.id.set_locaion);
+    private void init() {
+        descET = findViewById(R.id.descriptionET);
+        imageView = findViewById(R.id.imageView);
+        backBtn = findViewById(R.id.back_btn);
+        nextBtn = findViewById(R.id.next_btn);
+        recyclerView = findViewById(R.id.recyclerView);
+        setLocation = findViewById(R.id.set_locaion);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        dialog = new Dialog(getContext());
+        dialog = new Dialog(Add_location.this);
         dialog.setContentView(R.layout.loading_dialog);
         dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),
                 R.drawable.dialog_bg, null));
@@ -173,12 +152,12 @@ public class Add_location_Fragment extends Fragment {
     }
 
     private  boolean isGPSEnabled() {
-        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) Add_location.this.getSystemService(Context.LOCATION_SERVICE);
         return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     private void showGPSEnableDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(Add_location.this);
         builder.setMessage("GPS is disabled. Do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
@@ -198,7 +177,7 @@ public class Add_location_Fragment extends Fragment {
 
     private void clickListener() {
         adapter.sendImage(pickUri -> {
-            Glide.with(getContext())
+            Glide.with(Add_location.this)
                     .load(pickUri)
                     .into(imageView);
 
@@ -242,7 +221,7 @@ public class Add_location_Fragment extends Fragment {
             // Имя пользователя доступно, используйте его для передачи в Firestore
             map.put("username", username);
         }
-            map.put("likeCount", list);
+        map.put("likeCount", list);
         map.put("comments",list);
         map.put("uid", user.getUid());
 
@@ -255,11 +234,11 @@ public class Add_location_Fragment extends Fragment {
                         imageView.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
                         descET.setText(null);
                         finallatLang = null;
-                        Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Add_location.this, "Uploaded", Toast.LENGTH_SHORT).show();
 
                     } else {
                         Log.e("Firestore", "Error uploading document: " + task.getException());
-                        Toast.makeText(getContext(), "Error:" + task.getException().getMessage(),
+                        Toast.makeText(Add_location.this, "Error:" + task.getException().getMessage(),
                                 Toast.LENGTH_SHORT).show();
                     }
                     dialog.dismiss();
@@ -272,14 +251,9 @@ public class Add_location_Fragment extends Fragment {
 //Ashxatuma
     public void onResume() {
         super.onResume();
-                adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
 
     }
 
 
 }
-
-
-// 40°50'21.0"N 44°27'31.9"E
-
-// 40°47'52.2"N 44°31'25.2"E

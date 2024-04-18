@@ -65,9 +65,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     public void onBindViewHolder(@NonNull HomeHolder holder,  int position) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if(list.get(position).getLocation() == null){
-            Toast.makeText(context, "gone", Toast.LENGTH_SHORT).show();
+        if (list.get(position).getLocation() == null) {
             holder.getLocationBtn.setVisibility(View.GONE);
+        } else {
+            holder.getLocationBtn.setVisibility(View.VISIBLE);  // Добавлено, чтобы кнопка была видимой, если getLocation() не равен null
         }
 
 

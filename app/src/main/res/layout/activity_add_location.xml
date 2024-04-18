@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
-    tools:context=".Add_location_Fragment2"
-    android:background="@color/phone_gray">
+    tools:context=".Add_location">
 
     <RelativeLayout
         android:id="@+id/layout"
@@ -72,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                 />
+                />
 
             <View
                 android:id="@+id/view"
@@ -101,3 +99,5 @@
     </ScrollView>
 
 </RelativeLayout>
+
+

@@ -13,10 +13,21 @@
         android:id="@+id/notifications"
         android:title="Notifications"
         android:icon="@drawable/notification_ic" />
+
+
+    <item
+        android:id="@+id/Add_post"
+        android:title="Add_Post"
+        android:icon="@drawable/baseline_add_box_24"
+      
+         />
+
+
     <item
         android:id="@+id/chats"
         android:title="Chats"
         android:icon="@drawable/baseline_send_24"
+
 
         />
     <item

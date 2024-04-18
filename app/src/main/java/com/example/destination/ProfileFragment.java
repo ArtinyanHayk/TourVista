@@ -1,15 +1,11 @@
 package com.example.destination;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,15 +31,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.destination.ImageCropper.CropperActivity;
 import com.example.destination.model.PostImageModel;
-import com.example.destination.utils.AndroidUtil;
-import com.example.destination.utils.FirbaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -56,14 +47,11 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.yalantis.ucrop.UCrop;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
 
 public class ProfileFragment extends Fragment {
     private static final int RESULT_OK = -1;
@@ -276,7 +264,7 @@ public class ProfileFragment extends Fragment {
                     String userName = value.getString("userName");
                     Long followers = value.getLong("folowers");
                     String profileURL = value.getString("imageURL");
-                    postCountTv.setText(Integer.toString(Add_location_Fragment.list_size));
+                    postCountTv.setText(Integer.toString(Add_location_Fragment2.list_size));
 
 
 
