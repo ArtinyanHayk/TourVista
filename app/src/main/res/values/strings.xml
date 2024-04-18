@@ -2,4 +2,6 @@
     <string name="app_name">TourVista</string>
     <string name="my_map_api_key">AIzaSyC-TKxVVBY8kgHGlpvUTZH8tq3iewkEGGM</string>
     <string name="write_your_comment">write your comment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

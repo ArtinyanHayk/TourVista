@@ -22,7 +22,7 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(String phone, String userName, Timestamp createdTimesetap,String userId,int folowers,String imageURL,int folowing,String status
+    public UserModel(String phone, String userName, Timestamp createdTimesetap,String userId,int folowers,int folowing,String imageURL,String status
     ) {
         this.phone = phone;
         this.userName = userName;

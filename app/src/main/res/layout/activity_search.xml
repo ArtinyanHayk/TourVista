@@ -41,32 +41,20 @@
         android:layout_below="@id/main_toolbar"
         android:layout_margin="10dp"
         android:id="@+id/search_layout">
-
-        <EditText
-            android:id="@+id/search_input"
+<!-- EditText Button-->
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_toLeftOf="@+id/search_user_btn"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/edit_text_rounder_corner"
-            android:elevation="4dp"
-            android:hint="LocationName"
-            android:padding="10dp"></EditText>
-        <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/search_icon"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/search_user_btn"
-            android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="4dp"
-            app:tint="@color/my_secondary">
+            android:padding="3dp"
+            app:queryHint="Search..."
+            app:iconifiedByDefault="false"/>
 
-        </ImageButton>
 
     </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView

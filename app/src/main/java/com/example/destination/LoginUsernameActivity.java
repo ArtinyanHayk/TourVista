@@ -65,7 +65,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
         }else{
             userModel = new UserModel(phoneNumber,username, Timestamp.now(),FirbaseUtil.currentUsersId(),
                     ////////////////////////////
-                    folowers,imageURL,folowing, status
+                    folowers,folowing,imageURL, status
                        );
         }
         FirbaseUtil.currentUsersDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {

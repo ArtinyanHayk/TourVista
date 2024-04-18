@@ -63,6 +63,7 @@ public class NetworkFragment extends Fragment {
     private FirebaseUser user;
     List<String> list222;
     private List<String> commentLikes;
+    ImageButton search_user;
 
 
     Date curent_date;
@@ -98,6 +99,12 @@ public class NetworkFragment extends Fragment {
         adapter = new HomeAdapter(list, getContext());
         recyclerView.setAdapter(adapter);
         loadDataFromFirestore();
+        search_user.setOnClickListener(v -> {
+            Intent intent2 = new Intent(getActivity(),search_Activity.class);
+            startActivity(intent2);
+
+        });
+
 
         adapter.OnPressed(new HomeAdapter.OnPressed() {
 
@@ -217,6 +224,7 @@ public class NetworkFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        search_user = view.findViewById(R.id.search_user_btn);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 

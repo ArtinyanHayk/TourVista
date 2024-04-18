@@ -12,4 +12,11 @@
         <item name="android:windowExitAnimation">@anim/comment_slide_out_bottom</item>
 
     </style>
+    <style name="Widget.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="itemBackground">@android:color/transparent</item>
+        <item name="android:textSize">0sp</item>
+        <item name="labelVisibilityMode">unlabeled</item>
+        <item name="itemIconTint">@color/my_secondary</item>
+    </style>
 </resources>

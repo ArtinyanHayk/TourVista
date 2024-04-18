@@ -31,16 +31,15 @@
                 android:textSize="25dp"
                 android:textStyle="bold" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/search_user_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="12dp"
-                android:background="@drawable/search_icon"
-                android:scrollbarSize="18dp" />
+                android:src="@drawable/search_icon"
+                android:background="?attr/selectableItemBackgroundBorderless" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
     <androidx.recyclerview.widget.RecyclerView
