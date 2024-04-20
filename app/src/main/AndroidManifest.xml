@@ -88,7 +88,8 @@
             android:exported="false" />
         <activity
             android:name=".ImageCropper.CropperActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="DuplicateActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

@@ -1,11 +1,16 @@
 package com.example.destination;
 
+import static android.app.Activity.RESULT_OK;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +36,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.destination.ImageCropper.CropperActivity;
 import com.example.destination.model.PostImageModel;
+import com.example.destination.utils.AndroidUtil;
+import com.example.destination.utils.FirbaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -47,14 +57,19 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.yalantis.ucrop.UCrop;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class ProfileFragment extends Fragment {
-    private static final int RESULT_OK = -1;
+
+    private static final int PICK_IMAGE_REQUEST = 101;
+
     private TextView nameTv, followersCountTv, postCountTv, followingCountTv, ratingCountTv;
     private CircleImageView profileImage;
     private Button followBtn;
@@ -62,43 +77,117 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private RelativeLayout followLayout;
     private LinearLayout countLayout;
-    boolean isMyProfile = true;
-    FirestoreRecyclerAdapter<PostImageModel, PostImageHolder> adapter;
-    String uid;
-    FirebaseAuth auth;
+    private boolean isMyProfile = true;
+    private FirestoreRecyclerAdapter<PostImageModel, PostImageHolder> adapter;
+    private FirebaseAuth auth;
     private ImageButton editProfileButton;
-    //ActivityResultLauncher<Intent> imagePickLaunch;
-    ActivityResultLauncher<String> mGetContent;
-    Uri selectedImageUri;
-    ImageView profilePic;
+    private ActivityResultLauncher<String> mGetContent;
+    private Uri selectedImageUri;
 
-    // Объявление ProgressDialog для отображения индикатора загрузки
-    ProgressDialog progressDialog;
-    private Dialog dialog;
+    private ProgressDialog progressDialog;
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    public ProfileFragment() {
-    }
-
-    @SuppressLint({"CutPasteId", "MissingInflatedId"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_profile_fragment, container, false);
     }
 
-    @SuppressLint("RestrictedApi")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
+        setupUI();
 
+        editProfileButton.setOnClickListener(v -> mGetContent.launch("image/*"));
 
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
+            if (result != null) {
+                Intent intent = new Intent(getActivity(), CropperActivity.class);
+                intent.putExtra("DATA", result.toString());
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_REQUEST) {
+            String result = data.getStringExtra("RESULT");
+            if (result != null) {
+                Uri resultUri = Uri.parse(result);
+                uploadImage(resultUri);
+            } else {
+                Toast.makeText(getContext(), "Изображение не выбрано", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void uploadImage(Uri uri) {
+        progressDialog.show();
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference imageRef = storageRef.child("ProfileImages").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        imageRef.putFile(uri)
+                .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri1 -> {
+                    String imageURL = uri1.toString();
+                    updateUserProfileImage(uri1);
+                }))
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(getContext(), "Ошибка: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void updateUserProfileImage(Uri uri) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setPhotoUri(uri)
+                    .build();
+
+            user.updateProfile(profileUpdates).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("imageURL", uri.toString());
+
+                    FirebaseFirestore.getInstance().collection("users").document(user.getUid())
+                            .update(map)
+                            .addOnSuccessListener(aVoid -> {
+                                loadBasicData();
+                                progressDialog.dismiss();
+                                Toast.makeText(getContext(), "Обновление прошло успешно", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                progressDialog.dismiss();
+                                Toast.makeText(getContext(), "Ошибка: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(getContext(), "Ошибка при обновлении профиля", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void init(View view) {
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+
+        nameTv = view.findViewById(R.id.nameTv);
+        followersCountTv = view.findViewById(R.id.folowersCountTv);
+        profileImage = view.findViewById(R.id.profile_image);
+        followBtn = view.findViewById(R.id.followbtn);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        countLayout = view.findViewById(R.id.countLayout);
+        editProfileButton = view.findViewById(R.id.edit_profileImage);
+        postCountTv = view.findViewById(R.id.postsTv);
+    }
+
+    private void setupUI() {
         if (isMyProfile) {
             followBtn.setVisibility(View.GONE);
             countLayout.setVisibility(View.VISIBLE);
@@ -114,191 +203,46 @@ public class ProfileFragment extends Fragment {
         loadPostsImages();
         recyclerView.setAdapter(adapter);
 
-        // Инициализация ProgressDialog
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Обновление профиля...");
         progressDialog.setCancelable(false);
-
-        //imagePickLaunch = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-//
-        //        result -> {
-        //            if (result.getResultCode() == Activity.RESULT_OK) {
-        //                Intent data = result.getData();
-        //                if (data != null && data.getData() != null) {
-        //                    selectedImageUri = data.getData();
-        //                    AndroidUtil.setProfilPic(getApplicationContext(), selectedImageUri, profileImage);
-        //                    uploadImage(selectedImageUri);
-        //                    Toast.makeText(getContext(), selectedImageUri.toString(), Toast.LENGTH_SHORT).show();
-        //                }
-        //            }
-        //        }
-        //);
-        ////Error profili nkar@ poxelu het;
-
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mGetContent.launch("image/*");
-            }
-        });
-
-        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
-            @Override
-            public void onActivityResult(Uri result) {
-                if (result != null) {
-                    Intent intent = new Intent(getActivity(), CropperActivity.class);
-                    intent.putExtra("DATA", result.toString());
-                    startActivityForResult(intent, 101);
-                }
-                else {
-                    return;
-                }
-            }
-        });
     }
 
-        @Override
-        public void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
-            super.onActivityResult(requestCode, resultCode, data);
-            if (resultCode == RESULT_OK && requestCode == 101) {
-                String result = data.getStringExtra("RESULT");
-                if (result != null) {
-                    Uri resultUri = Uri.parse(result);
-                    uploadImage(resultUri);
-                } else {
-                    Toast.makeText(getContext(), "Изображение не выбрано", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-
-
-    private void uploadImage(Uri uri) {
-        progressDialog.show();
-
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference imageRef = storageRef.child("ProfileImages").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-        imageRef.putFile(uri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                String imageURL = uri.toString();
-
-                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                if (user != null) {
-                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                            .setPhotoUri(uri)
-                                            .build();
-
-                                    user.updateProfile(profileUpdates);
-
-                                    Map<String, Object> map = new HashMap<>();
-                                    map.put("imageURL", imageURL);
-
-                                    FirebaseFirestore.getInstance().collection("users").document(user.getUid())
-                                            .update(map)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    loadBasicData();
-                                                    progressDialog.dismiss();
-                                                    Toast.makeText(getContext(), "Обновление прошло успешно", Toast.LENGTH_SHORT).show();
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    progressDialog.dismiss();
-                                                    Toast.makeText(getContext(), "Ошибка: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                }
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Toast.makeText(getContext(), "Ошибка: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-    ///////Profili nkar@ normal drvma miak minus@ et vor nkar@ @ntrum u xachin es sxmm bacma ImageCropper Activitin
-    /////Like-
-    ////
-    ///
-    //
-    public void init(View view) {
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
-
-        nameTv = view.findViewById(R.id.nameTv);
-        followersCountTv = view.findViewById(R.id.folowersCountTv);
-        profileImage = view.findViewById(R.id.profile_image);
-        followBtn = view.findViewById(R.id.followbtn);
-        recyclerView = view.findViewById(R.id.recyclerView);
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        countLayout = view.findViewById(R.id.countLayout);
-        editProfileButton = view.findViewById(R.id.edit_profileImage);
-        postCountTv = view.findViewById(R.id.postsTv);
-
-    }
-
-    public void loadBasicData() {
+    private void loadBasicData() {
         DocumentReference userRef = FirebaseFirestore.getInstance().collection("users")
                 .document(user.getUid());
 
-        userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    return;
+        userRef.addSnapshotListener((value, error) -> {
+            if (error != null) {
+                return;
+            }
+            if (value != null && value.exists()) {
+                String userName = value.getString("userName");
+                Long followers = value.getLong("followers");
+                String profileURL = value.getString("imageURL");
+
+                if (userName != null) {
+                    nameTv.setText(userName);
                 }
-                if (value.exists()) {
-                    String userName = value.getString("userName");
-                    Long followers = value.getLong("folowers");
-                    String profileURL = value.getString("imageURL");
-                    postCountTv.setText(Integer.toString(Add_location_Fragment2.list_size));
-
-
-
-                    if (userName != null) {
-                        nameTv.setText(userName);
-                    }
-
-                    if (followers != null) {
-                        followersCountTv.setText(String.valueOf(followers));
-                    }
-
-                    if (profileURL != null) {
-                        Glide.with(requireContext().getApplicationContext())
-                                .load(profileURL)
-                                .placeholder(R.drawable.ic_person)
-                                .timeout(6500)
-                                .into(profileImage);
-                    }
+                if (followers != null) {
+                    followersCountTv.setText(String.valueOf(followers));
+                }
+                if (profileURL != null) {
+                    Glide.with(requireContext())
+                            .load(profileURL)
+                            .placeholder(R.drawable.ic_person)
+                            .timeout(6500)
+                            .into(profileImage);
                 }
             }
         });
-
     }
-    /////////////KAXELOVA ASSHXATM
-
-
-    /////////////KAXELOVA ASSHXATM
 
     private void loadPostsImages() {
-        Query query = FirebaseFirestore.getInstance().collection("userPosts").whereEqualTo("uid",user.getUid());
+        Query query = FirebaseFirestore.getInstance().collection("userPosts").whereEqualTo("uid", user.getUid());
 
         FirestoreRecyclerOptions<PostImageModel> options = new FirestoreRecyclerOptions.Builder<PostImageModel>()
                 .setQuery(query, PostImageModel.class)
-
                 .build();
 
         adapter = new FirestoreRecyclerAdapter<PostImageModel, PostImageHolder>(options) {
@@ -312,16 +256,24 @@ public class ProfileFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull PostImageHolder holder, int position, @NonNull PostImageModel model) {
                 if (model.getImageUrl() != null) {
-                    Glide.with(holder.itemView.getContext().getApplicationContext())
+                    Glide.with(holder.itemView.getContext())
                             .load(model.getImageUrl())
                             .timeout(6500)
                             .into(holder.imageView);
                 }
             }
+
+            @Override
+            public int getItemCount() {
+                return super.getItemCount(); // Ensure the item count is correct
+            }
+            @Override
+            public void onDataChanged() {
+                super.onDataChanged();
+                adapter.notifyDataSetChanged(); // Notify adapter about data changes
+            }
         };
     }
-
-
     private static class PostImageHolder extends RecyclerView.ViewHolder {
         private final ImageView imageView;
 
@@ -342,5 +294,4 @@ public class ProfileFragment extends Fragment {
         super.onStart();
         adapter.startListening();
     }
-
 }

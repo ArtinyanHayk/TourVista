@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.notifications) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, notificationFragment).commit();
                 }
-                if (item.getItemId() == R.id.chats) {
+                if (item.getItemId() == R.id.chats){
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, chatsFragment).commit();
                 }
                 if (item.getItemId() == R.id.Add_post) {
