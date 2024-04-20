@@ -8,14 +8,13 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 
 import com.example.destination.Add_location;
-import com.example.destination.Add_location_Fragment2;
+
 import com.example.destination.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -83,7 +82,7 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
                         locationChanged = true;
                         ////
                         LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
-                        Add_location_Fragment2.finallatLang = latLng;
+                        Add_location.finallatLang = latLng;
                         myMap.clear();
                         myMap.addMarker(new MarkerOptions().position(latLng).title(location));
                         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
@@ -103,13 +102,11 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
 
 
         add.setOnClickListener(v -> {
-              // Установите нужные данные
-            Intent intent = new Intent(LocationForPost.this, Add_location.class);
-            intent.putExtra("Longitude", currentLocation.getLongitude());
-            intent.putExtra("Latitude", currentLocation.getLatitude());
-            startActivity(intent);
-
-
+            // Установите нужные данные
+            // Intent intent = new Intent(LocationForPost.this, MainActivity.class);
+            // intent.putExtra("Location of post", 1);
+            // startActivity(intent);
+            finish();
 
 
 
@@ -141,7 +138,7 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
         myMap = googleMap;
 
         LatLng myLocation = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        Add_location_Fragment2.finallatLang = myLocation;
+        Add_location.finallatLang = myLocation;
         myMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
         myMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
 
@@ -159,3 +156,5 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
         }
     }
 }
+
+

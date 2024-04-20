@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -50,10 +51,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.checkerframework.common.subtyping.qual.Bottom;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class NetworkFragment extends Fragment {
@@ -64,9 +67,8 @@ public class NetworkFragment extends Fragment {
     List<String> list222;
     private List<String> commentLikes;
     ImageButton search_user;
-
-
     Date curent_date;
+    String Time;
     private ActivityMainBinding binding;
 
 
@@ -272,6 +274,8 @@ public class NetworkFragment extends Fragment {
                //Toast.makeText(getContext(), geoPoint.toString(), Toast.LENGTH_SHORT).show();
 
 
+
+
                 if(geoPoint == null){
 
                     list.add(new HomeModel(
@@ -282,7 +286,7 @@ public class NetworkFragment extends Fragment {
                             model.getDescription(),
                             model.getId(),
                             model.getUsername(),
-                            model.getTimestapmp(),
+                            (String) snapshot.get("timestamp"),
                             (List<String>) snapshot.get("likeCount")
                     ));
                 }
@@ -296,7 +300,7 @@ public class NetworkFragment extends Fragment {
                             model.getId(),
                             model.getUsername(),
                             new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()),
-                            model.getTimestapmp(),
+                            (String) snapshot.get("timestamp"),
                             (List<String>) snapshot.get("likeCount")
                     ));
                 }

@@ -11,26 +11,24 @@ public class HomeModel {
     private String  profileImage, imageUrl, uid, description, id;
     private String username;
     private LatLng location;
-    @ServerTimestamp
-    private Date timestapmp;
+    private String postedTime;
      private List<String> likes;
 
 
     public HomeModel() {
     }
-    public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username,  Date timestapmp, List<String> likes) {
+    public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username,  String postedTime, List<String> likes) {
         this.profileImage = profileImage;
         this.imageUrl = imageUrl;
         this.uid = uid;
         this.description = description;
         this.id = id;
         this.username = username;
-
-        this.timestapmp = timestapmp;
+        this.postedTime = postedTime;
         this.likes = likes;
     }
 
-    public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username, LatLng location, Date timestapmp, List<String> likes) {
+    public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username, LatLng location, String postedTime, List<String> likes) {
         this.profileImage = profileImage;
         this.imageUrl = imageUrl;
         this.uid = uid;
@@ -38,7 +36,7 @@ public class HomeModel {
         this.id = id;
         this.username = username;
         this.location = location;
-        this.timestapmp = timestapmp;
+        this.postedTime = postedTime;
         this.likes = likes;
     }
 
@@ -101,12 +99,12 @@ public class HomeModel {
         this.id = id;
     }
 
-    public Date getTimestapmp() {
-        return timestapmp;
+    public String getPostedTime() {
+        return postedTime;
     }
 
-    public void setTimestapmp(Date timestapmp) {
-        this.timestapmp = timestapmp;
+    public void setPostedTime(String postedTime) {
+        this.postedTime = postedTime;
     }
 
     public List<String> getLikes() {

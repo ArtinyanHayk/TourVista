@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -30,18 +31,26 @@ import com.example.destination.Location.LocationForPost;
 import com.example.destination.adapter.GalleryAdapter;
 import com.example.destination.model.GalleryImages;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class Add_location extends AppCompatActivity {
@@ -55,7 +64,8 @@ public class Add_location extends AppCompatActivity {
     private FirebaseUser user;
     private Dialog dialog;
     public static int list_size = 0;
-    public  LatLng finallatLang;
+    public  static LatLng finallatLang;
+    String username;
 
     //Gps chlnelu depqum dusa qcm
 
@@ -91,9 +101,7 @@ public class Add_location extends AppCompatActivity {
         list = new ArrayList<>();
         adapter = new GalleryAdapter(list);
         recyclerView.setAdapter(adapter);
-        if(getIntent().getExtras() != null && getIntent().getExtras().get("Longitude") != null && getIntent().getExtras().get("Latitude") != null) {
-            finallatLang = new LatLng((Double) getIntent().getExtras().get("Latitude"),(Double) getIntent().getExtras().get("Longitude"));
-        }
+
 
         setLocation.setOnClickListener(v -> {
             if(finallatLang == null) {
@@ -110,6 +118,8 @@ public class Add_location extends AppCompatActivity {
             }
 
         });
+
+        backBtn.setOnClickListener(v -> onBackPressed());
 
         imageView.setOnClickListener(v -> launcher.launch(
                 new PickVisualMediaRequest.Builder().setMediaType(
@@ -194,55 +204,81 @@ public class Add_location extends AppCompatActivity {
         //        .document(user.getUid()).collection("Post Images");
         CollectionReference reference = FirebaseFirestore.getInstance().collection("userPosts");
 
+        Date date = new Date();
 
-        List<String> list = new ArrayList<>();
+// Преобразование объекта Date в Timestamp
+        Timestamp timestamp = new Timestamp(date);
+
+// Преобразование Timestamp в строку
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String time = sdf.format(date);
+
+        ////////////////
+        Toast.makeText(Add_location.this, time, Toast.LENGTH_SHORT).show();
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        DocumentReference Currentuser = FirebaseFirestore.getInstance().collection("users")
+                .document(user.getUid());
+        Currentuser.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                   username = (String) task.getResult().get("userName");
+                    Toast.makeText(Add_location.this, username, Toast.LENGTH_SHORT).show();
+                    List<String> list = new ArrayList<>();
 
 
-        String description = descET.getText().toString();
-        String id = reference.document().getId();
+                    String description = descET.getText().toString();
+                    String id = reference.document().getId();
 
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("description", description);
-        map.put("imageUrl", imageURL);
-        map.put("timestamp", FieldValue.serverTimestamp());
-        map.put("id", id);
-        if(finallatLang != null) {
-            map.put("Location", new GeoPoint(finallatLang.latitude, finallatLang.longitude));
-        }
 
-
-        map.put("profileImage", String.valueOf(user.getPhotoUrl()));
-        String username = user.getDisplayName();
-        if (username == null || username.isEmpty()) {
-            // Имя пользователя не установлено или пусто, выполните необходимые действия
-            Log.e("NoUsername", "Username is null or empty");
-        } else {
-            // Имя пользователя доступно, используйте его для передачи в Firestore
-            map.put("username", username);
-        }
-        map.put("likeCount", list);
-        map.put("comments",list);
-        map.put("uid", user.getUid());
-
-        reference.document(id).set(map)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("Firestore", "Document uploaded successfully");
-                        imageView.setImageURI(null);
-                        nextBtn.setVisibility(View.GONE);
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
-                        descET.setText(null);
-                        finallatLang = null;
-                        Toast.makeText(Add_location.this, "Uploaded", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        Log.e("Firestore", "Error uploading document: " + task.getException());
-                        Toast.makeText(Add_location.this, "Error:" + task.getException().getMessage(),
-                                Toast.LENGTH_SHORT).show();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("description", description);
+                    map.put("imageUrl", imageURL);
+                    map.put("timestamp", time);
+                    map.put("id", id);
+                    if(finallatLang != null) {
+                        map.put("Location", new GeoPoint(finallatLang.latitude, finallatLang.longitude));
                     }
-                    dialog.dismiss();
-                });
+
+
+                    map.put("profileImage", String.valueOf(user.getPhotoUrl()));
+
+                    if (username == null || username.isEmpty()) {
+                        // Имя пользователя не установлено или пусто, выполните необходимые действия
+                        Log.e("NoUsername", "Username is null or empty");
+                    } else {
+                        // Имя пользователя доступно, используйте его для передачи в Firestore
+                        map.put("username", username);
+                    }
+                    map.put("likeCount", list);
+                    map.put("comments",list);
+                    map.put("uid", user.getUid());
+
+                    reference.document(id).set(map)
+                            .addOnCompleteListener(toFirebase -> {
+                                if (toFirebase.isSuccessful()) {
+                                    Log.d("Firestore", "Document uploaded successfully");
+                                    imageView.setImageURI(null);
+                                    nextBtn.setVisibility(View.GONE);
+                                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
+                                    descET.setText(null);
+                                    finallatLang = null;
+                                    Toast.makeText(Add_location.this, "Uploaded", Toast.LENGTH_SHORT).show();
+
+                                } else {
+                                    Log.e("Firestore", "Error uploading document: " + task.getException());
+                                    Toast.makeText(Add_location.this, "Error:" + task.getException().getMessage(),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                dialog.dismiss();
+                            });
+
+                }
+            }
+        });
+
 
     }
 

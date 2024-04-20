@@ -32,6 +32,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import android.graphics.BitmapFactory;
@@ -61,6 +62,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         return new HomeHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull HomeHolder holder,  int position) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -73,7 +75,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
 
         holder.userNameTv.setText(list.get(position).getUsername());
-        holder.timeTv.setText("" + list.get(position).getTimestapmp());
+        if(list.get(position).getPostedTime() != null) {
+            holder.timeTv.setText("" + list.get(position).getPostedTime());
+        }
 
         if (list.get(position).getLikes() != null) {
             List<String> likeList = list.get(position).getLikes();
