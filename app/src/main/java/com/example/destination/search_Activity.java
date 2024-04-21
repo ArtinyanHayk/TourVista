@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.destination.adapter.SearchUserReciclerAdapter;
 import com.example.destination.adapter.ViewPagerAdapter;
 import com.example.destination.model.UserModel;
+import com.example.destination.utils.Other_Profile;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -70,18 +71,15 @@ public class search_Activity extends AppCompatActivity {
        adapter.onSelected(new SearchUserReciclerAdapter.onSelected() {
            @Override
            public void onSelect(int position, String Uid, String Username, String imageURL, int followers, int following, int posts) {
-               ProfileFragment fragment = new ProfileFragment();
+               Intent intent = new Intent(search_Activity.this,Other_Profile.class);
+               intent.putExtra("Uid",Uid);
+               intent.putExtra("username",Username);
+               intent.putExtra("imageURL",imageURL);
+               intent.putExtra("followers",followers);
+               intent.putExtra("following",following);
+               intent.putExtra("posts",posts);
+               startActivity(intent);
 
-               Bundle bundle = new Bundle();
-               bundle.putString("Uid", Uid);
-               bundle.putString("Username", Username);
-               bundle.putString("ImageURL", imageURL);
-               bundle.putInt("Followers", followers);
-               bundle.putInt("Following", following);
-               bundle.putInt("Posts", posts);
-               bundle.putString("Fragment", "Profile");
-
-               fragment.setArguments(bundle);
 
 
            }

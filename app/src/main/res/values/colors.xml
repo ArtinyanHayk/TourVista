@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="my_primary">#00E2FF</color>
     <color name="my_secondary">#0090FF</color>
+    <color name="my_3">#0E449F</color>
     <color name="light_gray">#989898</color>
     <color name="dark_gray">#505050</color>
     <color name="phone_gray">#C8FFFFFF</color>

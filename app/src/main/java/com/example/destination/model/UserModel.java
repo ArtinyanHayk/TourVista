@@ -12,7 +12,7 @@ public class UserModel {
     private Timestamp createdTimesetap;
     private String userId;
     //// UserModel_um kan u getter setter
-   int folowers;
+   int folowers,posts;
    int folowing;
    String imageURL;
    String status;
@@ -22,7 +22,7 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(String phone, String userName, Timestamp createdTimesetap,String userId,int folowers,int folowing,String imageURL,String status
+    public UserModel(String phone, String userName, Timestamp createdTimesetap,String userId,int folowers,int folowing,String imageURL,String status,int posts
     ) {
         this.phone = phone;
         this.userName = userName;
@@ -33,8 +33,18 @@ public class UserModel {
        this.folowers = folowers;
        this.imageURL =  imageURL;
        this.status = status;
+       this.posts = posts;
         ////
     }
+
+    public int getPosts() {
+        return posts;
+    }
+
+    public void setPosts(int posts) {
+        this.posts = posts;
+    }
+
     public String getStatus() {return status;}
     public void setStatus(String status) {this.status = status;}
     public int getFolowers() {return folowers;}

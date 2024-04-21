@@ -21,9 +21,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -32,6 +34,7 @@ import com.example.destination.adapter.GalleryAdapter;
 import com.example.destination.model.GalleryImages;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +48,7 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,13 +58,17 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Add_location extends AppCompatActivity {
+    private TextView nameTv;
     private EditText descET;
-    private ImageView imageView;
+    private ImageView backBtn,imageView,profile_image;
     private RecyclerView recyclerView;
-    private ImageButton backBtn, nextBtn,setLocation;
+    private ImageButton setLocation;
+    private Button nextBtn;
     private GalleryAdapter adapter;
     private List<GalleryImages> list;
     private Uri imageUri;
+
+
     private FirebaseUser user;
     private Dialog dialog;
     public static int list_size = 0;
@@ -97,12 +105,11 @@ public class Add_location extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
         init();
-        recyclerView.setHasFixedSize(true);
+       // recyclerView.setHasFixedSize(true);
+        nextBtn.setVisibility(View.INVISIBLE);
         list = new ArrayList<>();
         adapter = new GalleryAdapter(list);
-        recyclerView.setAdapter(adapter);
-
-
+       // recyclerView.setAdapter(adapter);
         setLocation.setOnClickListener(v -> {
             if(finallatLang == null) {
                 Log.e("finallLatLang","null");
@@ -118,7 +125,6 @@ public class Add_location extends AppCompatActivity {
             }
 
         });
-
         backBtn.setOnClickListener(v -> onBackPressed());
 
         imageView.setOnClickListener(v -> launcher.launch(
@@ -126,7 +132,6 @@ public class Add_location extends AppCompatActivity {
                         ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
         nextBtn.setOnClickListener(v -> {
             Log.d("ButtonClick", "Next button clicked!");
-
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageReference = storage.getReference().child("Post Images/"
                     + System.currentTimeMillis());
@@ -143,14 +148,39 @@ public class Add_location extends AppCompatActivity {
                         }
                     });
         });
+
+        FirebaseFirestore.getInstance().collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                   String  profileURL = (String) documentSnapshot.get("imageURL");
+                   String name = (String) documentSnapshot.get("userName");
+
+                    Glide.with(Add_location.this.getApplicationContext())
+                            .load(profileURL)
+                            .placeholder(R.drawable.ic_person)
+                            .timeout(6500)
+                            .into(profile_image);
+
+                    nameTv.setText(name);
+
+                }
+
+            }
+        });
     }
 
+    @SuppressLint("WrongViewCast")
     private void init() {
         descET = findViewById(R.id.descriptionET);
-        imageView = findViewById(R.id.imageView);
+        //////////
+        imageView = findViewById(R.id.post_image);
+        nameTv = findViewById(R.id.username);
+        profile_image = findViewById(R.id.image_profile);
+        /////////
         backBtn = findViewById(R.id.back_btn);
-        nextBtn = findViewById(R.id.next_btn);
-        recyclerView = findViewById(R.id.recyclerView);
+        nextBtn = findViewById(R.id.share_btn);
+       // recyclerView = findViewById(R.id.recyclerView);
         setLocation = findViewById(R.id.set_locaion);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -262,7 +292,7 @@ public class Add_location extends AppCompatActivity {
                                     Log.d("Firestore", "Document uploaded successfully");
                                     imageView.setImageURI(null);
                                     nextBtn.setVisibility(View.GONE);
-                                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
+                                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.add_icon_borderless));
                                     descET.setText(null);
                                     finallatLang = null;
                                     Toast.makeText(Add_location.this, "Uploaded", Toast.LENGTH_SHORT).show();
