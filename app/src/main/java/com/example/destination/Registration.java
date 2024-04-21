@@ -130,7 +130,7 @@ public class Registration extends AppCompatActivity {
                              userModel.setUserName(name);
                              userModel.setFolowers(0);
                              userModel.setUserId(user.getUid());
-                             userModel.setFolowing(123);
+                             userModel.setFolowing(0);
                              userModel.setPhone("null");
                              userModel.setPhone("0");
                              userModel.setCreatedTimesetap(new Timestamp(new Date(System.currentTimeMillis())));

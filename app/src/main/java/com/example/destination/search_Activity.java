@@ -120,7 +120,7 @@ public class search_Activity extends AppCompatActivity {
                     UserModel model = snapshot.toObject(UserModel.class);
 
                     if (model.getUserName().toLowerCase().contains(text.toLowerCase())) {
-                        Toast.makeText(search_Activity.this, model.getUserName(), Toast.LENGTH_SHORT).show();
+
 
                         filteredList.add(new UserModel(
                                 model.getPhone(),
@@ -131,6 +131,7 @@ public class search_Activity extends AppCompatActivity {
                                 model.getFolowing(),
                                 model.getImageURL(),
                                 model.getStatus()
+
                         ));
                     }
                 }

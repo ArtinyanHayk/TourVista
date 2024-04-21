@@ -16,11 +16,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -109,6 +112,17 @@ public class Add_location extends AppCompatActivity {
         nextBtn.setVisibility(View.INVISIBLE);
         list = new ArrayList<>();
         adapter = new GalleryAdapter(list);
+
+        DisplayMetrics displayMetrics = Add_location.this.getResources().getDisplayMetrics();
+        int screenWidth = displayMetrics.widthPixels;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(Add_location.this.getResources(), R.drawable.map_icon, options);
+        float aspectRatio = options.outWidth / (float) options.outHeight;
+        int calculatedHeight = (int) (screenWidth / aspectRatio);
+        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+        layoutParams.height = calculatedHeight;
+        imageView.setLayoutParams(layoutParams);
        // recyclerView.setAdapter(adapter);
         setLocation.setOnClickListener(v -> {
             if(finallatLang == null) {

@@ -275,7 +275,7 @@ public class ProfileFragment extends Fragment {
         };
     }
     public static class PostImageHolder extends RecyclerView.ViewHolder {
-        private final ImageView imageView;
+        public final ImageView imageView;
 
         public PostImageHolder(@NonNull View itemView) {
             super(itemView);
