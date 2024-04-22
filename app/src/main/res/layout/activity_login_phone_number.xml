@@ -7,7 +7,7 @@
     android:layout_margin="20dp"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".loginPhoneNumberActivity"
+    tools:context=".Activityes.loginPhoneNumberActivity"
     android:weightSum="100"
     >
 

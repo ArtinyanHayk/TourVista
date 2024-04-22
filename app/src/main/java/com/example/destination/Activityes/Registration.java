@@ -1,4 +1,4 @@
-package com.example.destination;
+package com.example.destination.Activityes;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.destination.R;
 import com.example.destination.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,11 +30,10 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Registration extends AppCompatActivity {
@@ -128,9 +128,9 @@ public class Registration extends AppCompatActivity {
                              DocumentReference reference = FirebaseFirestore.getInstance().collection("users").document(user.getUid());
 
                              userModel.setUserName(name);
-                             userModel.setFolowers(0);
+                             userModel.setFollowers(new ArrayList<String>());
                              userModel.setUserId(user.getUid());
-                             userModel.setFolowing(0);
+                             userModel.setFollowing(new ArrayList<String>());
                              userModel.setPhone("null");
                              userModel.setPhone("0");
                              userModel.setCreatedTimesetap(new Timestamp(new Date(System.currentTimeMillis())));
@@ -141,7 +141,7 @@ public class Registration extends AppCompatActivity {
                                  public void onSuccess(Void unused) {
                                      Toast.makeText(Registration.this, "Account crated", Toast.LENGTH_SHORT).show();
 
-                                     Intent intent = new Intent(Registration.this,Login.class);
+                                     Intent intent = new Intent(Registration.this, Login.class);
                                      intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
                                      startActivity(intent);
                                  }

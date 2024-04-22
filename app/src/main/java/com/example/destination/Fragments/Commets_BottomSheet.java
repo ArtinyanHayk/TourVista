@@ -1,4 +1,4 @@
-package com.example.destination;
+package com.example.destination.Fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.destination.R;
 import com.example.destination.adapter.CommentAdapter;
 import com.example.destination.adapter.HomeAdapter;
 import com.example.destination.databinding.CommentbottomsheetlayoutBinding;

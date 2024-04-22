@@ -1,4 +1,4 @@
-package com.example.destination;
+package com.example.destination.Activityes;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.example.destination.R;
 import com.example.destination.utils.FirbaseUtil;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -20,14 +21,14 @@ public class Start_Activity extends AppCompatActivity {
             public void run() {
                 if(FirbaseUtil.isLoggedIn()){
                     if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
-                        startActivity(new Intent(Start_Activity.this,MainActivity.class));
+                        startActivity(new Intent(Start_Activity.this, MainActivity.class));
                     } else if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                         startActivity(new Intent(Start_Activity.this,MainActivity.class));
 
                     }
                 }
                else{
-                    startActivity(new Intent(Start_Activity.this,Registration.class));
+                    startActivity(new Intent(Start_Activity.this, Registration.class));
                 }
 
                 finish();

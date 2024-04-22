@@ -7,7 +7,7 @@
     android:layout_margin="20dp"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".LoginUsernameActivity"
+    tools:context=".Activityes.LoginUsernameActivity"
     android:weightSum="100">
 
     <LinearLayout

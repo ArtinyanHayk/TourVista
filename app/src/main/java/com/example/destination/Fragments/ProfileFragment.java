@@ -1,4 +1,4 @@
-package com.example.destination;
+package com.example.destination.Fragments;
 
 import static android.app.Activity.RESULT_OK;
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.destination.ImageCropper.CropperActivity;
+import com.example.destination.R;
 import com.example.destination.model.PostImageModel;
 import com.example.destination.utils.AndroidUtil;
 import com.example.destination.utils.FirbaseUtil;
@@ -60,6 +61,7 @@ import com.google.firebase.storage.UploadTask;
 import com.yalantis.ucrop.UCrop;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -186,7 +188,10 @@ public class ProfileFragment extends Fragment {
         editProfileButton = view.findViewById(R.id.edit_profileImage);
         postCountTv = view.findViewById(R.id.postsTv);
     }
-
+////////////////////////////////
+    /////////////////////
+    ////////////////
+    /////////ES INCHA
     private void setupUI() {
         if (isMyProfile) {
             followBtn.setVisibility(View.GONE);
@@ -218,14 +223,16 @@ public class ProfileFragment extends Fragment {
             }
             if (value != null && value.exists()) {
                 String userName = value.getString("userName");
-                Long followers = value.getLong("followers");
+                List<String> followers = (List<String>) value.get("followers");
                 String profileURL = value.getString("imageURL");
-
+///////////////
+                ///////////
+                //////////Erb follow es anm dusa qcm____following voch te followers
                 if (userName != null) {
                     nameTv.setText(userName);
                 }
                 if (followers != null) {
-                    followersCountTv.setText(String.valueOf(followers));
+                    followersCountTv.setText(String.valueOf(followers.size()));
                 }
                 if (profileURL != null) {
                     Glide.with(requireContext())

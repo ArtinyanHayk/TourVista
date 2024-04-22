@@ -49,8 +49,8 @@ public class SearchUserReciclerAdapter extends RecyclerView.Adapter<SearchUserRe
                 list.get(position).getUserId(),
                 list.get(position).getUserName(),
                 list.get(position).getImageURL(),
-                list.get(position).getFolowers(),
-                list.get(position).getFolowing(),
+                list.get(position).getFollowers(),
+                list.get(position).getFollowing(),
                 0
 
         );
@@ -61,7 +61,7 @@ public class SearchUserReciclerAdapter extends RecyclerView.Adapter<SearchUserRe
         return list.size();
     }
     public interface onSelected{
-        public void onSelect(int position, String Uid, String Username, String imageURL, int followers, int following, int posts );
+        public void onSelect(int position, String Uid, String Username, String imageURL, List<String> followers, List<String> following, int posts );
     }
     public void onSelected(onSelected selected){this.selected = selected;}
 
@@ -81,7 +81,7 @@ public class SearchUserReciclerAdapter extends RecyclerView.Adapter<SearchUserRe
 
         }
 
-        public void setOnClickListener(int position, String Uid,String Username,String imageURL,int followers,int following,int posts) {
+        public void setOnClickListener(int position, String Uid,String Username,String imageURL,List<String> followers,List<String> following,int posts) {
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -28,13 +28,13 @@
         android:theme="@style/Theme.Destination"
         tools:targetApi="31">
         <activity
-            android:name=".Other_Profile"
+            android:name=".Activityes.Other_Profile"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".Activityes.Login"
             android:exported="false" />
         <activity
-            android:name=".Registration"
+            android:name=".Activityes.Registration"
             android:exported="false" />
         <activity
             android:name=".Location.LocationForUser"
@@ -50,32 +50,27 @@
             android:name=".Add_post"
             android:exported="false" />
         -->
+
         <activity
-            android:name=".MyAccount"
+            android:name=".Fragments.ProfileFragment"
             android:exported="false" />
         <activity
-            android:name=".Add_location_Fragment2"
+            android:name=".Fragments.NetworkFragment"
             android:exported="false" />
         <activity
-            android:name=".ProfileFragment"
+            android:name=".Activityes.search_Activity"
             android:exported="false" />
         <activity
-            android:name=".NetworkFragment"
+            android:name=".Activityes.LoginUsernameActivity"
             android:exported="false" />
         <activity
-            android:name=".search_Activity"
+            android:name=".Activityes.loginPhoneNumberActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginUsernameActivity"
+            android:name=".Activityes.LoginOtpActivity"
             android:exported="false" />
         <activity
-            android:name=".loginPhoneNumberActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginOtpActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Start_Activity"
+            android:name=".Activityes.Start_Activity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -84,10 +79,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".Activityes.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".Add_location"
+            android:name=".Activityes.Add_location"
             android:exported="false" />
         <activity
             android:name=".ImageCropper.CropperActivity"

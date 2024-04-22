@@ -1,4 +1,4 @@
-package com.example.destination;
+package com.example.destination.Activityes;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.destination.R;
 import com.hbb20.CountryCodePicker;
 
 public class loginPhoneNumberActivity extends AppCompatActivity {

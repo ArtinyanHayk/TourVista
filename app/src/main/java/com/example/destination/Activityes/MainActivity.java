@@ -1,4 +1,4 @@
-package com.example.destination;
+package com.example.destination.Activityes;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -11,12 +11,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.destination.adapter.ViewPagerAdapter;
+import com.example.destination.Fragments.ChatsFragment;
+import com.example.destination.Fragments.NetworkFragment;
+import com.example.destination.Fragments.NotificationFragment;
+import com.example.destination.Fragments.ProfileFragment;
+import com.example.destination.R;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    ViewPagerAdapter pagerAdapter;
+
     private static final String READ_STORAGE_PERMISSION = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final String READ_MEDIA_IMAGES = Manifest.permission.READ_MEDIA_IMAGES;
     private static final String READ_MEDIA_VIDEO = Manifest.permission.READ_MEDIA_VIDEO;
@@ -180,8 +184,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
 
-        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(pagerAdapter);
+
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.getTabAt(0).setIcon(R.drawable.map_icon);

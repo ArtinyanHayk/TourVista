@@ -1,4 +1,4 @@
-package com.example.destination;
+package com.example.destination.Activityes;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.destination.R;
 import com.example.destination.adapter.SearchUserReciclerAdapter;
 import com.example.destination.model.UserModel;
 import com.google.firebase.firestore.CollectionReference;
@@ -65,13 +66,13 @@ public class search_Activity extends AppCompatActivity {
 
        adapter.onSelected(new SearchUserReciclerAdapter.onSelected() {
            @Override
-           public void onSelect(int position, String Uid, String Username, String imageURL, int followers, int following, int posts) {
-               Intent intent = new Intent(search_Activity.this,Other_Profile.class);
+           public void onSelect(int position, String Uid, String Username, String imageURL, List<String> followers, List<String> following, int posts) {
+               Intent intent = new Intent(search_Activity.this, Other_Profile.class);
                intent.putExtra("Uid",Uid);
                intent.putExtra("username",Username);
                intent.putExtra("imageURL",imageURL);
-               intent.putExtra("followers",followers);
-               intent.putExtra("following",following);
+               intent.putStringArrayListExtra("followers", new ArrayList<>(followers));
+               intent.putStringArrayListExtra("following", new ArrayList<>(following));
                intent.putExtra("posts",posts);
                startActivity(intent);
 
@@ -122,8 +123,8 @@ public class search_Activity extends AppCompatActivity {
                                 model.getUserName(),
                                 model.getCreatedTimesetap(),
                                 model.getUserId(),
-                                model.getFolowers(),
-                                model.getFolowing(),
+                                model.getFollowers(),
+                                model.getFollowing(),
                                 model.getImageURL(),
                                 model.getStatus()
 

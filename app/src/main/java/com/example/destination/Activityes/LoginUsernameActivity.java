@@ -1,4 +1,4 @@
-package com.example.destination;
+package com.example.destination.Activityes;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.example.destination.model.HomeModel;
+import com.example.destination.R;
 import com.example.destination.model.UserModel;
 import com.example.destination.utils.FirbaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,7 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
 
 public class LoginUsernameActivity extends AppCompatActivity {
     EditText usernameInput;
@@ -27,8 +28,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
     UserModel userModel;
     String phoneNumber;
     ////
-    int folowers = 0;
-    int folowing = 0;
+    List<String> folowers,folowing;
     String imageURL;
     String status;
     FirebaseUser user;
@@ -74,7 +74,7 @@ public class LoginUsernameActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 setInProgress(false);
                 if(task.isSuccessful()){
-                    Intent intent = new Intent(LoginUsernameActivity.this,MainActivity.class);
+                    Intent intent = new Intent(LoginUsernameActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
 

@@ -13,7 +13,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 
-import com.example.destination.Add_location;
+import com.example.destination.Activityes.Add_location;
 
 import com.example.destination.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
