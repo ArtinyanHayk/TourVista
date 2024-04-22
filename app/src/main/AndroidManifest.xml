@@ -28,7 +28,7 @@
         android:theme="@style/Theme.Destination"
         tools:targetApi="31">
         <activity
-            android:name=".utils.Other_Profile"
+            android:name=".Other_Profile"
             android:exported="false" />
         <activity
             android:name=".Login"
