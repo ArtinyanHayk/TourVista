@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.destination.Activityes.MainActivity;
 import com.example.destination.ImageCropper.CropperActivity;
 import com.example.destination.R;
 import com.example.destination.model.PostImageModel;
@@ -72,7 +73,7 @@ public class ProfileFragment extends Fragment {
 
     private static final int PICK_IMAGE_REQUEST = 101;
 
-    private TextView nameTv, followersCountTv, postCountTv, followingCountTv, ratingCountTv;
+    private TextView nameTv, followingCountTv,followersCountTv, postCountTv;
     private CircleImageView profileImage;
     private Button followBtn;
     private RecyclerView recyclerView;
@@ -87,6 +88,8 @@ public class ProfileFragment extends Fragment {
     private Uri selectedImageUri;
 
     private ProgressDialog progressDialog;
+    public  List<String> following;
+    public  List<String> followers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -178,6 +181,7 @@ public class ProfileFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
 
         nameTv = view.findViewById(R.id.nameTv);
+        followingCountTv = view.findViewById(R.id.followingCountTv);
         followersCountTv = view.findViewById(R.id.folowersCountTv);
         profileImage = view.findViewById(R.id.profile_image);
         followBtn = view.findViewById(R.id.followbtn);
@@ -213,6 +217,7 @@ public class ProfileFragment extends Fragment {
         progressDialog.setCancelable(false);
     }
 
+    @SuppressLint("RestrictedApi")
     private void loadBasicData() {
         DocumentReference userRef = FirebaseFirestore.getInstance().collection("users")
                 .document(user.getUid());
@@ -223,7 +228,8 @@ public class ProfileFragment extends Fragment {
             }
             if (value != null && value.exists()) {
                 String userName = value.getString("userName");
-                List<String> followers = (List<String>) value.get("followers");
+                 following = (List<String>) value.get("following");
+                 followers = (List<String>) value.get("followers");
                 String profileURL = value.getString("imageURL");
 ///////////////
                 ///////////
@@ -231,11 +237,14 @@ public class ProfileFragment extends Fragment {
                 if (userName != null) {
                     nameTv.setText(userName);
                 }
+                if (following != null) {
+                    followingCountTv.setText(Integer.toString(following.size()));
+                }
                 if (followers != null) {
-                    followersCountTv.setText(String.valueOf(followers.size()));
+                    followersCountTv.setText(Integer.toString(followers.size()));
                 }
                 if (profileURL != null) {
-                    Glide.with(requireContext())
+                    Glide.with(getApplicationContext())
                             .load(profileURL)
                             .placeholder(R.drawable.ic_person)
                             .timeout(6500)

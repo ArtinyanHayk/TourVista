@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -70,7 +71,7 @@ public class SearchUserReciclerAdapter extends RecyclerView.Adapter<SearchUserRe
         TextView usernameText;
         TextView phoneText;
        ImageView profilePic;
-       LinearLayout layout;
+       RelativeLayout layout;
 
         public UserModelViewHolder(@NonNull View itemView) {
             super(itemView);
