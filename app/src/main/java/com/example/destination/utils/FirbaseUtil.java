@@ -57,5 +57,19 @@ public class FirbaseUtil {
         return FirebaseStorage.getInstance().getReference().child("profile_pic").
                 child(FirbaseUtil.currentUsersId());
     }
+    public static DocumentReference getChatReference(String chatId){
+        return FirebaseFirestore.getInstance().collection("chats").document(chatId);
+    }
+    public static  String chatId(String userId1,String userId2){
+        if(userId1.hashCode() < userId2.hashCode()){
+            return userId1 + "_" + userId2;
+        }else
+            return userId2 + "_" + userId1;
+    }
+    public static CollectionReference getChatMessageReference(String chatId){
+        return getChatReference(chatId).collection("messages");
+    }
+
+
 
 }
