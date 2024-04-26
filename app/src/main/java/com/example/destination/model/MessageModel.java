@@ -1,16 +1,19 @@
 package com.example.destination.model;
 
+import com.google.firebase.Timestamp;
+
 public class MessageModel {
-    private String message,senderId,Time;
+    private String message,senderId;
+    private Timestamp time;
 
 
     public MessageModel() {
     }
 
-    public MessageModel(String message, String senderId, String time) {
+    public MessageModel(String message, String senderId, Timestamp time) {
         this.message = message;
         this.senderId = senderId;
-        Time = time;
+        this.time = time;
     }
 
     public String getMessage() {
@@ -29,11 +32,11 @@ public class MessageModel {
         this.senderId = senderId;
     }
 
-    public String getTime() {
-        return Time;
+    public Timestamp getTime() {
+        return time;
     }
 
-    public void setTime(String time) {
-        Time = time;
+    public void setTime(Timestamp time) {
+        this.time = time;
     }
 }

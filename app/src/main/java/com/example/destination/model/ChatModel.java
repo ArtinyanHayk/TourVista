@@ -1,43 +1,31 @@
 package com.example.destination.model;
 
+import com.google.firebase.Timestamp;
+
 import java.util.List;
 
 public class ChatModel {
-    private String name ,lastMessage,profilePic,lastMessageTime;
+    private String lastMessage,lastMsgSenderId;
     private List<String> membersId;
-    private int unseenMessage;
+    private Timestamp lastMessageTime;
 
     public ChatModel() {
     }
-    public ChatModel( String lastMessage, List<String> membersId,String lastMessageTime) {
+
+
+    public ChatModel(String lastMessage,Timestamp lastMessageTime,  String lastMsgSenderId,List<String> membersId  ) {
         this.lastMessage = lastMessage;
-        this.membersId = membersId;
         this.lastMessageTime = lastMessageTime;
-    }
-
-    public ChatModel(String name, String lastMessage, String profilePic, List<String> membersId, int unseenMessage) {
-        this.name = name;
-        this.lastMessage = lastMessage;
-        this.profilePic = profilePic;
+        this.lastMsgSenderId = lastMsgSenderId;
         this.membersId = membersId;
-        this.unseenMessage = unseenMessage;
+
+
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public String getProfilePic() {
-        return profilePic;
-    }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
-    }
+
 
 
     public String getLastMessage() {
@@ -48,13 +36,7 @@ public class ChatModel {
         this.lastMessage = lastMessage;
     }
 
-    public int getUnseenMessage() {
-        return unseenMessage;
-    }
 
-    public void setUnseenMessage(int unseenMessage) {
-        this.unseenMessage = unseenMessage;
-    }
 
     public List<String> getMembersId() {
         return membersId;
@@ -64,11 +46,19 @@ public class ChatModel {
         this.membersId = membersId;
     }
 
-    public String getLastMessageTime() {
+    public Timestamp getLastMessageTime() {
         return lastMessageTime;
     }
 
-    public void setLastMessageTime(String lastMessageTime) {
+    public void setLastMessageTime(Timestamp lastMessageTime) {
         this.lastMessageTime = lastMessageTime;
+    }
+
+    public String getLastMsgSenderId() {
+        return lastMsgSenderId;
+    }
+
+    public void setLastMsgSenderId(String lastMsgSenderId) {
+        this.lastMsgSenderId = lastMsgSenderId;
     }
 }

@@ -10,6 +10,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.FirebaseStorageKtxRegistrar;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
+
 public class FirbaseUtil {
     public static String currentUsersId() {
         return FirebaseAuth.getInstance().getUid();
@@ -68,6 +70,16 @@ public class FirbaseUtil {
     }
     public static CollectionReference getChatMessageReference(String chatId){
         return getChatReference(chatId).collection("messages");
+    }
+    public static DocumentReference getOtherUserChat(List<String> userIds){
+        if(userIds.get(0).equals(FirbaseUtil.currentUsersId())){
+            return allUsersCollectionReference().document(userIds.get(1));
+        }else{
+            return allUsersCollectionReference().document(userIds.get(0));
+        }
+    }
+    public static CollectionReference allChatCollectionReference(){
+        return  FirebaseFirestore.getInstance().collection("chats");
     }
 
 

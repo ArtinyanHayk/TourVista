@@ -21,6 +21,7 @@ import com.example.destination.utils.FirbaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -87,8 +88,10 @@ public class Chat_serach extends AppCompatActivity {
                         if(chatModel == null){
                             chatModel = new ChatModel(
                                     "",
-                                    Arrays.asList(user.getUid(),Uid),
-                                    null
+                                    Timestamp.now(),
+                                    "",
+                                    Arrays.asList(user.getUid(),Uid)
+
 
                             );
                         }
@@ -99,6 +102,7 @@ public class Chat_serach extends AppCompatActivity {
                                     Intent intent = new Intent(Chat_serach.this, Chat.class);
                                     intent.putExtra("username", Username);
                                     intent.putExtra("person2_id", Uid);
+                                    intent.putExtra("profilePic", imageURL);
                                     startActivity(intent);
                                 }
                                 else {

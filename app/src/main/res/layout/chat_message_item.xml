@@ -5,7 +5,7 @@
     android:padding="8dp">
 
     <LinearLayout
-        android:layout_marginStart="5dp"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/other_user_messages_bkg"
@@ -22,7 +22,7 @@
             android:id="@+id/left_chat_textview"/>
     </LinearLayout>
     <LinearLayout
-        android:layout_marginEnd="5dp"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/my_messages_bkg"
@@ -35,6 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
+            android:maxLines="50"
+            android:maxLength="500"
             android:textSize="18sp"
             android:id="@+id/right_chat_textview"/>
     </LinearLayout>

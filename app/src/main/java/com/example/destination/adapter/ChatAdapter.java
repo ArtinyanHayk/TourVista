@@ -1,72 +1,90 @@
 package com.example.destination.adapter;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.destination.Activityes.Chat_serach;
 import com.example.destination.Chat.Chat;
 import com.example.destination.R;
 import com.example.destination.model.ChatModel;
-
-import java.util.List;
+import com.example.destination.model.UserModel;
+import com.example.destination.utils.FirbaseUtil;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatesonCreateViewHolder> {
+public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, ChatAdapter.ChatesonCreateViewHolder> {
+    private Context context;
 
-    private final List<ChatModel> messageLists;
-    private final Context context;
-
-    public ChatAdapter(List<ChatModel> messageLists, Context context) {
-        this.messageLists = messageLists;
+    public ChatAdapter(FirestoreRecyclerOptions<ChatModel> options, Context context) {
+        super(options);
         this.context = context;
     }
-
 
     @NonNull
     @Override
     public ChatesonCreateViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.chat_item, parent, false);
         return new ChatesonCreateViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChatesonCreateViewHolder holder, int position) {
-        ChatModel messageList = messageLists.get(position);
+    protected void onBindViewHolder(@NonNull ChatesonCreateViewHolder holder, int position, @NonNull ChatModel model) {
+        FirbaseUtil.getOtherUserChat(model.getMembersId()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                UserModel userModel = task.getResult().toObject(UserModel.class);
+               if(model.getLastMsgSenderId().equals(userModel.getUserId()) ){
+                   holder.lastMessage.setText(model.getLastMessage());
+//
+               }else{
+                   Toast.makeText(context, "true", Toast.LENGTH_SHORT).show();
+                   holder.lastMessage.setText("Me:" + model.getLastMessage());
+               }
+//
 
-        if (messageList.getProfilePic() != null) {
-            Glide.with(context.getApplicationContext())
-                    .load(messageList.getProfilePic())
-                    .placeholder(R.drawable.ic_person)
-                    .timeout(6500)
-                    .into(holder.profileImage);
-        }
+                holder.name.setText(userModel.getUserName());
+                if (userModel.getImageURL() != null) {
+                    Glide.with(context.getApplicationContext())
+                            .load(userModel.getImageURL())
+                            .placeholder(R.drawable.ic_person)
+                            .timeout(6500)
+                            .into(holder.profileImage);
+                    Toast.makeText(context, "nonull", Toast.LENGTH_SHORT).show();
+                }
 
-        holder.name.setText(messageList.getName());
-        holder.lastMessage.setText(messageList.getLastMessage());
+                holder.itemView.setOnClickListener(v -> {
+                    Intent intent = new Intent(context, Chat.class);
+                    intent.putExtra("username", userModel.getUserName());
+                    intent.putExtra("person2_id",userModel.getUserId());
+                    intent.putExtra("profilePic", userModel.getImageURL());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                });
+            }
+        });
 
-        if (messageList.getUnseenMessage() == 0) {
-            holder.unseenMessages.setVisibility(View.GONE);
-        } else {
-            holder.unseenMessages.setVisibility(View.VISIBLE);
-            holder.unseenMessages.setText(String.valueOf(messageList.getUnseenMessage()));
-        }
 
-        holder.bindChatClick(messageList);
     }
-
     @Override
     public int getItemCount() {
-        return messageLists.size();
+        return super.getItemCount(); // Ensure the item count is correct
     }
+
+
 
     class ChatesonCreateViewHolder extends RecyclerView.ViewHolder {
 
@@ -83,16 +101,20 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatesonCreate
             chatLayout = itemView.findViewById(R.id.chat_layout);
         }
 
-        public void bindChatClick(ChatModel messageList) {
-            chatLayout.setOnClickListener(v -> openChatActivity(messageList));
-        }
+      //  public void onClick(int position, String uid, String profilePic, String name) {
+      //      chatLayout.setOnClickListener(new View.OnClickListener() {
+      //          @Override
+      //          public void onClick(View v) {
+      //              onPressed.onPress(position, uid, profilePic, name);
+      //          }
+      //      });
+      //  }
 
-        private void openChatActivity(ChatModel messageList) {
-            Intent intent = new Intent(context, Chat.class);
-            intent.putExtra("name", messageList.getName());
-            intent.putExtra("profilPic", messageList.getProfilePic());
-            context.startActivity(intent);
-        }
+
     }
+
 }
+
+
+
 
