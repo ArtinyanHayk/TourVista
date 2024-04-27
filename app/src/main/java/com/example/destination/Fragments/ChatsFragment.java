@@ -115,16 +115,10 @@ public class ChatsFragment extends Fragment {
      //           }
      //       }
      //   });
-        FirbaseUtil.allChatCollectionReference().whereArrayContains("membersId",user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (DocumentSnapshot snapshot:queryDocumentSnapshots){
-                    if(!snapshot.exists()){
 
-                    }
-                }
                 Query query = FirbaseUtil.allChatCollectionReference()
-                        .orderBy("lastMessageTime", Query.Direction.DESCENDING);
+                        .orderBy("lastMessageTime", Query.Direction.DESCENDING)
+                        .whereArrayContains("membersId",user.getUid());
 
                 FirestoreRecyclerOptions<ChatModel> options = new FirestoreRecyclerOptions.Builder<ChatModel>()
                         .setQuery(query, ChatModel.class).build();
@@ -134,15 +128,13 @@ public class ChatsFragment extends Fragment {
                 recyclerView.setLayoutManager(manager);
                 recyclerView.setAdapter(adapter);
                 adapter.startListening();
-
-
             }
-        });
 
 
 
 
-    }
+
+
 
 //    private void removeChatItem(String chatId) {
 //        for (int i = 0; i < chatList.size(); i++) {

@@ -10,12 +10,16 @@ import com.example.destination.R;
 import com.example.destination.utils.FirbaseUtil;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Start_Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        FirbaseUtil.Online(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -36,4 +40,5 @@ public class Start_Activity extends AppCompatActivity {
             }
         },1500);
     }
+
 }

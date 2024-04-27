@@ -35,6 +35,7 @@ import com.example.destination.Location.LocationForPost;
 import com.example.destination.R;
 import com.example.destination.adapter.GalleryAdapter;
 import com.example.destination.model.GalleryImages;
+import com.example.destination.utils.BaseApplication;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,7 +59,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class Add_location extends AppCompatActivity {
+public class Add_location  extends BaseApplication  {
     private TextView nameTv;
     private EditText descET;
     private ImageView backBtn,imageView,profile_image;

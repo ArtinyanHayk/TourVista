@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.destination.R;
 import com.example.destination.model.UserModel;
+import com.example.destination.utils.BaseApplication;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,7 +37,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Registration extends AppCompatActivity {
+public class Registration  extends BaseApplication {
     public static final String Tag = "Tag";
     EditText fullName,Email,Password,confirmPass;
     Button registerBtn;
@@ -134,7 +135,7 @@ public class Registration extends AppCompatActivity {
                              userModel.setPhone("null");
                              userModel.setPhone("0");
                              userModel.setCreatedTimesetap(new Timestamp(new Date(System.currentTimeMillis())));
-                             userModel.setStatus("");
+                             userModel.setonline(false);
 
                              reference.set(userModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                  @Override

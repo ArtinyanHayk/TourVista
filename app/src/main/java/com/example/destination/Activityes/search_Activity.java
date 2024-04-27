@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.destination.R;
 import com.example.destination.adapter.SearchUserReciclerAdapter;
 import com.example.destination.model.UserModel;
+import com.example.destination.utils.BaseApplication;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,7 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class search_Activity extends AppCompatActivity {
+public class search_Activity  extends BaseApplication {
 
     EditText searchInput;
     ImageButton searchButton;
@@ -126,7 +127,7 @@ public class search_Activity extends AppCompatActivity {
                                 model.getFollowers(),
                                 model.getFollowing(),
                                 model.getImageURL(),
-                                model.getStatus()
+                                model.getonline()
 
                         ));
                     }

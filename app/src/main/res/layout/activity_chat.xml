@@ -60,7 +60,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
                 android:text="Online"
-                android:textColor="#00C853"
+                android:textStyle="bold"
+                android:textColor="@color/light_green"
                 android:layout_marginTop="2dp"/>
         </LinearLayout>
     </RelativeLayout>

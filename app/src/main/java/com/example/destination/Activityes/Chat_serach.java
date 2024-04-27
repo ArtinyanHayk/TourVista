@@ -17,6 +17,7 @@ import com.example.destination.R;
 import com.example.destination.adapter.SearchUserReciclerAdapter;
 import com.example.destination.model.ChatModel;
 import com.example.destination.model.UserModel;
+import com.example.destination.utils.BaseApplication;
 import com.example.destination.utils.FirbaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class Chat_serach extends AppCompatActivity {
+public class Chat_serach  extends BaseApplication {
     private RecyclerView recyclerView;
     private SearchView searchView;
     private List<UserModel> filteredList;
@@ -170,7 +171,7 @@ public class Chat_serach extends AppCompatActivity {
                                 model.getFollowers(),
                                 model.getFollowing(),
                                 model.getImageURL(),
-                                model.getStatus()
+                                model.getonline()
 
                         ));
                     }

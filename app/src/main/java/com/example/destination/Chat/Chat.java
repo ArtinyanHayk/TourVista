@@ -1,12 +1,14 @@
 package com.example.destination.Chat;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,13 +29,20 @@ import com.example.destination.R;
 import com.example.destination.adapter.MessagesAdapter;
 import com.example.destination.model.ChatModel;
 import com.example.destination.model.MessageModel;
+import com.example.destination.model.UserModel;
+import com.example.destination.utils.BaseApplication;
 import com.example.destination.utils.FirbaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,7 +50,7 @@ import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Chat extends AppCompatActivity {
+public class Chat  extends BaseApplication {
 
     EditText messageEditText;
     String chatId;
@@ -50,10 +59,11 @@ public class Chat extends AppCompatActivity {
     ChatModel chatModel;
     MessagesAdapter adapter;
     ImageView sendBtn;
-    TextView name;
+    TextView name,onlineTv;
     ImageView bacBtn;
     CircleImageView profilePic;
     RecyclerView recyclerView;
+    boolean online;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,24 +76,49 @@ public class Chat extends AppCompatActivity {
         profilePic = findViewById(R.id.profilePic);
         sendBtn = findViewById(R.id.sendBtn);
         recyclerView = findViewById(R.id.recyclerView);
+        onlineTv = findViewById(R.id.online);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         bacBtn.setOnClickListener(v -> finish());
-        final String getname = getIntent().getStringExtra("username");
+
         id2 = getIntent().getStringExtra("person2_id");
-        final String getProfilPic = getIntent().getStringExtra("profilePic");
 
-        Glide.with(this)
-                .load(getProfilPic)
-                .placeholder(R.drawable.ic_person)
-                .timeout(6500)
-                .into(profilePic);
-        name.setText(getname);
 
-        chatId = FirbaseUtil.chatId(user.getUid(), id2);
-        getOrCreateChatroomModel();
-        setupChatRecyclerView();
+
+        FirebaseFirestore.getInstance().collection("users").document(id2).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                UserModel model = task.getResult().toObject(UserModel.class);
+
+                    if(model.getonline()){
+                        onlineTv.setText("online");
+                        onlineTv.setTextColor(getResources().getColor(R.color.light_green));
+                    }else{
+                        onlineTv.setText("offline");
+                        onlineTv.setTextColor(getResources().getColor(R.color.light_gray));
+                    }
+
+                    Glide.with(Chat.this)
+                            .load(model.getImageURL())
+                            .placeholder(R.drawable.ic_person)
+                            .timeout(6500)
+                            .into(profilePic);
+                    name.setText(model.getUserName());
+
+                    chatId = FirbaseUtil.chatId(user.getUid(), id2);
+                    getOrCreateChatroomModel();
+                    setupChatRecyclerView();
+                }
+
+
+
+        });
+
+
+
+
+
+
 
         sendBtn.setOnClickListener(v -> {
             String gettxtMessage = messageEditText.getText().toString();
@@ -96,6 +131,8 @@ public class Chat extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
         });
+
+
     }
 
     void setupChatRecyclerView() {
@@ -160,4 +197,5 @@ public class Chat extends AppCompatActivity {
             }
         });
     }
+
 }

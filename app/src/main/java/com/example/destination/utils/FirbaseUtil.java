@@ -10,7 +10,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.FirebaseStorageKtxRegistrar;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirbaseUtil {
     public static String currentUsersId() {
@@ -71,6 +73,13 @@ public class FirbaseUtil {
     public static CollectionReference getChatMessageReference(String chatId){
         return getChatReference(chatId).collection("messages");
     }
+    public static String getOtherUserId(List<String> userIds){
+        if(userIds.get(0).equals(FirbaseUtil.currentUsersId())){
+            return userIds.get(1);
+        }else{
+            return userIds.get(0);
+        }
+    }
     public static DocumentReference getOtherUserChat(List<String> userIds){
         if(userIds.get(0).equals(FirbaseUtil.currentUsersId())){
             return allUsersCollectionReference().document(userIds.get(1));
@@ -80,6 +89,20 @@ public class FirbaseUtil {
     }
     public static CollectionReference allChatCollectionReference(){
         return  FirebaseFirestore.getInstance().collection("chats");
+    }
+
+    public static void Online(boolean online){
+        if(online){
+
+            Map<String,Object> map = new HashMap<>();
+            map.put("online",true);
+            currentUsersDetails().update(map);
+
+        }else{
+            Map<String,Object> map = new HashMap<>();
+            map.put("online",false);
+            currentUsersDetails().update(map);
+        }
     }
 
 

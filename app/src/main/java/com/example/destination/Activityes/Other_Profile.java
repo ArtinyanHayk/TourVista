@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.destination.R;
 import com.example.destination.model.PostImageModel;
 import com.example.destination.model.UserModel;
+import com.example.destination.utils.BaseApplication;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,7 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Other_Profile extends AppCompatActivity {
+public class Other_Profile  extends BaseApplication {
     private TextView nameTv, followersCountTv, postCountTv, followingCountTv;
     private ImageView profileImage;
     private MotionButton followBtn;

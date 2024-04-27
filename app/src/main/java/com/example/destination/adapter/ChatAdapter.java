@@ -29,6 +29,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, ChatAdapter.ChatesonCreateViewHolder> {
     private Context context;
+    String otherId = "";
+    boolean repeat = false;
 
     public ChatAdapter(FirestoreRecyclerOptions<ChatModel> options, Context context) {
         super(options);
@@ -38,49 +40,60 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, ChatAdapter
     @NonNull
     @Override
     public ChatesonCreateViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(context).inflate(R.layout.chat_item, parent, false);
         return new ChatesonCreateViewHolder(view);
     }
 
     @Override
     protected void onBindViewHolder(@NonNull ChatesonCreateViewHolder holder, int position, @NonNull ChatModel model) {
-        FirbaseUtil.getOtherUserChat(model.getMembersId()).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                UserModel userModel = task.getResult().toObject(UserModel.class);
-               if(model.getLastMsgSenderId().equals(userModel.getUserId()) ){
-                   holder.lastMessage.setText(model.getLastMessage());
+        if(!otherId.equals(FirbaseUtil.getOtherUserId(model.getMembersId()))){
+            otherId = FirbaseUtil.getOtherUserId(model.getMembersId());
+            otherId =  FirbaseUtil.getOtherUserId(model.getMembersId());
+            FirbaseUtil.getOtherUserChat(model.getMembersId()).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    UserModel userModel = task.getResult().toObject(UserModel.class);
+
+                    if(model.getLastMsgSenderId().equals(userModel.getUserId()) ){
+                        holder.lastMessage.setText(model.getLastMessage());
 //
-               }else{
-                   Toast.makeText(context, "true", Toast.LENGTH_SHORT).show();
-                   holder.lastMessage.setText("Me:" + model.getLastMessage());
-               }
+                    }else{
+                        Toast.makeText(context, "true", Toast.LENGTH_SHORT).show();
+                        holder.lastMessage.setText("Me:" + model.getLastMessage());
+                    }
 //
 
-                holder.name.setText(userModel.getUserName());
-                if (userModel.getImageURL() != null) {
-                    Glide.with(context.getApplicationContext())
-                            .load(userModel.getImageURL())
-                            .placeholder(R.drawable.ic_person)
-                            .timeout(6500)
-                            .into(holder.profileImage);
-                    Toast.makeText(context, "nonull", Toast.LENGTH_SHORT).show();
+                    holder.name.setText(userModel.getUserName());
+                    if (userModel.getImageURL() != null) {
+                        Glide.with(context.getApplicationContext())
+                                .load(userModel.getImageURL())
+                                .placeholder(R.drawable.ic_person)
+                                .timeout(6500)
+                                .into(holder.profileImage);
+                        Toast.makeText(context, "nonull", Toast.LENGTH_SHORT).show();
+                    }
+
+                    holder.itemView.setOnClickListener(v -> {
+                        Intent intent = new Intent(context, Chat.class);
+                        intent.putExtra("username", userModel.getUserName());
+                        intent.putExtra("person2_id",userModel.getUserId());
+                        intent.putExtra("profilePic", userModel.getImageURL());
+                        intent.putExtra("status",userModel.getonline());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        context.startActivity(intent);
+                    });
+
                 }
+            });
 
-                holder.itemView.setOnClickListener(v -> {
-                    Intent intent = new Intent(context, Chat.class);
-                    intent.putExtra("username", userModel.getUserName());
-                    intent.putExtra("person2_id",userModel.getUserId());
-                    intent.putExtra("profilePic", userModel.getImageURL());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                });
-            }
-        });
+        }
 
 
     }
     @Override
     public int getItemCount() {
+
         return super.getItemCount(); // Ensure the item count is correct
     }
 

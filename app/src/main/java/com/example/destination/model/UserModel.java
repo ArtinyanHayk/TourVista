@@ -17,14 +17,14 @@ public class UserModel {
    private List<String> followers,following;
 
    private String imageURL;
-   private String status;
+   private Boolean online;
     ////
  //   private ImageView imageView;
 
     public UserModel() {
     }
 
-    public UserModel(String phone, String userName, Timestamp createdTimesetap,String userId,List<String> followers,List<String> following,String imageURL,String status
+    public UserModel(String phone, String userName, Timestamp createdTimesetap,String userId,List<String> followers,List<String> following,String imageURL,Boolean online
     ) {
         this.phone = phone;
         this.userName = userName;
@@ -34,7 +34,7 @@ public class UserModel {
        this.following = following;
        this.followers = followers;
        this.imageURL =  imageURL;
-       this.status = status;
+       this.online = online;
 
         ////
     }
@@ -51,8 +51,8 @@ public class UserModel {
 
 
 
-    public String getStatus() {return status;}
-    public void setStatus(String status) {this.status = status;}
+    public boolean getonline() {return online;}
+    public void setonline(boolean online) {this.online = online;}
 
     public List<String> getFollowers() {
         return followers;

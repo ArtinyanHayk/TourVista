@@ -10,5 +10,7 @@
     <color name="phone_gray">#C8FFFFFF</color>
     <color name="extra_light_gray">#D2FFFFFF</color>
     <color name="comment_bg_gray">#BDBDBD</color>
+    <color name="light_green">#00C853</color>
+
 
 </resources>

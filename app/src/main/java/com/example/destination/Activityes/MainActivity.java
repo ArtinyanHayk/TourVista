@@ -21,11 +21,19 @@ import com.example.destination.Fragments.NotificationFragment;
 import com.example.destination.Fragments.ProfileFragment;
 import com.example.destination.R;
 
+import com.example.destination.utils.BaseApplication;
+import com.example.destination.utils.FirbaseUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Map;
+
+public class MainActivity extends BaseApplication {
     BottomNavigationView bottomNavigationView;
     NetworkFragment networkFragment;
     ProfileFragment profileFragment;
@@ -43,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String READ_MEDIA_AUDIO = Manifest.permission.READ_MEDIA_AUDIO;
     private static final String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
     private final int REQUEST_CODE = 11;
+    private  DocumentReference reference;
 
 
     @SuppressLint("WrongViewCast")
@@ -54,8 +63,11 @@ public class MainActivity extends AppCompatActivity {
         profileFragment = new ProfileFragment();
         notificationFragment = new NotificationFragment();
         chatsFragment = new ChatsFragment();
+        FirbaseUtil.Online(true);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+         reference = FirebaseFirestore.getInstance().collection("users").document(FirbaseUtil.currentUsersId());
         //search_btn = findViewById(R.id.search_btn);
         //search_btn.setOnClickListener(v -> {
         //    Intent intent = new Intent(MainActivity.this,search_Activity.class);
@@ -156,87 +168,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
     }
 
 
 
-
-
-  //  private void init() {
-  //      Toolbar toolbar = findViewById(R.id.toolbar);
-  //      setSupportActionBar(toolbar);
-//
-  //      viewPager = findViewById(R.id.viewPager);
-  //      tabLayout = findViewById(R.id.tabLayout);
-//
-  //  }
-
-    private void addTabs() {
-        //??? video
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.map_icon));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.add_icon));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.person_icon));
-
-        tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-
-
-
-
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.getTabAt(0).setIcon(R.drawable.map_icon);
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem((tab.getPosition()));
-
-                switch (tab.getPosition()) {
-                    case 0:
-                        tabLayout.getTabAt(0);
-                        //.setIcon(R.drawable.map_icon);
-                        break;
-                    case 1:
-                        tabLayout.getTabAt(1);
-                        //.setIcon(R.drawable.add_icon);
-                        break;
-                    case 2:
-                        tabLayout.getTabAt(2);
-                        //.setIcon(R.drawable.person_icon);
-                        break;
-                }
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-                switch (tab.getPosition()) {
-                    case 0:
-                        tabLayout.getTabAt(0);
-                        //.setIcon(R.drawable.map_home_icon);
-                        break;
-                    case 1:
-                        tabLayout.getTabAt(1);
-                        //.setIcon(R.drawable.add_location_icon);
-                        break;
-                    case 2:
-                        tabLayout.getTabAt(2);
-                        //.setIcon(R.drawable.account_icon);
-                        break;
-                }
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FirbaseUtil.Online(false);
     }
-
 }
