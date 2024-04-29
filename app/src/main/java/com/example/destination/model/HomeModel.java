@@ -1,6 +1,7 @@
 package com.example.destination.model;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
@@ -11,13 +12,13 @@ public class HomeModel {
     private String  profileImage, imageUrl, uid, description, id;
     private String username;
     private LatLng location;
-    private String postedTime;
+    private Timestamp postedTime;
      private List<String> likes;
 
 
     public HomeModel() {
     }
-    public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username,  String postedTime, List<String> likes) {
+    public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username,  Timestamp postedTime, List<String> likes) {
         this.profileImage = profileImage;
         this.imageUrl = imageUrl;
         this.uid = uid;
@@ -28,7 +29,7 @@ public class HomeModel {
         this.likes = likes;
     }
 
-    public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username, LatLng location, String postedTime, List<String> likes) {
+    public HomeModel(String profileImage, String imageUrl, String uid, String description, String id, String username, LatLng location, Timestamp postedTime, List<String> likes) {
         this.profileImage = profileImage;
         this.imageUrl = imageUrl;
         this.uid = uid;
@@ -99,11 +100,11 @@ public class HomeModel {
         this.id = id;
     }
 
-    public String getPostedTime() {
+    public Timestamp getPostedTime() {
         return postedTime;
     }
 
-    public void setPostedTime(String postedTime) {
+    public void setPostedTime(Timestamp postedTime) {
         this.postedTime = postedTime;
     }
 

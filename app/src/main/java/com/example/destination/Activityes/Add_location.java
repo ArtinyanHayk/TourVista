@@ -15,7 +15,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ScaleDrawable;
+import android.icu.number.Scale;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +34,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
+import com.example.destination.Chat.Chat;
 import com.example.destination.Location.LocationForPost;
 import com.example.destination.R;
 import com.example.destination.adapter.GalleryAdapter;
@@ -40,6 +47,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.Service;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -62,13 +70,14 @@ import java.util.Map;
 public class Add_location  extends BaseApplication  {
     private TextView nameTv;
     private EditText descET;
-    private ImageView backBtn,imageView,profile_image;
+    private ImageView backBtn,profile_image;
+    ImageSlider imageView;
     private RecyclerView recyclerView;
     private ImageButton setLocation;
     private Button nextBtn;
     private GalleryAdapter adapter;
     private List<GalleryImages> list;
-    private Uri imageUri;
+    private List<Uri> imageUris;
 
 
     private FirebaseUser user;
@@ -81,34 +90,27 @@ public class Add_location  extends BaseApplication  {
 
 
     private ActivityResultLauncher<PickVisualMediaRequest> launcher =
-            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(),
-                    new ActivityResultCallback<Uri>() {
+            registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(),
+                    new ActivityResultCallback<List<Uri>>() {
                         @Override
-                        public void onActivityResult(Uri o) {
-                            if (o == null) {
-                                Toast.makeText(Add_location.this, "No image Selected", Toast.LENGTH_SHORT).show();
+                        public void onActivityResult(List<Uri> uris) {
+                            if (uris == null || uris.isEmpty()) {
+                                Toast.makeText(Add_location.this, "No images Selected", Toast.LENGTH_SHORT).show();
                             } else {
-                                imageUri = o;
-                                imageView.setVisibility(View.VISIBLE);
-                                nextBtn.setVisibility(View.VISIBLE);
+                                imageUris = uris;
 
-                                Glide.with(Add_location.this.getApplicationContext())
-                                        .load(o)
-                                        .into(imageView);
-
-                                // Вызываем clickListener только после выбора изображения
+                                // Вызываем clickListener только после выбора изображений
                                 clickListener();
                             }
                         }
                     });
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
         init();
        // recyclerView.setHasFixedSize(true);
-        nextBtn.setVisibility(View.INVISIBLE);
+
         list = new ArrayList<>();
         adapter = new GalleryAdapter(list);
 
@@ -149,17 +151,19 @@ public class Add_location  extends BaseApplication  {
             StorageReference storageReference = storage.getReference().child("Post Images/"
                     + System.currentTimeMillis());
             dialog.show();
-            storageReference.putFile(imageUri)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            storageReference.getDownloadUrl().addOnSuccessListener(uri ->
-                                    uploadData(uri.toString()));
-                        } else {
-                            dialog.dismiss();
-                            Toast.makeText(Add_location.this,
-                                    "Failed to upload post", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+
+                storageReference.putFile(imageUris.get(0))
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                storageReference.getDownloadUrl().addOnSuccessListener(uri ->
+                                        uploadData(uri.toString()));
+                            } else {
+                                dialog.dismiss();
+                                Toast.makeText(Add_location.this,
+                                        "Failed to upload post", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
         });
 
         FirebaseFirestore.getInstance().collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -193,6 +197,7 @@ public class Add_location  extends BaseApplication  {
         /////////
         backBtn = findViewById(R.id.back_btn);
         nextBtn = findViewById(R.id.share_btn);
+        nextBtn.setVisibility(View.VISIBLE);
        // recyclerView = findViewById(R.id.recyclerView);
         setLocation = findViewById(R.id.set_locaion);
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -230,18 +235,18 @@ public class Add_location  extends BaseApplication  {
 
     private void clickListener() {
         adapter.sendImage(pickUri -> {
-            Glide.with(Add_location.this)
-                    .load(pickUri)
-                    .into(imageView);
+            imageUris = pickUri;
+            ArrayList<SlideModel> imageList = new ArrayList<>();
 
-            imageUri = pickUri;
+
+            imageList.add(new SlideModel("https://bit.ly/2BteuF2", "Elephants and tigers may become extinct.",ScaleTypes.CENTER_CROP));
+            imageList.add(new SlideModel("https://bit.ly/3fLJf72", "And people do that.",ScaleTypes.CENTER_CROP));
             imageView.setVisibility(View.VISIBLE);
-            nextBtn.setVisibility(View.VISIBLE);
+            imageView.setImageList(imageList);
 
 
         });
     }
-
     public void uploadData(String imageURL) {
         //CollectionReference reference = FirebaseFirestore.getInstance().collection("users")
         //        .document(user.getUid()).collection("Post Images");
@@ -279,7 +284,7 @@ public class Add_location  extends BaseApplication  {
                     Map<String, Object> map = new HashMap<>();
                     map.put("description", description);
                     map.put("imageUrl", imageURL);
-                    map.put("timestamp", time);
+                    map.put("timestamp", com.google.firebase.Timestamp.now());
                     map.put("id", id);
                     if(finallatLang != null) {
                         map.put("Location", new GeoPoint(finallatLang.latitude, finallatLang.longitude));
@@ -303,9 +308,7 @@ public class Add_location  extends BaseApplication  {
                             .addOnCompleteListener(toFirebase -> {
                                 if (toFirebase.isSuccessful()) {
                                     Log.d("Firestore", "Document uploaded successfully");
-                                    imageView.setImageURI(null);
                                     nextBtn.setVisibility(View.GONE);
-                                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.add_icon_borderless));
                                     descET.setText(null);
                                     finallatLang = null;
                                     Toast.makeText(Add_location.this, "Uploaded", Toast.LENGTH_SHORT).show();

@@ -84,21 +84,33 @@
         <EditText
             android:id="@+id/messageEditTxt"
             android:layout_toStartOf="@id/sendBtn"
+            android:layout_toEndOf="@id/addToMessage"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:backgroundTint="@color/fui_transparent"
+            android:paddingHorizontal="20dp"
             android:textSize="14dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="5dp"
+
             android:hint="Type your message"
-            android:background="@drawable/edit_text_rounder_corner"/>
-            <ImageView
-                android:id="@+id/sendBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/send_icon"/>
+            android:background="@drawable/coment_edit_text_rounder_corner"/>
+
+        <ImageView
+            android:id="@+id/addToMessage"
+            android:layout_width="41dp"
+            android:layout_height="38dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/add"
+            />
+        <ImageView
+            android:id="@+id/sendBtn"
+            android:layout_width="51dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/send"
+           />
 
 
 

@@ -43,7 +43,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryH
 
 
     }
-    private void chooseImage(Uri pickUri){
+    private void chooseImage(List<Uri> pickUri){
         onSendImage.onSend(pickUri);
 
 
@@ -63,7 +63,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryH
 
     }
     public interface SendImage {
-        void onSend(Uri pickUri);
+        void onSend(List<Uri> pickUri);
     }
     public void sendImage(SendImage sendImage){
         this.onSendImage = sendImage ;

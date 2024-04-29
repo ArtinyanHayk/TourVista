@@ -17,14 +17,7 @@ public class BaseApplication extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirbaseUtil.Online(true);
-        FirbaseUtil.currentUsersDetails().addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                online = (boolean) value.get("online");
 
-
-            }
-        });
     }
 
     @Override

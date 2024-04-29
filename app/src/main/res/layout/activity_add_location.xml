@@ -55,17 +55,14 @@
 
         </LinearLayout>
 
-        <ImageView
+        <com.denzcoskun.imageslider.ImageSlider
             android:id="@+id/post_image"
-            android:layout_width="match_parent"
-            android:layout_height="265dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/add_icon_borderless"
-            android:scaleType="centerCrop"
-            android:background="@drawable/border_image"
-
-
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="400dp"
+            app:iss_auto_cycle="true"
+            app:iss_period="1000"
+            app:iss_delay="1000"
+            app:iss_text_align="CENTER"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -167,6 +164,7 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginBottom="2dp"
         android:backgroundTint="@color/my_3"
+        android:visibility="visible"
         android:text="Share"
         android:textSize="20sp" />
 

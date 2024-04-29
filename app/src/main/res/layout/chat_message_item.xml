@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="8dp">
+
 
     <LinearLayout
 
@@ -14,6 +16,17 @@
         android:layout_marginEnd="80dp"
         android:id="@+id/left_chat_layout"
         android:orientation="vertical">
+
+        <com.denzcoskun.imageslider.ImageSlider
+            android:id="@+id/image_slider"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:visibility="gone"
+            app:iss_corner_radius="18"
+
+            app:iss_period="1000"
+            app:iss_delay="1000"
+            app:iss_text_align="CENTER"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,14 +43,23 @@
         android:layout_alignParentEnd="true"
         android:padding="8dp"
         android:layout_marginStart="80dp"
+        android:orientation="vertical"
         android:id="@+id/right_chat_layout">
+
+        <com.denzcoskun.imageslider.ImageSlider
+            android:id="@+id/image_slider2"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:visibility="gone"
+            app:iss_period="1000"
+            app:iss_corner_radius="18"
+            app:iss_delay="1000"
+            app:iss_text_align="CENTER"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:maxLines="50"
-            android:maxLength="500"
             android:textSize="18sp"
+            android:text="Hello"
             android:id="@+id/right_chat_textview"/>
     </LinearLayout>
 

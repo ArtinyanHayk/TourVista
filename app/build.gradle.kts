@@ -92,6 +92,8 @@ dependencies {
 
         implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
 
+        implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
+
 
 
 

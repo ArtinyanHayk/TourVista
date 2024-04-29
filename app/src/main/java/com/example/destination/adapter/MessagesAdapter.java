@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -12,11 +13,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.destination.R;
 import com.example.destination.model.MessageModel;
 import com.example.destination.utils.FirbaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+
+import java.net.URL;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, MessagesAdapter.MessagesViewHolder> {
     private Context context;
@@ -39,10 +48,34 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             holder.leftChatLayout.setVisibility(View.GONE);
             holder.rightChatLayout.setVisibility(View.VISIBLE);
             holder.rightChatTextview.setText(model.getMessage());
+            if(model.getImageUris() != null){
+                if(!model.getImageUris().isEmpty()) {
+                    ArrayList<SlideModel> list = new ArrayList<>();
+                    for (String url : model.getImageUris()) {
+                        list.add(new SlideModel(url,  ScaleTypes.CENTER_CROP));
+                    }
+                    holder.sliderRight.setVisibility(View.VISIBLE);
+                    holder.sliderRight.setImageList(list);
+                }
+            }
+
+
         }else{
             holder.rightChatLayout.setVisibility(View.GONE);
             holder.leftChatLayout.setVisibility(View.VISIBLE);
             holder.leftChatTextview.setText(model.getMessage());
+            if(model.getImageUris() != null){
+                if(!model.getImageUris().isEmpty()) {
+                    Toast.makeText(context, "1image", Toast.LENGTH_SHORT).show();
+                    ArrayList<SlideModel> list = new ArrayList<>();
+                    for (String url : model.getImageUris()) {
+                        Toast.makeText(context, "+1", Toast.LENGTH_SHORT).show();
+                        list.add(new SlideModel(url, ScaleTypes.CENTER_CROP));
+                    }
+                    holder.sliderLeft.setVisibility(View.VISIBLE);
+                    holder.sliderLeft.setImageList(list);
+                }
+            }
         }
     }
     @Override
@@ -55,6 +88,7 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
     public static class MessagesViewHolder extends RecyclerView.ViewHolder {
         LinearLayout leftChatLayout,rightChatLayout;
         TextView leftChatTextview,rightChatTextview;
+        ImageSlider sliderLeft,sliderRight;
 
         public MessagesViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,6 +96,8 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             rightChatLayout = itemView.findViewById(R.id.right_chat_layout);
             leftChatTextview = itemView.findViewById(R.id.left_chat_textview);
             rightChatTextview = itemView.findViewById(R.id.right_chat_textview);
+            sliderLeft = itemView.findViewById(R.id.image_slider);
+            sliderRight = itemView.findViewById(R.id.image_slider2);
         }
     }
 }

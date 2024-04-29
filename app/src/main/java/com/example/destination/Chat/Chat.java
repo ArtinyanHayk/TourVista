@@ -1,56 +1,58 @@
 package com.example.destination.Chat;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.app.Dialog;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.destination.R;
+import com.example.destination.adapter.GalleryAdapter;
 import com.example.destination.adapter.MessagesAdapter;
 import com.example.destination.model.ChatModel;
+import com.example.destination.model.GalleryImages;
 import com.example.destination.model.MessageModel;
 import com.example.destination.model.UserModel;
 import com.example.destination.utils.BaseApplication;
 import com.example.destination.utils.FirbaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Chat  extends BaseApplication {
+public class Chat extends BaseApplication {
 
     EditText messageEditText;
     String chatId;
@@ -59,13 +61,42 @@ public class Chat  extends BaseApplication {
     ChatModel chatModel;
     MessagesAdapter adapter;
     ImageView sendBtn;
-    TextView name,onlineTv;
-    ImageView bacBtn;
+    TextView name, onlineTv;
+    ImageView bacBtn,addBtn;
     CircleImageView profilePic;
     RecyclerView recyclerView;
+    Dialog dialog;
+    List<String> urls = new ArrayList<>();
     boolean online;
+    private GalleryAdapter galleryAdapter;
+    private List<GalleryImages> list;
+    private List<Uri> imageUris;
+    private ActivityResultLauncher<PickVisualMediaRequest> launcher =
+            registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(),
+                    new ActivityResultCallback<List<Uri>>() {
+                        @Override
+                        public void onActivityResult(List<Uri> uris) {
+                            if (uris == null || uris.isEmpty()) {
+                                Toast.makeText(Chat.this, "No images Selected", Toast.LENGTH_SHORT).show();
+                            } else {
+                                imageUris = uris;
 
-    @Override
+                                // Вызываем clickListener только после выбора изображений
+                                clickListener();
+                            }
+                        }
+                    });
+
+
+                            private void clickListener() {
+                                galleryAdapter.sendImage(pickUri -> {
+                                    imageUris = pickUri;
+                                });
+                            }
+
+
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
@@ -77,23 +108,37 @@ public class Chat  extends BaseApplication {
         sendBtn = findViewById(R.id.sendBtn);
         recyclerView = findViewById(R.id.recyclerView);
         onlineTv = findViewById(R.id.online);
+        addBtn = findViewById(R.id.addToMessage);
+
+        list = new ArrayList<>();
+        galleryAdapter = new GalleryAdapter(list);
+
+        dialog = new Dialog(Chat.this);
+        dialog.setContentView(R.layout.loading_dialog);
+        dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),
+                R.drawable.dialog_bg, null));
+        dialog.setCancelable(false);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         bacBtn.setOnClickListener(v -> finish());
 
+        addBtn.setOnClickListener(v ->launcher.launch(new PickVisualMediaRequest.Builder().setMediaType(
+                ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()) );
+
         id2 = getIntent().getStringExtra("person2_id");
 
 
+        FirebaseFirestore.getInstance().collection("users").document(id2).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value.exists() && error == null) {
+                    UserModel model = value.toObject(UserModel.class);
 
-        FirebaseFirestore.getInstance().collection("users").document(id2).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                UserModel model = task.getResult().toObject(UserModel.class);
-
-                    if(model.getonline()){
+                    if (model.getonline()) {
                         onlineTv.setText("online");
                         onlineTv.setTextColor(getResources().getColor(R.color.light_green));
-                    }else{
+                    } else {
                         onlineTv.setText("offline");
                         onlineTv.setTextColor(getResources().getColor(R.color.light_gray));
                     }
@@ -105,28 +150,31 @@ public class Chat  extends BaseApplication {
                             .into(profilePic);
                     name.setText(model.getUserName());
 
-                    chatId = FirbaseUtil.chatId(user.getUid(), id2);
-                    getOrCreateChatroomModel();
-                    setupChatRecyclerView();
+
                 }
-
-
-
+            }
         });
-
-
-
-
-
+        chatId = FirbaseUtil.chatId(user.getUid(), id2);
+        getOrCreateChatroomModel();
+        setupChatRecyclerView();
 
 
         sendBtn.setOnClickListener(v -> {
             String gettxtMessage = messageEditText.getText().toString();
-            if (gettxtMessage.isEmpty()) {
+            if (gettxtMessage.isEmpty() && imageUris == null) {
+                return;
+            }
+            if(imageUris.isEmpty() && gettxtMessage.isEmpty()){
                 return;
             }
             try {
-                SendMessage(gettxtMessage, user.getUid());
+                if(imageUris != null && !imageUris.isEmpty()){
+                    SendMessage(gettxtMessage, user.getUid());
+
+                }else{
+                    message(gettxtMessage, user.getUid());
+                }
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -140,9 +188,9 @@ public class Chat  extends BaseApplication {
                 .orderBy("time", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<MessageModel> options = new FirestoreRecyclerOptions.Builder<MessageModel>()
-                .setQuery(query,MessageModel.class).build();
+                .setQuery(query, MessageModel.class).build();
 
-        adapter = new MessagesAdapter(options,getApplicationContext());
+        adapter = new MessagesAdapter(options, getApplicationContext());
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setReverseLayout(true);
         recyclerView.setLayoutManager(manager);
@@ -159,17 +207,67 @@ public class Chat  extends BaseApplication {
 
     void SendMessage(String message, String id) throws IOException {
         Timestamp timestamp = Timestamp.now();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference().child("Chats Images/");
 
-        MessageModel messageModel = new MessageModel(message, id, com.google.firebase.Timestamp.now());
+        dialog.show();
+        urls = new ArrayList<>();
+        List<UploadTask> uploadTasks = new ArrayList<>();
+
+        for (Uri imageUri : imageUris) {
+            StorageReference imageRef = storageReference.child(System.currentTimeMillis() + ".jpg");
+            uploadTasks.add(imageRef.putFile(imageUri));
+        }
+        Tasks.whenAllComplete(uploadTasks).addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
+            @Override
+            public void onComplete(@NonNull Task<List<Task<?>>> task) {
+                if (task.isSuccessful()) {
+                    for (UploadTask uploadTask : uploadTasks) {
+                        StorageReference storageReference = (StorageReference) uploadTask.getResult().getStorage();
+                        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                urls.add(uri.toString());
+                                if (urls.size() == imageUris.size()) {
+                                    message(message, id);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    // Handle error
+                }
+            }
+
+        });
+    }
+
+    void message(String message,String id) {
+        MessageModel messageModel = new MessageModel(message, id, com.google.firebase.Timestamp.now(), urls);
         chatModel.setLastMessage(message);
         chatModel.setLastMessageTime(com.google.firebase.Timestamp.now());
         chatModel.setLastMsgSenderId(user.getUid());
+        if(urls.isEmpty()){
+            FirbaseUtil.getChatReference(chatId).set(chatModel).addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(this, "Check your connection", Toast.LENGTH_SHORT).show();
+                } else {
+                    dialog.dismiss();
+                }
+            });
 
-        FirbaseUtil.getChatReference(chatId).set(chatModel).addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Toast.makeText(this, "Check your connection", Toast.LENGTH_SHORT).show();
-            }
-        });
+        }
+        else {
+            FirbaseUtil.getChatReference(chatId).set(chatModel).addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(this, "Check your connection", Toast.LENGTH_SHORT).show();
+                } else {
+                    imageUris.clear();
+                    dialog.dismiss();
+                    urls.clear();
+                }
+            });
+        }
 
         FirbaseUtil.getChatMessageReference(chatId).add(messageModel).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -197,5 +295,7 @@ public class Chat  extends BaseApplication {
             }
         });
     }
+
+
 
 }

@@ -5,19 +5,22 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,13 +32,16 @@ import com.example.destination.databinding.ActivityMainBinding;
 import com.example.destination.model.HomeModel;
 import com.example.destination.Activityes.search_Activity;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,10 +55,10 @@ public class NetworkFragment extends Fragment {
     private List<HomeModel> list;
     private FirebaseUser user;
     List<String> list222;
-    private List<String> commentLikes;
+
     ImageButton search_user;
     Date curent_date;
-    String Time;
+
     private ActivityMainBinding binding;
 
 
@@ -70,10 +76,9 @@ public class NetworkFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         curent_date = new Date();
-        /////////////////////////////////
+
        list222 = new ArrayList<>();
-       //commentLikes = new ArrayList<>();
-       /////////////////////////////////
+
        binding = ActivityMainBinding.inflate(getLayoutInflater());
 
 
@@ -129,6 +134,7 @@ public class NetworkFragment extends Fragment {
             public void onComment(int position, String id, String uid) {
                 //showDialog();
 
+                if(getActivity() != null) {
                     Commets_BottomSheet fragment = new Commets_BottomSheet();
                     Bundle args = new Bundle();
                     args.putInt("position", position);
@@ -136,6 +142,7 @@ public class NetworkFragment extends Fragment {
                     args.putString("uid", uid);
                     fragment.setArguments(args);
                     fragment.show(getActivity().getSupportFragmentManager(), "comment bottom sheet dialog");
+                }
 
 
 
@@ -158,51 +165,41 @@ public class NetworkFragment extends Fragment {
             }
         });
     }
-//  // private void showBottomDialog() {
-///
-//  //     final Dialog dialog = new Dialog(this);
-//  //     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//  //     dialog.setContentView(R.layout.bottomsheetlayout);
-///
-//  //     LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
-//  //     LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
-//  //     LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
-//  //     ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
 
-//   private void showDialog() {
-//       final Dialog dialog = new Dialog(getActivity());
-//       dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//       dialog.setContentView(R.layout.commentbottomsheetlayout);
-//       RelativeLayout EditTextt  = dialog.findViewById(R.id.comment_edit_text);
-//       //stex dra mechi baner@ pti lni voncor EDITTEXT SENDBUTTON
-//       dialog.show();
-//       dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-//       dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//       dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-//       dialog.getWindow().setGravity(Gravity.BOTTOM);
-//   }
 
-    private  boolean isGPSEnabled() {
-        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-        return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+    private boolean isGPSEnabled() {
+        Context context = getContext();
+        if (context != null) {
+            try {
+                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            } catch (Exception e) {
+                Log.e("isGpsEnabled/NetworkFragment", "Ошибка при проверке GPS: " + e.getMessage());
+                return false;
+            }
+        } else {
+            Log.e("isGpsEnabled/NetworkFragment", "Контекст равен null");
+            return false;
+        }
     }
     private void showGPSEnableDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("To view the location, turn on GPS")
-                .setCancelable(false)
-                .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                })
-                .setNegativeButton("Cancel",  new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.dialog_bg,null));
-        alert.show();
+        Context context = getContext();
+        if (context != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Для просмотра местоположения включите GPS")
+                    .setCancelable(false)
+                    .setPositiveButton("Включить GPS", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                    .setNegativeButton("Отмена", (dialog, id) -> dialog.cancel());
+            AlertDialog alert = builder.create();
+            Window window = alert.getWindow();
+            if (window != null) {
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+            alert.show();
+        } else {
+            Log.e("showGPSEnableDialog", "Контекст равен null");
+        }
     }
 
 
@@ -248,35 +245,29 @@ public class NetworkFragment extends Fragment {
                 if (!snapshot.exists()) {
                     continue;
                 }
-                // if( snapshot.getDouble("location latitude") == 0.0){
-                //     Log.e("double111","null");
-                // }
+
 
                 HomeModel model = snapshot.toObject(HomeModel.class);
                 GeoPoint geoPoint = (GeoPoint) snapshot.get("Location");
-               //assert geoPoint != null;
-               //Toast.makeText(getContext(), geoPoint.toString(), Toast.LENGTH_SHORT).show();
 
 
 
 
-                if(geoPoint == null){
-
+                Object likeCountObject = snapshot.get("likeCount");
+                List<String> likeCountList = likeCountObject instanceof List ? (List<String>) likeCountObject : null;
+                if (geoPoint == null) {
                     list.add(new HomeModel(
-
                             model.getProfileImage(),
                             model.getImageUrl(),
                             model.getUid(),
                             model.getDescription(),
                             model.getId(),
                             model.getUsername(),
-                            (String) snapshot.get("timestamp"),
-                            (List<String>) snapshot.get("likeCount")
+                            snapshot.getTimestamp("timestamp"),
+                            likeCountList
                     ));
-                }
-                else {
+                } else {
                     list.add(new HomeModel(
-
                             model.getProfileImage(),
                             model.getImageUrl(),
                             model.getUid(),
@@ -284,8 +275,8 @@ public class NetworkFragment extends Fragment {
                             model.getId(),
                             model.getUsername(),
                             new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()),
-                            (String) snapshot.get("timestamp"),
-                            (List<String>) snapshot.get("likeCount")
+                            snapshot.getTimestamp("timestamp"),
+                            likeCountList
                     ));
                 }
             }

@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.example.destination.R;
 import com.example.destination.model.HomeModel;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneMultiFactorAssertion;
@@ -32,8 +33,10 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -75,9 +78,28 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
 
         holder.userNameTv.setText(list.get(position).getUsername());
-        if(list.get(position).getPostedTime() != null) {
-            holder.timeTv.setText("" + list.get(position).getPostedTime());
+        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat hm = new SimpleDateFormat("HH:mm", Locale.getDefault());
+
+
+        String time = ymd.format(list.get(position).getPostedTime().toDate());
+
+        String todayTime = ymd.format(com.google.firebase.Timestamp.now().toDate());
+        //TimeISSUE
+
+        if (todayTime.equals(time)){
+            Toast.makeText(context, hm.format(list.get(position).getPostedTime().toDate()), Toast.LENGTH_SHORT).show();
+            holder.timeTv.setText(hm.format(list.get(position).getPostedTime().toDate()));
+
+
+        } else {
+            Toast.makeText(context, time + " " +   todayTime, Toast.LENGTH_SHORT).show();
+            holder.timeTv.setText(time);
         }
+
+
+
+
 
         if (list.get(position).getLikes() != null) {
             List<String> likeList = list.get(position).getLikes();
