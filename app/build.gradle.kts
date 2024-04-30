@@ -94,6 +94,8 @@ dependencies {
 
         implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
 
+        implementation("com.airbnb.android:lottie:3.7.0")
+
 
 
 

@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    <ProgressBar
+    >
+
+    <com.airbnb.lottie.LottieAnimationView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_margin="22dp"
-        android:layout_width="80dp"
-        android:layout_height="80dp" />
+        app:lottie_autoPlay="true"
+        app:lottie_repeatMode="reverse"
+        app:lottie_repeatCount="20"
+
+        app:lottie_rawRes="@raw/image_send_anim"/>
 </RelativeLayout>

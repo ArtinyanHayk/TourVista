@@ -1,6 +1,8 @@
 package com.example.destination.Chat;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -76,9 +78,12 @@ public class Chat extends BaseApplication {
                     new ActivityResultCallback<List<Uri>>() {
                         @Override
                         public void onActivityResult(List<Uri> uris) {
+
                             if (uris == null || uris.isEmpty()) {
                                 Toast.makeText(Chat.this, "No images Selected", Toast.LENGTH_SHORT).show();
                             } else {
+                                imageUris = new ArrayList<>();
+
                                 imageUris = uris;
 
                                 // Вызываем clickListener только после выбора изображений
@@ -115,8 +120,7 @@ public class Chat extends BaseApplication {
 
         dialog = new Dialog(Chat.this);
         dialog.setContentView(R.layout.loading_dialog);
-        dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),
-                R.drawable.dialog_bg, null));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(false);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -163,21 +167,23 @@ public class Chat extends BaseApplication {
             String gettxtMessage = messageEditText.getText().toString();
             if (gettxtMessage.isEmpty() && imageUris == null) {
                 return;
-            }
-            if(imageUris.isEmpty() && gettxtMessage.isEmpty()){
-                return;
-            }
-            try {
-                if(imageUris != null && !imageUris.isEmpty()){
-                    SendMessage(gettxtMessage, user.getUid());
 
-                }else{
-                    message(gettxtMessage, user.getUid());
+            }
+            else {
+                try {
+                    if(imageUris != null && !imageUris.isEmpty() ){
+                        SendMessage(gettxtMessage, user.getUid());
+
+                    }else{
+                        message(gettxtMessage, user.getUid());
+                    }
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
+
+
         });
 
 
@@ -247,12 +253,11 @@ public class Chat extends BaseApplication {
         chatModel.setLastMessage(message);
         chatModel.setLastMessageTime(com.google.firebase.Timestamp.now());
         chatModel.setLastMsgSenderId(user.getUid());
-        if(urls.isEmpty()){
+        if(urls == null ||  urls.isEmpty()){
             FirbaseUtil.getChatReference(chatId).set(chatModel).addOnCompleteListener(task -> {
                 if (!task.isSuccessful()) {
                     Toast.makeText(this, "Check your connection", Toast.LENGTH_SHORT).show();
                 } else {
-                    dialog.dismiss();
                 }
             });
 
@@ -262,9 +267,10 @@ public class Chat extends BaseApplication {
                 if (!task.isSuccessful()) {
                     Toast.makeText(this, "Check your connection", Toast.LENGTH_SHORT).show();
                 } else {
-                    imageUris.clear();
+                    imageUris = null;
+                    urls = null;
                     dialog.dismiss();
-                    urls.clear();
+
                 }
             });
         }
