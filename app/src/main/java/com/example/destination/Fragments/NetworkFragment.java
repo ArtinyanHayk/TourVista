@@ -163,6 +163,15 @@ public class NetworkFragment extends Fragment {
 
 
             }
+
+            @Override
+            public void onSharePost(int position, String id, String uid) {
+                if(getActivity() != null) {
+                    Share_bottom_sheet_layout fragment = new Share_bottom_sheet_layout();
+
+                    fragment.show(getActivity().getSupportFragmentManager(), "comment bottom sheet dialog");
+                }
+            }
         });
     }
 

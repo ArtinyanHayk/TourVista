@@ -88,12 +88,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         //TimeISSUE
 
         if (todayTime.equals(time)){
-            Toast.makeText(context, hm.format(list.get(position).getPostedTime().toDate()), Toast.LENGTH_SHORT).show();
             holder.timeTv.setText(hm.format(list.get(position).getPostedTime().toDate()));
 
 
         } else {
-            Toast.makeText(context, time + " " +   todayTime, Toast.LENGTH_SHORT).show();
             holder.timeTv.setText(time);
         }
 
@@ -167,6 +165,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         void onLiked(int position, String id, String uid, List<String> likeList, boolean isChecked);
         void onComment(int position, String id, String uid);
         void onGetLocation(int position, String id, String uid, LatLng location);
+        void onSharePost(int position,String id,String uid);
     }
 
     public void OnPressed(OnPressed onPressed) {
@@ -203,27 +202,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         }
 
         public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes, LatLng location) {
-            likeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    onPressed.onLiked(position, id, uid, likes, isChecked);
-                }
-            });
+            likeCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> onPressed.onLiked(position, id, uid, likes, isChecked));
 
-            getLocationBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            getLocationBtn.setOnClickListener(v -> onPressed.onGetLocation(position, id, uid, location));
 
-                    onPressed.onGetLocation(position, id, uid, location);
-                }
-            });
+            commentBtn.setOnClickListener(v -> onPressed.onComment(position, id, uid));
 
-            commentBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onPressed.onComment(position, id, uid);
-                }
-            });
+            shareBtn.setOnClickListener(v -> onPressed.onSharePost(position,id,uid));
         }
     }
 }

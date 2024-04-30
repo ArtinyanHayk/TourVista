@@ -85,7 +85,7 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
         Bundle args = getArguments();
         if (args != null) {
             int position = args.getInt("position");
-             id = args.getString("id");
+            id = args.getString("id");
             String uid = args.getString("uid");
             String commentlist = args.getString("commentlist");
 
@@ -100,7 +100,7 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
                     ViewGroup.LayoutParams layoutParams = binding.getRoot().getLayoutParams();
                     layoutParams.height = getResources().getDisplayMetrics().heightPixels; // Установите желаемую высоту или используйте другой размер
                     binding.getRoot().setLayoutParams(layoutParams);
-                            }
+                }
             });
             binding.close.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -245,5 +245,3 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
 
 
 }
-
-
