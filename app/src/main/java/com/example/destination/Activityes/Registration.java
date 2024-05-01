@@ -37,7 +37,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Registration  extends BaseApplication {
+public class Registration  extends  AppCompatActivity {
     public static final String Tag = "Tag";
     EditText fullName,Email,Password,confirmPass;
     Button registerBtn;
