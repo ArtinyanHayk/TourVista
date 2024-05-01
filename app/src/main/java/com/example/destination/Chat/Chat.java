@@ -1,6 +1,10 @@
 package com.example.destination.Chat;
 
+import static android.app.PendingIntent.getActivity;
+import static java.security.AccessController.getContext;
+
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -21,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.destination.Location.LocationForUser;
 import com.example.destination.R;
 import com.example.destination.adapter.GalleryAdapter;
 import com.example.destination.adapter.MessagesAdapter;
@@ -28,9 +33,11 @@ import com.example.destination.model.ChatModel;
 import com.example.destination.model.GalleryImages;
 import com.example.destination.model.MessageModel;
 import com.example.destination.model.UserModel;
+import com.example.destination.utils.AndroidUtil;
 import com.example.destination.utils.BaseApplication;
 import com.example.destination.utils.FirbaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -42,6 +49,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -161,6 +169,21 @@ public class Chat extends BaseApplication {
         chatId = FirbaseUtil.chatId(user.getUid(), id2);
         getOrCreateChatroomModel();
         setupChatRecyclerView();
+
+
+        adapter.OnPressed(new MessagesAdapter.OnPressed() {
+            @Override
+            public void onGetLocation(GeoPoint location) {
+                if(AndroidUtil.isGPSEnabled(Chat.this)) {
+                    Intent intent = new Intent(Chat.this, LocationForUser.class);
+                    intent.putExtra("Location", new LatLng(location.getLatitude(),location.getLongitude()));
+                    startActivity(intent);
+                }
+                else{
+                    AndroidUtil.showGPSEnableDialog(Chat.this);
+                }
+            }
+        });
 
 
         sendBtn.setOnClickListener(v -> {

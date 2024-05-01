@@ -58,7 +58,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, ChatAdapter
                         holder.lastMessage.setText(model.getLastMessage());
 //
                     }else{
-                        Toast.makeText(context, "true", Toast.LENGTH_SHORT).show();
                         holder.lastMessage.setText("Me:" + model.getLastMessage());
                     }
 //
@@ -70,8 +69,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, ChatAdapter
                                 .placeholder(R.drawable.ic_person)
                                 .timeout(6500)
                                 .into(holder.profileImage);
-                        Toast.makeText(context, "nonull", Toast.LENGTH_SHORT).show();
-                    }
+                     }
 
                     holder.itemView.setOnClickListener(v -> {
                         Intent intent = new Intent(context, Chat.class);

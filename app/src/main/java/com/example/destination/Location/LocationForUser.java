@@ -46,8 +46,6 @@ public class LocationForUser extends AppCompatActivity implements OnMapReadyCall
     ////////////
 
 
-
-
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,9 +57,8 @@ public class LocationForUser extends AppCompatActivity implements OnMapReadyCall
 
         getLastLocation();
 
-
-
-//
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         mapSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -69,7 +66,7 @@ public class LocationForUser extends AppCompatActivity implements OnMapReadyCall
                 String location = mapSearchView.getQuery().toString();
                 List<Address> addressList = null;
 
-                if(location != null){
+                if(location!= null){
                     Geocoder geocoder = new Geocoder(LocationForUser.this);
                     try{
                         addressList = geocoder.getFromLocationName(location,1);
@@ -78,7 +75,7 @@ public class LocationForUser extends AppCompatActivity implements OnMapReadyCall
                         //??????????
                         throw new RuntimeException(e);
                     }
-                    if (addressList != null && !addressList.isEmpty()) {
+                    if (addressList!= null &&!addressList.isEmpty()) {
                         Address address = addressList.get(0);
                         /////
 
@@ -101,28 +98,18 @@ public class LocationForUser extends AppCompatActivity implements OnMapReadyCall
                 return false;
             }
         });
-
-
-
-
-
-
     }
 
     private void getLastLocation() {
-        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION},FINE_PERMISSION_CODE);
             return;
         }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(location -> {
-            if (location != null){
+            if (location!= null){
                 currentLocation = location;
-                ///??
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-                mapFragment.getMapAsync(LocationForUser.this);
             }
-
         });
     }
 
@@ -130,21 +117,21 @@ public class LocationForUser extends AppCompatActivity implements OnMapReadyCall
     public void onMapReady(@NonNull GoogleMap googleMap) {
         myMap = googleMap;
 
-         LatLng myLocation = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        MarkerOptions userMarkerOtions = new MarkerOptions().position(myLocation).title("My Location");
-        userMarkerOtions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        if (currentLocation!= null) {
+            LatLng myLocation = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+            MarkerOptions userMarkerOptions = new MarkerOptions().position(myLocation).title("My Location");
+            userMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
-         myMap.addMarker(userMarkerOtions);
-         //myMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+            myMap.addMarker(userMarkerOptions);
+            //myMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+        }
+
         location = getIntent().getParcelableExtra("Location");
-////
         Toast.makeText(this, Double.toString(location.latitude) + "  " + Double.toString(location.longitude), Toast.LENGTH_SHORT).show();
-        // //Toast.makeText(this, Double.toString(latLng.latitude), Toast.LENGTH_SHORT).show();
-        MarkerOptions postMarkerOtions = new MarkerOptions().position(location).title("Posted location");
-        postMarkerOtions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-        myMap.addMarker(postMarkerOtions);
+        MarkerOptions postMarkerOptions = new MarkerOptions().position(location).title("Posted location");
+        postMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        myMap.addMarker(postMarkerOptions);
         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,10));
-
     }
 
     @Override

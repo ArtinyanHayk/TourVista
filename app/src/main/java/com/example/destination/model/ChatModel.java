@@ -9,6 +9,7 @@ public class ChatModel {
     private List<String> membersId;
     private Timestamp lastMessageTime;
 
+
     public ChatModel() {
     }
 

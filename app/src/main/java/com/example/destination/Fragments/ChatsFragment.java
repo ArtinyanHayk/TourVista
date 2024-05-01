@@ -80,7 +80,6 @@ public class ChatsFragment extends Fragment {
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "12", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getContext(), Chat_serach.class));
             }
         });

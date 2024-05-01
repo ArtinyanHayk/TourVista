@@ -2,7 +2,6 @@ package com.example.destination.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.destination.R;
 import com.example.destination.model.UserModel;
-import com.firebase.ui.auth.data.model.User;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.example.destination.utils.FirbaseUtil;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import java.util.zip.Inflater;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SendLayoutAdapter extends RecyclerView.Adapter<SendLayoutAdapter.SendLayoutViewHolder> {
     Context context;
     List<UserModel> list;
+    onPressed pressed;
 
     public SendLayoutAdapter(Context context, List<UserModel> list) {
         this.context = context;
@@ -43,11 +42,11 @@ public class SendLayoutAdapter extends RecyclerView.Adapter<SendLayoutAdapter.Se
 
     @Override
     public void onBindViewHolder(@NonNull SendLayoutViewHolder holder, int position) {
-        Toast.makeText(context, "works", Toast.LENGTH_SHORT).show();
+        UserModel model =  list.get(position);
 
-        holder.username.setText(list.get(position).getUserName());
+        holder.username.setText(model.getUserName());
 
-        if(list.get(position).getonline()){
+        if(model.getonline()){
             holder.online.setVisibility(View.VISIBLE);
         }else{
             holder.online.setVisibility(View.GONE);
@@ -57,16 +56,22 @@ public class SendLayoutAdapter extends RecyclerView.Adapter<SendLayoutAdapter.Se
         int color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
 
         Glide.with(context.getApplicationContext())
-                .load(list.get(position).getImageURL())
+                .load(model.getImageURL())
                 .placeholder(R.drawable.ic_person)
                 .timeout(6500)
                 .into(holder.profilePic);
+
+        holder.setOnClickListener(model.getUserId());
     }
 
     @Override
     public int getItemCount() {
         return list.size();
     }
+    public interface onPressed{
+        void onSelect(String id);
+    }
+    public void onPressed(onPressed pressed){this.pressed = pressed;}
 
 
     class SendLayoutViewHolder extends RecyclerView.ViewHolder{
@@ -80,6 +85,14 @@ public class SendLayoutAdapter extends RecyclerView.Adapter<SendLayoutAdapter.Se
             username = itemView.findViewById(R.id.username);
             online = itemView.findViewById(R.id.online);
 
+        }
+        public void setOnClickListener(String id){
+            profilePic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pressed.onSelect(id);
+                }
+            });
         }
     }
 }

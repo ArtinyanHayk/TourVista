@@ -165,13 +165,31 @@ public class NetworkFragment extends Fragment {
             }
 
             @Override
-            public void onSharePost(int position, String id, String uid) {
-                if(getActivity() != null) {
-                    Share_bottom_sheet_layout fragment = new Share_bottom_sheet_layout();
-
-                    fragment.show(getActivity().getSupportFragmentManager(), "comment bottom sheet dialog");
+            public void onSharePost(int position, String id, String uid, String postImageUrl, String profileImage, String username, String Description, LatLng location) {
+                Share_bottom_sheet_layout fragment = new Share_bottom_sheet_layout();
+                Bundle args = new Bundle();
+                args.putInt("position", position);
+                args.putString("id", id);
+                args.putString("uid", uid);
+                if(location != null){
+                    args.putDouble("latitude",location.latitude);
+                    args.putDouble("longitude",location.longitude);
                 }
+                else{
+                    args.putDouble("latitude",0);
+                    args.putDouble("longitude",0);
+                }
+                   args.putString("postImage",postImageUrl);
+                  args.putString("profilePic",profileImage);
+                 args.putString("Description",Description);
+                args.putString("PostUsername",username);
+                fragment.setArguments(args);
+
+                fragment.show(getActivity().getSupportFragmentManager(), "comment bottom sheet dialog");
+
             }
+
+
         });
     }
 

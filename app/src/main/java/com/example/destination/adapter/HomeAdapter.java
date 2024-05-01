@@ -50,6 +50,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     private static List<HomeModel> list;
     private static Context context;
     static OnPressed onPressed;
+    LatLng location;
 
 
 
@@ -72,8 +73,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
         if (list.get(position).getLocation() == null) {
             holder.getLocationBtn.setVisibility(View.GONE);
+            location = null;
         } else {
-            holder.getLocationBtn.setVisibility(View.VISIBLE);  // Добавлено, чтобы кнопка была видимой, если getLocation() не равен null
+            holder.getLocationBtn.setVisibility(View.VISIBLE);
+             location = list.get(position).getLocation();// Добавлено, чтобы кнопка была видимой, если getLocation() не равен null
         }
 
 
@@ -153,7 +156,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
                 list.get(position).getUsername(),
                 list.get(position).getUid(),
                 list.get(position).getLikes(),
-                list.get(position).getLocation());
+                location,
+                list.get(position).getImageUrl(),
+                list.get(position).getProfileImage(),
+                list.get(position).getDescription());
+
     }
 
     @Override
@@ -165,7 +172,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         void onLiked(int position, String id, String uid, List<String> likeList, boolean isChecked);
         void onComment(int position, String id, String uid);
         void onGetLocation(int position, String id, String uid, LatLng location);
-        void onSharePost(int position,String id,String uid);
+        void onSharePost(int position,String id,String uid,String postImageUrl,String profileImage,String username,String Description,LatLng location);
     }
 
     public void OnPressed(OnPressed onPressed) {
@@ -201,14 +208,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
         }
 
-        public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes, LatLng location) {
+        public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes, LatLng location,String postImageUrl,String profileImage,String description) {
             likeCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> onPressed.onLiked(position, id, uid, likes, isChecked));
 
             getLocationBtn.setOnClickListener(v -> onPressed.onGetLocation(position, id, uid, location));
 
             commentBtn.setOnClickListener(v -> onPressed.onComment(position, id, uid));
 
-            shareBtn.setOnClickListener(v -> onPressed.onSharePost(position,id,uid));
+            shareBtn.setOnClickListener(v -> onPressed.onSharePost(position,id,uid,postImageUrl,profileImage,username,description,location));
         }
     }
 }
