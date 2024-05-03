@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +18,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableResource;
 import com.example.destination.R;
 import com.example.destination.model.HomeModel;
 import com.google.android.gms.maps.model.LatLng;
@@ -114,13 +117,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             }
 
             if(likeList.contains(user.getUid())) {
-                holder.likeCheckBox.setChecked(true);
+                holder.likeCheckBox.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_heart_red));
             } else {
-                holder.likeCheckBox.setChecked(false);
+                holder.likeCheckBox.setBackground(ContextCompat.getDrawable(context, R.drawable.like));
             }
         } else {
             holder.likeCountTv.setText("0 likes");
-            holder.likeCheckBox.setChecked(false);
+            holder.likeCheckBox.setBackground(ContextCompat.getDrawable(context,R.drawable.like));
         }
 
         holder.descriptionTv.setText(list.get(position).getDescription());
@@ -169,7 +172,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     }
 
     public interface OnPressed {
-        void onLiked(int position, String id, String uid, List<String> likeList, boolean isChecked);
+        void onLiked(int position, String id, String uid, List<String> likeList);
         void onComment(int position, String id, String uid);
         void onGetLocation(int position, String id, String uid, LatLng location);
         void onSharePost(int position,String id,String uid,String postImageUrl,String profileImage,String username,String Description,LatLng location);
@@ -183,7 +186,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         private ImageView profileImage;
         private TextView userNameTv, timeTv, likeCountTv, descriptionTv;
         private ImageView imageView;
-        private CheckBox likeCheckBox;
+        private ImageView likeCheckBox;
         private  ImageButton commentBtn, shareBtn, getLocationBtn, favoriteBtn;
 
         public HomeHolder(@NonNull View itemView) {
@@ -209,7 +212,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         }
 
         public void clickListener(final int position, final String id, final String username, final String uid, List<String> likes, LatLng location,String postImageUrl,String profileImage,String description) {
-            likeCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> onPressed.onLiked(position, id, uid, likes, isChecked));
+            likeCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onPressed.onLiked(position, id, uid, likes);
+                }
+            });
+
+
 
             getLocationBtn.setOnClickListener(v -> onPressed.onGetLocation(position, id, uid, location));
 

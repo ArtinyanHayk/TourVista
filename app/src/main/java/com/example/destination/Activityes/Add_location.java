@@ -17,6 +17,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.icu.number.Scale;
 import android.location.LocationManager;
@@ -146,11 +148,18 @@ public class Add_location  extends BaseApplication  {
                 new PickVisualMediaRequest.Builder().setMediaType(
                         ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
         nextBtn.setOnClickListener(v -> {
+            if(imageUris == null){
+                return;
+            } else if (imageUris.isEmpty()) {
+                return;
+
+            }
             Log.d("ButtonClick", "Next button clicked!");
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageReference = storage.getReference().child("Post Images/"
                     + System.currentTimeMillis());
             dialog.show();
+
 
                 storageReference.putFile(imageUris.get(0))
                         .addOnCompleteListener(task -> {
@@ -204,8 +213,7 @@ public class Add_location  extends BaseApplication  {
 
         dialog = new Dialog(Add_location.this);
         dialog.setContentView(R.layout.loading_dialog);
-        dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),
-                R.drawable.dialog_bg, null));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(false);
     }
 

@@ -100,7 +100,7 @@ public class NetworkFragment extends Fragment {
         adapter.OnPressed(new HomeAdapter.OnPressed() {
 
             @Override
-            public void onLiked(int position, String id, String uid, List<String> likeList, boolean isChecked) {
+            public void onLiked(int position, String id, String uid, List<String> likeList) {
                 DocumentReference reference = FirebaseFirestore.getInstance().collection("userPosts").document(id);
 
                 if (likeList == null) {

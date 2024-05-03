@@ -67,7 +67,7 @@ public class Chat extends BaseApplication {
     EditText messageEditText;
     String chatId;
     FirebaseUser user;
-    String id2;
+    String id2,profilePicUrl;
     ChatModel chatModel;
     MessagesAdapter adapter;
     ImageView sendBtn;
@@ -139,6 +139,7 @@ public class Chat extends BaseApplication {
                 ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()) );
 
         id2 = getIntent().getStringExtra("person2_id");
+        profilePicUrl = getIntent().getStringExtra("profilePic");
 
 
         FirebaseFirestore.getInstance().collection("users").document(id2).addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -154,18 +155,17 @@ public class Chat extends BaseApplication {
                         onlineTv.setText("offline");
                         onlineTv.setTextColor(getResources().getColor(R.color.light_gray));
                     }
-
-                    Glide.with(Chat.this)
-                            .load(model.getImageURL())
-                            .placeholder(R.drawable.ic_person)
-                            .timeout(6500)
-                            .into(profilePic);
                     name.setText(model.getUserName());
 
 
                 }
             }
         });
+        Glide.with(Chat.this)
+                .load(profilePicUrl)
+                .placeholder(R.drawable.ic_person)
+                .timeout(6500)
+                .into(profilePic);
         chatId = FirbaseUtil.chatId(user.getUid(), id2);
         getOrCreateChatroomModel();
         setupChatRecyclerView();
