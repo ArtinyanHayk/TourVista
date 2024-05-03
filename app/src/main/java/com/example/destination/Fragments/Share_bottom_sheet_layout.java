@@ -1,10 +1,16 @@
 package com.example.destination.Fragments;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.service.credentials.Action;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,6 +38,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -58,6 +65,7 @@ public class Share_bottom_sheet_layout extends BottomSheetDialogFragment {
     String postUsername;
     String posterid;
     CollectionReference chats;
+    ImageView viber,whatsapp,messenger,telegram;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -108,6 +116,88 @@ public class Share_bottom_sheet_layout extends BottomSheetDialogFragment {
                         // Инициализируем список, RecyclerView, адаптер и загружаем данные
                         list = new ArrayList<>();
                         recyclerView = view.findViewById(R.id.recyclerView);
+                        viber = view.findViewById(R.id.viber);
+                        whatsapp = view.findViewById(R.id.whatsapp);
+                        messenger = view.findViewById(R.id.messenger);
+                        telegram = view.findViewById(R.id.telegram);
+                        //
+                        viber.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    Intent toViber = new Intent(Intent.ACTION_SEND);
+                                    toViber.putExtra(Intent.EXTRA_TEXT, postImage + "\n\n\n\n\n" + description); // Add your text here
+                                    // Add your image here
+                                    // Set the MIME type for text
+                                    toViber.setType("text/plain"); // Set the MIME type for image
+                                    toViber.setPackage("com.viber.voip"); // Specify the Viber package name
+                                    startActivity(toViber);
+                            }catch (ActivityNotFoundException e){
+                                Toast.makeText(getActivity(), "Viber is not installed", Toast.LENGTH_SHORT).show();
+                            }
+
+                            }
+                        });
+                        telegram.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                     Intent toTelegram = new Intent(Intent.ACTION_SEND);
+                                    toTelegram.putExtra(Intent.EXTRA_TEXT, postImage + "\n\n\n\n\n" + description); // Add your text here
+                                    // Add your image here
+                                    // Set the MIME type for text
+                                    toTelegram.setType("text/plain"); // Set the MIME type for image
+                                    toTelegram.setPackage("org.telegram.messenger"); // Specify the Viber package name
+                                    startActivity(toTelegram);
+                            }catch (ActivityNotFoundException e){
+                                Toast.makeText(getActivity(), "Telegram is not installed", Toast.LENGTH_SHORT).show();
+                            }
+
+                                 }
+
+
+
+                        });
+                        messenger.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try{
+                                    Intent toTelegram = new Intent(Intent.ACTION_SEND);
+                                    toTelegram.putExtra(Intent.EXTRA_TEXT, postImage + "\n\n\n\n\n" + description); // Add your text here
+                                    // Add your image here
+                                    // Set the MIME type for text
+                                    toTelegram.setType("text/plain"); // Set the MIME type for image
+                                    toTelegram.setPackage("com.facebook.orca"); // Specify the Viber package name
+                                    startActivity(toTelegram);
+
+                                }catch (ActivityNotFoundException e){
+                                    Toast.makeText(getActivity(), "Messenger is not installed", Toast.LENGTH_SHORT).show();
+                                }
+
+
+                            }
+                        });
+                        whatsapp.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    Intent toTelegram = new Intent(Intent.ACTION_SEND);
+                                    toTelegram.putExtra(Intent.EXTRA_TEXT, postImage + "\n\n\n\n\n" + description); // Add your text here
+                                    // Add your image here
+                                    // Set the MIME type for text
+                                    toTelegram.setType("text/plain"); // Set the MIME type for image
+                                    toTelegram.setPackage("com.whatsapp"); // Specify the Viber package name
+                                    startActivity(toTelegram);
+                            }catch (ActivityNotFoundException e){
+                                Toast.makeText(getActivity(), "Whatsapp is not installed", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                            }
+                        });
+
+
+
                         recyclerView.setHasFixedSize(true);
                         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                         adapter = new SendLayoutAdapter(getContext(),list);
@@ -167,6 +257,14 @@ public class Share_bottom_sheet_layout extends BottomSheetDialogFragment {
         }
 
 
+    }
+    private boolean isPackageInstalled(String packageName, PackageManager packageManager) {
+        try {
+            packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
 
