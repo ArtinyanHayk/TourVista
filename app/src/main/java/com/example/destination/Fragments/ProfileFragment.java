@@ -90,6 +90,8 @@ public class ProfileFragment extends Fragment {
     private ProgressDialog progressDialog;
     public  List<String> following;
     public  List<String> followers;
+    private int postCount;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -210,6 +212,7 @@ public class ProfileFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
         loadPostsImages();
+
         recyclerView.setAdapter(adapter);
 
         progressDialog = new ProgressDialog(getContext());
@@ -230,7 +233,7 @@ public class ProfileFragment extends Fragment {
                 String userName = value.getString("userName");
                  following = (List<String>) value.get("following");
                  followers = (List<String>) value.get("followers");
-                String profileURL = value.getString("imageURL");
+                String profileURL = value.getString("imageURL");;
 ///////////////
                 ///////////
                 //////////Erb follow es anm dusa qcm____following voch te followers
@@ -255,7 +258,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadPostsImages() {
-        Query query = FirebaseFirestore.getInstance().collection("userPosts").whereEqualTo("uid", user.getUid());
+        Query query = FirebaseFirestore.getInstance().collection("userPosts").whereEqualTo("uid", user.getUid()).orderBy("timestamp",Query.Direction.ASCENDING);
+
 
         FirestoreRecyclerOptions<PostImageModel> options = new FirestoreRecyclerOptions.Builder<PostImageModel>()
                 .setQuery(query, PostImageModel.class)
@@ -276,19 +280,29 @@ public class ProfileFragment extends Fragment {
                             .load(model.getImageUrl())
                             .timeout(6500)
                             .into(holder.imageView);
+
+                    postCount++;
+
                 }
             }
 
             @Override
             public int getItemCount() {
-                return super.getItemCount(); // Ensure the item count is correct
+                return super.getItemCount();// Ensure the item count is correct
             }
             @Override
             public void onDataChanged() {
                 super.onDataChanged();
-                adapter.notifyDataSetChanged(); // Notify adapter about data changes
+                adapter.notifyDataSetChanged();
+                postCountTv.setText(String.valueOf(adapter.getItemCount()));
+
+
+                // Notify adapter about data changes
             }
         };
+        Toast.makeText(getContext(), String.valueOf(postCount), Toast.LENGTH_SHORT).show();
+
+
     }
     public static class PostImageHolder extends RecyclerView.ViewHolder {
         public final ImageView imageView;
@@ -297,6 +311,7 @@ public class ProfileFragment extends Fragment {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
         }
+
     }
 
     @Override

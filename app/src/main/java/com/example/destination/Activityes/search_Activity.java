@@ -68,6 +68,9 @@ public class search_Activity  extends BaseApplication {
        adapter.onSelected(new SearchUserReciclerAdapter.onSelected() {
            @Override
            public void onSelect(int position, String Uid, String Username, String imageURL, List<String> followers, List<String> following, int posts) {
+               filterlist("");
+               filteredList.clear();
+
                Intent intent = new Intent(search_Activity.this, Other_Profile.class);
                intent.putExtra("Uid",Uid);
                intent.putExtra("username",Username);

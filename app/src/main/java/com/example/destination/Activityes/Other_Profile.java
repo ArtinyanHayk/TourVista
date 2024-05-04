@@ -3,6 +3,7 @@ package com.example.destination.Activityes;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,14 +70,17 @@ public class Other_Profile  extends BaseApplication {
         followBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                
 
 
                 if (followersList.contains(user.getUid())) {
                     followersList.remove(user.getUid());
                     followingsList.remove(userModel.getUserId());
+                    followBtn.setText("Follow");
                 } else {
                     followersList.add(user.getUid());
                     followingsList.add(userModel.getUserId());
+                    followBtn.setText("Unfollow");
                 }
                 Map<String, Object> followers = new HashMap<>();
                 followers.put("followers", followersList);
@@ -101,6 +105,12 @@ public class Other_Profile  extends BaseApplication {
                     @Override
                     public void onFailure(Exception e) {
                         Log.w(TAG, "Error Following", e);
+                        if (followersList.contains(user.getUid())) {
+                            followBtn.setText("Unfollow");
+                        }else {
+                            followBtn.setText("Follow");
+                        }
+                        Toast.makeText(Other_Profile.this, "Failed to follow/unfollow", Toast.LENGTH_SHORT).show();
                         Toast.makeText(Other_Profile.this, "Following error", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -173,6 +183,12 @@ public class Other_Profile  extends BaseApplication {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(this,search_Activity.class));
     }
 
     private void loadPostsImages() {

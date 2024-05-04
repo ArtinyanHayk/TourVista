@@ -77,6 +77,8 @@ public class Chat_serach  extends BaseApplication {
         adapter.onSelected(new SearchUserReciclerAdapter.onSelected() {
             @Override
             public void onSelect(int position, String Uid, String Username, String imageURL, List<String> followers, List<String> following, int posts) {
+                filterList("");
+                filteredList.clear();
                 Date date = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 String time = sdf.format(date);

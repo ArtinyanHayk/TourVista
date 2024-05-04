@@ -65,13 +65,23 @@
         android:layout_below="@+id/recyclerViewApps"
 
         android:background="@drawable/edit_text_rounder_corner" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/searchView"
+        android:layout_marginHorizontal="5dp"
+        android:visibility="gone"
+        />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/searchView"
+        android:layout_below="@+id/search_recycler_view"
         android:layout_marginHorizontal="5dp"
         android:layout_alignParentBottom="true"
         />
