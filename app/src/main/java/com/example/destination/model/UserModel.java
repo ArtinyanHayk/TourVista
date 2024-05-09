@@ -16,7 +16,7 @@ public class UserModel {
     //// UserModel_um kan u getter setter
    private List<String> followers,following;
 
-   private String imageURL;
+   private String imageURL,fcmToken;
    private Boolean online;
     ////
  //   private ImageView imageView;
@@ -36,6 +36,7 @@ public class UserModel {
        this.imageURL =  imageURL;
        this.online = online;
 
+
         ////
     }
 
@@ -48,8 +49,17 @@ public class UserModel {
 
     }
 
-
-
+    public UserModel(String phone, String userName, Timestamp createdTimesetap, String userId, List<String> followers, List<String> following, String imageURL, String fcmToken, Boolean online) {
+        this.phone = phone;
+        this.userName = userName;
+        this.createdTimesetap = createdTimesetap;
+        this.userId = userId;
+        this.followers = followers;
+        this.following = following;
+        this.imageURL = imageURL;
+        this.fcmToken = fcmToken;
+        this.online = online;
+    }
 
     public boolean getonline() {return online;}
     public void setonline(boolean online) {this.online = online;}
@@ -112,4 +122,14 @@ public class UserModel {
  //   public void setImageView(ImageView imageView) {
  //       this.imageView = imageView;
     //}
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
+
 }

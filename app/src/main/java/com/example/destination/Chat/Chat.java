@@ -1,14 +1,14 @@
 package com.example.destination.Chat;
 
-import static android.app.PendingIntent.getActivity;
-import static java.security.AccessController.getContext;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +20,6 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,28 +54,41 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Chat extends BaseApplication {
 
     EditText messageEditText;
     String chatId;
     FirebaseUser user;
-    String id2,profilePicUrl;
+    String id2, profilePicUrl;
     ChatModel chatModel;
     MessagesAdapter adapter;
     ImageView sendBtn;
     TextView name, onlineTv;
-    ImageView bacBtn,addBtn;
+    ImageView bacBtn, addBtn;
     CircleImageView profilePic;
     RecyclerView recyclerView;
     Dialog dialog;
     List<String> urls = new ArrayList<>();
+    UserModel otherUser;
     boolean online;
     private GalleryAdapter galleryAdapter;
     private List<GalleryImages> list;
@@ -101,13 +113,11 @@ public class Chat extends BaseApplication {
                     });
 
 
-                            private void clickListener() {
-                                galleryAdapter.sendImage(pickUri -> {
-                                    imageUris = pickUri;
-                                });
-                            }
-
-
+    private void clickListener() {
+        galleryAdapter.sendImage(pickUri -> {
+            imageUris = pickUri;
+        });
+    }
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,8 +145,8 @@ public class Chat extends BaseApplication {
 
         bacBtn.setOnClickListener(v -> finish());
 
-        addBtn.setOnClickListener(v ->launcher.launch(new PickVisualMediaRequest.Builder().setMediaType(
-                ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()) );
+        addBtn.setOnClickListener(v -> launcher.launch(new PickVisualMediaRequest.Builder().setMediaType(
+                ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
 
         id2 = getIntent().getStringExtra("person2_id");
         profilePicUrl = getIntent().getStringExtra("profilePic");
@@ -146,16 +156,16 @@ public class Chat extends BaseApplication {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (value.exists() && error == null) {
-                    UserModel model = value.toObject(UserModel.class);
+                     otherUser = value.toObject(UserModel.class);
 
-                    if (model.getonline()) {
+                    if (otherUser.getonline()) {
                         onlineTv.setText("online");
                         onlineTv.setTextColor(getResources().getColor(R.color.light_green));
                     } else {
                         onlineTv.setText("offline");
                         onlineTv.setTextColor(getResources().getColor(R.color.light_gray));
                     }
-                    name.setText(model.getUserName());
+                    name.setText(otherUser.getUserName());
 
 
                 }
@@ -174,12 +184,11 @@ public class Chat extends BaseApplication {
         adapter.OnPressed(new MessagesAdapter.OnPressed() {
             @Override
             public void onGetLocation(GeoPoint location) {
-                if(AndroidUtil.isGPSEnabled(Chat.this)) {
+                if (AndroidUtil.isGPSEnabled(Chat.this)) {
                     Intent intent = new Intent(Chat.this, LocationForUser.class);
-                    intent.putExtra("Location", new LatLng(location.getLatitude(),location.getLongitude()));
+                    intent.putExtra("Location", new LatLng(location.getLatitude(), location.getLongitude()));
                     startActivity(intent);
-                }
-                else{
+                } else {
                     AndroidUtil.showGPSEnableDialog(Chat.this);
                 }
             }
@@ -191,13 +200,12 @@ public class Chat extends BaseApplication {
             if (gettxtMessage.isEmpty() && imageUris == null) {
                 return;
 
-            }
-            else {
+            } else {
                 try {
-                    if(imageUris != null && !imageUris.isEmpty() ){
+                    if (imageUris != null && !imageUris.isEmpty()) {
                         SendMessage(gettxtMessage, user.getUid());
 
-                    }else{
+                    } else {
                         message(gettxtMessage, user.getUid());
                     }
 
@@ -271,12 +279,12 @@ public class Chat extends BaseApplication {
         });
     }
 
-    void message(String message,String id) {
+    void message(String message, String id) {
         MessageModel messageModel = new MessageModel(message, id, com.google.firebase.Timestamp.now(), urls);
         chatModel.setLastMessage(message);
         chatModel.setLastMessageTime(com.google.firebase.Timestamp.now());
         chatModel.setLastMsgSenderId(user.getUid());
-        if(urls == null ||  urls.isEmpty()){
+        if (urls == null || urls.isEmpty()) {
             FirbaseUtil.getChatReference(chatId).set(chatModel).addOnCompleteListener(task -> {
                 if (!task.isSuccessful()) {
                     Toast.makeText(this, "Check your connection", Toast.LENGTH_SHORT).show();
@@ -284,8 +292,7 @@ public class Chat extends BaseApplication {
                 }
             });
 
-        }
-        else {
+        } else {
             FirbaseUtil.getChatReference(chatId).set(chatModel).addOnCompleteListener(task -> {
                 if (!task.isSuccessful()) {
                     Toast.makeText(this, "Check your connection", Toast.LENGTH_SHORT).show();
@@ -293,6 +300,7 @@ public class Chat extends BaseApplication {
                     imageUris = null;
                     urls = null;
                     dialog.dismiss();
+                    sendNotification(message);
 
                 }
             });
@@ -301,11 +309,79 @@ public class Chat extends BaseApplication {
         FirbaseUtil.getChatMessageReference(chatId).add(messageModel).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 messageEditText.setText("");
+                sendNotification(message);
             }
         });
     }
 
-    void getOrCreateChatroomModel() {
+    public void sendNotification(String message){
+
+            FirbaseUtil.currentUsersDetails().get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    UserModel currentUser = task.getResult().toObject(UserModel.class);
+                    try{
+                        JSONObject jsonObject  = new JSONObject();
+
+                        JSONObject notificationObj = new JSONObject();
+                        notificationObj.put("title",currentUser.getUserName());
+                        notificationObj.put("body",message);
+
+                        JSONObject dataObj = new JSONObject();
+                        dataObj.put("userId",currentUser.getUserId());
+
+                        jsonObject.put("notification",notificationObj);
+                        jsonObject.put("data",dataObj);
+                        jsonObject.put("to",otherUser.getFcmToken());
+
+                        callApi(jsonObject);
+
+
+                    }catch (Exception e){
+
+                    }
+
+                }
+            });
+
+    }
+
+    private static final String FCM_URL = "https://fcm.googleapis.com/fcm/send";   private static final String API_KEY = "AAAASq_n4Kw:APA91bH4zJaAJCEjnV_ns2eCL1E6kMjUtqxnVVnZ1nQ41LJYvO_1ji11ZMHWYamOZ6mNhCxQLmAm1ozrJYdWTezkwn6ShqQMdpxNM7Hey7k_M4wVMUV9KQb66RiYwwGtRe2W1ySqf8P8";    private static final MediaType APPLICATION_JSON_MEDIA_TYPE = MediaType.get("application/json");
+
+    public void callApi(JSONObject jsonObject) {
+        OkHttpClient client = new OkHttpClient.Builder().build();
+
+        RequestBody body = RequestBody.create(jsonObject.toString(), APPLICATION_JSON_MEDIA_TYPE);
+        Request request = new Request.Builder()
+                .url(FCM_URL)
+                .header("Authorization", "key=" + API_KEY)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                // Handle failure more meaningfully, e.g., re-throw the exception
+                throw new RuntimeException("Failed to call API", e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                try{
+                    if (response!= null && response.isSuccessful()) {
+                        Log.d("API Response", "Success");
+                    } else {
+                        Log.e("API Response", "Failed: " + response);
+                    }
+                }finally {
+                    if (response.body() != null) {
+                        response.body().close();
+                    }
+                }
+
+            }
+        });
+    }
+        void getOrCreateChatroomModel() {
         FirbaseUtil.getChatReference(chatId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 chatModel = task.getResult().toObject(ChatModel.class);
@@ -324,7 +400,6 @@ public class Chat extends BaseApplication {
             }
         });
     }
-
 
 
 }

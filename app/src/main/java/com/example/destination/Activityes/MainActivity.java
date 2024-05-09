@@ -23,12 +23,16 @@ import com.example.destination.R;
 
 import com.example.destination.utils.BaseApplication;
 import com.example.destination.utils.FirbaseUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -110,6 +114,26 @@ public class MainActivity extends BaseApplication {
             }
         });
         bottomNavigationView.setSelectedItemId(R.id.network);
+        getFCMToken();
+
+
+    }
+
+    private void getFCMToken() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (task.isSuccessful()){
+                    String token = task.getResult();
+                    Log.i("fcmToken",token);
+
+                    FirbaseUtil.currentUsersDetails().update("fcmToken",token);
+
+                }else{
+                    Toast.makeText(MainActivity.this, "token", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 

@@ -19,4 +19,7 @@
         <item name="labelVisibilityMode">unlabeled</item>
         <item name="itemIconTint">@color/my_secondary</item>
     </style>
+    <style name="TourVista" parent="Base.Theme.Destination">
+        <item name="android:background">@null</item>
+    </style>
 </resources>
