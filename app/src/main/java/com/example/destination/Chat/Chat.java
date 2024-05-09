@@ -297,10 +297,11 @@ public class Chat extends BaseApplication {
                 if (!task.isSuccessful()) {
                     Toast.makeText(this, "Check your connection", Toast.LENGTH_SHORT).show();
                 } else {
-                    imageUris = null;
-                    urls = null;
+
+                    //sendNotification(message,urls.get(urls.size()-1));
+
                     dialog.dismiss();
-                    sendNotification(message);
+
 
                 }
             });
@@ -309,12 +310,20 @@ public class Chat extends BaseApplication {
         FirbaseUtil.getChatMessageReference(chatId).add(messageModel).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 messageEditText.setText("");
-                sendNotification(message);
+                if(urls != null && !urls.isEmpty()){
+                    sendNotification(message,urls.get(0));
+                    imageUris = null;
+                    urls = null;
+                }else{
+                    sendNotification(message,"");
+                }
+
+
             }
         });
     }
 
-    public void sendNotification(String message){
+    public void sendNotification(String message,String lastPhoto){
 
             FirbaseUtil.currentUsersDetails().get().addOnCompleteListener(task -> {
                 if(task.isSuccessful()){
@@ -325,6 +334,10 @@ public class Chat extends BaseApplication {
                         JSONObject notificationObj = new JSONObject();
                         notificationObj.put("title",currentUser.getUserName());
                         notificationObj.put("body",message);
+                        if(!lastPhoto.isEmpty()){
+                            notificationObj.put("image", lastPhoto);
+                        }
+
 
                         JSONObject dataObj = new JSONObject();
                         dataObj.put("userId",currentUser.getUserId());
