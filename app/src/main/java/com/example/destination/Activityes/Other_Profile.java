@@ -144,7 +144,7 @@ public class Other_Profile  extends BaseApplication {
                             followBtn.setText("Follow");
                         }
                         Toast.makeText(Other_Profile.this, "Failed to follow/unfollow", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(Other_Profile.this, "Following error", Toast.LENGTH_SHORT).show();
+                  //      Toast.makeText(Other_Profile.this, "Following error", Toast.LENGTH_SHORT).show();
                     }
                 });
 

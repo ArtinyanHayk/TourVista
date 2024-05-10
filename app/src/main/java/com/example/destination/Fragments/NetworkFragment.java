@@ -155,7 +155,6 @@ public class NetworkFragment extends Fragment {
             @Override
             public void onGetLocation(int position, String id, String uid, LatLng location) {
                 if(isGPSEnabled()) {
-                    Toast.makeText(getContext(), Double.toString(location.latitude) + "  " + Double.toString(location.longitude), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), LocationForUser.class);
                     intent.putExtra("Location", location);
                     startActivity(intent);

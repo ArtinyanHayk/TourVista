@@ -120,7 +120,7 @@
                 android:layout_marginRight="35dp"
                 android:background="@drawable/forget"
                 android:hint="Enter the Confirm Password"
-                android:inputType="textPhonetic" />
+                android:inputType="textPassword" />
 
             <ProgressBar
                 android:id="@+id/progressBar"

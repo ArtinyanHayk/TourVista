@@ -300,9 +300,6 @@ public class ProfileFragment extends Fragment {
                 // Notify adapter about data changes
             }
         };
-        Toast.makeText(getContext(), String.valueOf(postCount), Toast.LENGTH_SHORT).show();
-
-
     }
     public static class PostImageHolder extends RecyclerView.ViewHolder {
         public final ImageView imageView;

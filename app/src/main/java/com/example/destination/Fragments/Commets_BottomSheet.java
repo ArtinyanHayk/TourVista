@@ -105,19 +105,16 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
             binding.close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "dimiss", Toast.LENGTH_SHORT).show();
                     dismiss();
                 }
             });
 
-            Toast.makeText(getContext(), "!null", Toast.LENGTH_SHORT).show();
             binding.sendCommentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String comment = binding.commentEditText.getText().toString();
                     if(comment == null){
-                        Toast.makeText(getActivity(), "Empty comment", Toast.LENGTH_SHORT).show();
-                        return;
+                         return;
                     }
 
                     //Adapter
@@ -142,7 +139,6 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
                                 binding.commentEditText.setText("");
-                                Toast.makeText(getContext(), "+comment", Toast.LENGTH_SHORT).show();
                             }
                             else {
                                 Toast.makeText(getContext(), "Failed to comment" + task.getException()

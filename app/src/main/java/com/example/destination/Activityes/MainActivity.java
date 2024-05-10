@@ -130,7 +130,7 @@ public class MainActivity extends BaseApplication {
                     FirbaseUtil.currentUsersDetails().update("fcmToken",token);
 
                 }else{
-                    Toast.makeText(MainActivity.this, "token", Toast.LENGTH_SHORT).show();
+           //         Toast.makeText(MainActivity.this, "token", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -145,7 +145,7 @@ public class MainActivity extends BaseApplication {
                 (ContextCompat.checkSelfPermission(this, READ_STORAGE_PERMISSION) == PackageManager.PERMISSION_GRANTED
                         && ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED)) {
             // Если все разрешения уже предоставлены, показываем сообщение об этом
-            Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
         }
         //else if (ContextCompat.checkSelfPermission(this, READ_STORAGE_PERMISSION) == PackageManager.PERMISSION_GRANTED  &&
         //    ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED){
@@ -179,10 +179,10 @@ public class MainActivity extends BaseApplication {
                 }
                 if (allPermissionsGranted) {
                     // Если все разрешения предоставлены, показываем сообщение об этом
-                    Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
                 } else {
                     // Если какое-либо разрешение было отклонено, показываем сообщение об этом
-                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Log.d("generate Toast", "5");

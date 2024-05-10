@@ -284,11 +284,17 @@ public class Chat extends BaseApplication {
         chatModel.setLastMessage(message);
         chatModel.setLastMessageTime(com.google.firebase.Timestamp.now());
         chatModel.setLastMsgSenderId(user.getUid());
-        if (urls == null || urls.isEmpty()) {
+        if (imageUris == null && urls == null || urls.isEmpty()) {
             FirbaseUtil.getChatReference(chatId).set(chatModel).addOnCompleteListener(task -> {
                 if (!task.isSuccessful()) {
                     Toast.makeText(this, "Check your connection", Toast.LENGTH_SHORT).show();
                 } else {
+                    if(message == null  || message.isEmpty()){
+                        sendNotification("New messages","");
+                    }else{
+                        sendNotification(message,"");
+                    }
+
                 }
             });
 
@@ -297,6 +303,16 @@ public class Chat extends BaseApplication {
                 if (!task.isSuccessful()) {
                     Toast.makeText(this, "Check your connection", Toast.LENGTH_SHORT).show();
                 } else {
+                    if(urls != null && !urls.isEmpty()){
+                        sendNotification(message,urls.get(0));
+                        imageUris = null;
+                        urls = null;
+                    }else {
+                        if(message.isEmpty()){
+                            sendNotification("New message",urls.get(0));
+                        }
+
+                    }
 
                     //sendNotification(message,urls.get(urls.size()-1));
 
@@ -310,15 +326,6 @@ public class Chat extends BaseApplication {
         FirbaseUtil.getChatMessageReference(chatId).add(messageModel).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 messageEditText.setText("");
-                if(urls != null && !urls.isEmpty()){
-                    sendNotification(message,urls.get(0));
-                    imageUris = null;
-                    urls = null;
-                }else{
-                    sendNotification(message,"");
-                }
-
-
             }
         });
     }

@@ -132,7 +132,7 @@ public class Add_location  extends BaseApplication  {
                 Log.e("finallLatLang","null");
             }else {
                 Log.e("finallLatLang","!null");
-                Toast.makeText(Add_location.this, Double.toString(finallatLang.latitude), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(Add_location.this, Double.toString(finallatLang.latitude), Toast.LENGTH_SHORT).show();
             }
             if (isGPSEnabled()) {
                 Intent intent = new Intent(Add_location.this, LocationForPost.class);
@@ -270,7 +270,7 @@ public class Add_location  extends BaseApplication  {
         String time = sdf.format(date);
 
         ////////////////
-        Toast.makeText(Add_location.this, time, Toast.LENGTH_SHORT).show();
+  //      Toast.makeText(Add_location.this, time, Toast.LENGTH_SHORT).show();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         DocumentReference Currentuser = FirebaseFirestore.getInstance().collection("users")
@@ -280,7 +280,7 @@ public class Add_location  extends BaseApplication  {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
                    username = (String) task.getResult().get("userName");
-                    Toast.makeText(Add_location.this, username, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Add_location.this, username, Toast.LENGTH_SHORT).show();
                     List<String> list = new ArrayList<>();
 
 

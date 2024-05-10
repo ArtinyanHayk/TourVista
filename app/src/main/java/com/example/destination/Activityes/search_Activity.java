@@ -136,7 +136,7 @@ public class search_Activity  extends BaseApplication {
                     }
                 }
                 if (filteredList.isEmpty()) {
-                    Toast.makeText(search_Activity.this, "Нет данных", Toast.LENGTH_SHORT).show();
+              //      Toast.makeText(search_Activity.this, "Нет данных", Toast.LENGTH_SHORT).show();
                 } else {
                     adapter.notifyDataSetChanged();
                 }

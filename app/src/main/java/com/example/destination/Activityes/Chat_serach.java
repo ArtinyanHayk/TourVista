@@ -179,7 +179,7 @@ public class Chat_serach  extends BaseApplication {
                     }
                 }
                 if (filteredList.isEmpty()) {
-                    Toast.makeText(Chat_serach.this, "Нет данных", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Chat_serach.this, "Нет данных", Toast.LENGTH_SHORT).show();
                 } else {
                     adapter.notifyDataSetChanged();
                 }

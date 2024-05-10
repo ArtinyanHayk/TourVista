@@ -215,7 +215,6 @@ public class Share_bottom_sheet_layout extends BottomSheetDialogFragment {
                                         Toast.makeText(getContext(), "Check your connection", Toast.LENGTH_SHORT).show();
                                     } else {
 
-                                        Toast.makeText(getContext(), "message", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -238,7 +237,6 @@ public class Share_bottom_sheet_layout extends BottomSheetDialogFragment {
                                         Toast.makeText(getContext(), "Check your connection", Toast.LENGTH_SHORT).show();
                                     } else {
 
-                                        Toast.makeText(getContext(), "message", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
