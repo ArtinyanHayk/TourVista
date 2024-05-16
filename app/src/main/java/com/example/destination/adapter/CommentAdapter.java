@@ -50,30 +50,30 @@ public class CommentAdapter extends  RecyclerView.Adapter<CommentAdapter.Comment
         holder.timeTv.setText("" + list.get(position).getTimestapmp());
 
 
-        if (list.get(position).getLikeList() != null) {
-            Log.e("!null","likes");
-            List<String> likeList = list.get(position).getLikeList();
-            int count = likeList.size();
-            if (count == 0) {
-                Log.e("0like","work");
-                holder.likeCountTv.setText(count + " like");
-            } else if (count == 1) {
-                Log.e("1like","work");
-                holder.likeCountTv.setText(count + " like");
-            } else {
-                Log.e("likes","work");
-                holder.likeCountTv.setText(count + " likes");
-            }
-
-            if(likeList.contains(user.getUid())) {
-                holder.likeCheckBox.setChecked(true);
-            } else {
-                holder.likeCheckBox.setChecked(false);
-            }
-        } else {
-            holder.likeCountTv.setText("0 likes");
-            holder.likeCheckBox.setChecked(false);
-        }
+      //  if (list.get(position).getLikeList() != null) {
+      //      Log.e("!null","likes");
+      //      List<String> likeList = list.get(position).getLikeList();
+      //      int count = likeList.size();
+      //      if (count == 0) {
+      //          Log.e("0like","work");
+      //          holder.likeCountTv.setText(count + " like");
+      //      } else if (count == 1) {
+      //          Log.e("1like","work");
+      //          holder.likeCountTv.setText(count + " like");
+      //      } else {
+      //          Log.e("likes","work");
+      //          holder.likeCountTv.setText(count + " likes");
+      //      }
+//
+      //      if(likeList.contains(user.getUid())) {
+      //          holder.likeCheckBox.setChecked(true);
+      //      } else {
+      //          holder.likeCheckBox.setChecked(false);
+      //      }
+      //  } else {
+      //      holder.likeCountTv.setText("0 likes");
+      //      holder.likeCheckBox.setChecked(false);
+      //  }
 
         holder.commentTv.setText(list.get(position).getCommentText());
 
@@ -112,10 +112,10 @@ public class CommentAdapter extends  RecyclerView.Adapter<CommentAdapter.Comment
             profileImage = itemView.findViewById(R.id.profile_image);
             userNameTv = itemView.findViewById(R.id.userName);
             timeTv = itemView.findViewById(R.id.comment_time);
-            likeCountTv = itemView.findViewById(R.id.like_count);
-            replyTv = itemView.findViewById(R.id.reply_button);
-            likeCheckBox = itemView.findViewById(R.id.like_button);
-            threeDots = itemView.findViewById(R.id.three_dots_button);
+           // likeCountTv = itemView.findViewById(R.id.like_count);
+           // replyTv = itemView.findViewById(R.id.reply_button);
+           // likeCheckBox = itemView.findViewById(R.id.like_button);
+           // threeDots = itemView.findViewById(R.id.three_dots_button);
             commentTv = itemView.findViewById(R.id.comment_text);
         }
 

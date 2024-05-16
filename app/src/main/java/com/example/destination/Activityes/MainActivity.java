@@ -96,19 +96,24 @@ public class MainActivity extends BaseApplication {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.network) {
                      getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, networkFragment).commit();
+                    overridePendingTransition(R.anim.change_fragment_out, R.anim.change_fragment_in);
                 }
                 if (item.getItemId() == R.id.profile) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, profileFragment).commit();
+                    overridePendingTransition(R.anim.change_fragment_out, R.anim.change_fragment_in);
                 }
 
                 if (item.getItemId() == R.id.notifications) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, notificationFragment).commit();
+                    overridePendingTransition(R.anim.change_fragment_out, R.anim.change_fragment_in);
                 }
                 if (item.getItemId() == R.id.chats){
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, chatsFragment).commit();
+                    overridePendingTransition(R.anim.change_fragment_out, R.anim.change_fragment_in);
                 }
                 if (item.getItemId() == R.id.Add_post) {
                     startActivity(new Intent(MainActivity.this, Add_location.class));
+                    overridePendingTransition(R.anim.change_fragment_out, R.anim.change_fragment_in);
                      }
                 return true;
             }

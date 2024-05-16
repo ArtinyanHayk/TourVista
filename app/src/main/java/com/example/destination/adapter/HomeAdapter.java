@@ -1,5 +1,6 @@
 package com.example.destination.adapter;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -12,19 +13,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableResource;
 import com.example.destination.R;
 import com.example.destination.model.HomeModel;
+import com.example.destination.utils.FirbaseUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,12 +55,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     private static List<HomeModel> list;
     private static Context context;
     static OnPressed onPressed;
     LatLng location;
+
+
 
 
 
@@ -138,11 +152,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
                 .into(holder.profileImage);
         Glide.with(context.getApplicationContext())
                 .load(list.get(position).getImageUrl())
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(50)))
                 .placeholder(new ColorDrawable(color))
                 .timeout(7000)
+
                 .into(holder.imageView);
 
-        // Dynamic height calculation for ImageView
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int screenWidth = displayMetrics.widthPixels;
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -150,10 +165,22 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         BitmapFactory.decodeResource(context.getResources(), R.drawable.map_icon, options);
         float aspectRatio = options.outWidth / (float) options.outHeight;
         int calculatedHeight = (int) (screenWidth / aspectRatio);
-        ViewGroup.LayoutParams layoutParams = holder.imageView.getLayoutParams();
-        layoutParams.height = calculatedHeight;
-        holder.imageView.setLayoutParams(layoutParams);
 
+// Get the correct LayoutParams instance
+        ViewGroup.LayoutParams layoutParams = holder.cardView.getLayoutParams();
+        if (layoutParams instanceof LinearLayout.LayoutParams) {
+            LinearLayout.LayoutParams linearLayoutParams = (LinearLayout.LayoutParams) layoutParams;
+            linearLayoutParams.height = calculatedHeight;
+            holder.cardView.setLayoutParams(linearLayoutParams);
+        } else if (layoutParams instanceof RelativeLayout.LayoutParams) {
+            RelativeLayout.LayoutParams relativeLayoutParams = (RelativeLayout.LayoutParams) layoutParams;
+            relativeLayoutParams.height = calculatedHeight;
+            holder.cardView.setLayoutParams(relativeLayoutParams);
+        } else if (layoutParams instanceof FrameLayout.LayoutParams) {
+            FrameLayout.LayoutParams frameLayoutParams = (FrameLayout.LayoutParams) layoutParams;
+            frameLayoutParams.height = calculatedHeight;
+            holder.cardView.setLayoutParams(frameLayoutParams);
+        }
         holder.clickListener(position,
                 list.get(position).getId(),
                 list.get(position).getUsername(),
@@ -183,11 +210,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     }
 
     static class HomeHolder extends RecyclerView.ViewHolder {
-        private ImageView profileImage;
+        private CircleImageView profileImage;
         private TextView userNameTv, timeTv, likeCountTv, descriptionTv;
         private ImageView imageView;
         private ImageView likeCheckBox;
         private  ImageButton commentBtn, shareBtn, getLocationBtn, favoriteBtn;
+        private CardView cardView;
+       // LottieAnimationView likeAnim;
 
         public HomeHolder(@NonNull View itemView) {
             super(itemView);
@@ -202,6 +231,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             shareBtn = itemView.findViewById(R.id.share);
             getLocationBtn = itemView.findViewById(R.id.get_location);
             favoriteBtn = itemView.findViewById(R.id.favorite);
+           // likeAnim = itemView.findViewById(R.id.likeAnim);
+           //likeAnim.setMinAndMaxProgress(0.7f,1.0f);
+            cardView = itemView.findViewById(R.id.cardView);
+
 
 
 
@@ -216,6 +249,33 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
                 @Override
                 public void onClick(View v) {
                     onPressed.onLiked(position, id, uid, likes);
+                   // if (likes.contains(FirbaseUtil.currentUsersId())){
+                   //     likeAnim.setVisibility(View.VISIBLE);
+//
+                   //     likeAnim.playAnimation();
+                   //     likeAnim.addAnimatorListener(new Animator.AnimatorListener() {
+                   //         @Override
+                   //         public void onAnimationStart(@NonNull Animator animation) {
+//
+                   //         }
+//
+                   //         @Override
+                   //         public void onAnimationEnd(@NonNull Animator animation) {
+                   //             likeAnim.setVisibility(View.INVISIBLE);
+                   //         }
+//
+                   //         @Override
+                   //         public void onAnimationCancel(@NonNull Animator animation) {
+//
+                   //         }
+//
+                   //         @Override
+                   //         public void onAnimationRepeat(@NonNull Animator animation) {
+//
+                   //         }
+                   //     });
+                   // }
+
                 }
             });
 

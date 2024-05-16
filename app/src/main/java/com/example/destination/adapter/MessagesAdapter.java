@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,6 +56,8 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             holder.leftChatLayout.setVisibility(View.GONE);
             holder.rightChatLayout.setVisibility(View.VISIBLE);
             holder.rightChatTextview.setText(model.getMessage());
+
+            holder.rightChatLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.chat_transition_animation));
             if(model.getImageUris()!= null){
                 if(!model.getImageUris().isEmpty()) {
                     ArrayList<SlideModel> list = new ArrayList<>();
@@ -88,6 +91,8 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             holder.rightChatLayout.setVisibility(View.GONE);
             holder.leftChatLayout.setVisibility(View.VISIBLE);
             holder.leftChatTextview.setText(model.getMessage());
+            holder.leftChatLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.chat_transition_animation));
+
             if(model.getImageUris()!= null){
                 if(!model.getImageUris().isEmpty()) {
                     ArrayList<SlideModel> list = new ArrayList<>();

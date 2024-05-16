@@ -17,7 +17,7 @@
         <item name="itemBackground">@android:color/transparent</item>
         <item name="android:textSize">0sp</item>
         <item name="labelVisibilityMode">unlabeled</item>
-        <item name="itemIconTint">@color/my_secondary</item>
+        <item name="itemIconTint">#D34C4C4C</item>
     </style>
     <style name="TourVista" parent="Base.Theme.Destination">
         <item name="android:background">@null</item>

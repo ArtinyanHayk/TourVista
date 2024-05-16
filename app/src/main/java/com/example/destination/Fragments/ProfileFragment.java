@@ -8,8 +8,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +66,7 @@ import com.yalantis.ucrop.UCrop;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import kotlin.Unit;
@@ -74,7 +77,7 @@ public class ProfileFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 101;
 
     private TextView nameTv, followingCountTv,followersCountTv, postCountTv;
-    private CircleImageView profileImage;
+    private ImageView profileImage;
     private Button followBtn;
     private RecyclerView recyclerView;
     private FirebaseUser user;
@@ -83,7 +86,7 @@ public class ProfileFragment extends Fragment {
     private boolean isMyProfile = true;
     private FirestoreRecyclerAdapter<PostImageModel, PostImageHolder> adapter;
     private FirebaseAuth auth;
-    private ImageButton editProfileButton;
+   // private ImageButton editProfileButton;
     private ActivityResultLauncher<String> mGetContent;
     private Uri selectedImageUri;
 
@@ -91,6 +94,7 @@ public class ProfileFragment extends Fragment {
     public  List<String> following;
     public  List<String> followers;
     private int postCount;
+    RelativeLayout profileInfoLayout;
 
 
     @Override
@@ -105,7 +109,7 @@ public class ProfileFragment extends Fragment {
         init(view);
         setupUI();
 
-        editProfileButton.setOnClickListener(v -> mGetContent.launch("image/*"));
+      //  editProfileButton.setOnClickListener(v -> mGetContent.launch("image/*"));
 
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
             if (result != null) {
@@ -191,8 +195,9 @@ public class ProfileFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         countLayout = view.findViewById(R.id.countLayout);
-        editProfileButton = view.findViewById(R.id.edit_profileImage);
+     //   editProfileButton = view.findViewById(R.id.edit_profileImage);
         postCountTv = view.findViewById(R.id.postsTv);
+        profileInfoLayout = view.findViewById(R.id.profile_info);
     }
 ////////////////////////////////
     /////////////////////
@@ -249,9 +254,20 @@ public class ProfileFragment extends Fragment {
                 if (profileURL != null) {
                     Glide.with(getApplicationContext())
                             .load(profileURL)
-                            .placeholder(R.drawable.ic_person)
+                            .placeholder(com.denzcoskun.imageslider.R.drawable.default_loading)
                             .timeout(6500)
                             .into(profileImage);
+                    DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+                    int screenWidth = displayMetrics.widthPixels;
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.map_icon, options);
+                    float aspectRatio = options.outWidth / (float) options.outHeight;
+                    int calculatedHeight = (int) (screenWidth / aspectRatio);
+                    ViewGroup.LayoutParams layoutParams = profileImage.getLayoutParams();
+                    layoutParams.height = calculatedHeight;
+                    profileImage.setLayoutParams(layoutParams);
+
                 }
             }
         });

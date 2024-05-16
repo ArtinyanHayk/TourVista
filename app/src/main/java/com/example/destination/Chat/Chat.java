@@ -266,6 +266,7 @@ public class Chat extends BaseApplication {
                             public void onSuccess(Uri uri) {
                                 urls.add(uri.toString());
                                 if (urls.size() == imageUris.size()) {
+                                    imageUris = null;
                                     message(message, id);
                                 }
                             }

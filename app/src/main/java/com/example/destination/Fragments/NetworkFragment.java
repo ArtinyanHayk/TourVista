@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.destination.Location.LocationForUser;
 import com.example.destination.R;
 import com.example.destination.adapter.HomeAdapter;
@@ -61,6 +62,7 @@ public class NetworkFragment extends Fragment {
 
     ImageButton search_user;
     Date curent_date;
+
 
     private ActivityMainBinding binding;
 
