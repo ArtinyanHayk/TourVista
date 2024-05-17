@@ -56,10 +56,13 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             holder.leftChatLayout.setVisibility(View.GONE);
             holder.rightChatLayout.setVisibility(View.VISIBLE);
             holder.rightChatTextview.setText(model.getMessage());
-
+            holder.sliderRight.setVisibility(View.GONE);
             holder.rightChatLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.chat_transition_animation));
+            Toast.makeText(context, "photo1", Toast.LENGTH_SHORT).show();
             if(model.getImageUris()!= null){
+                Toast.makeText(context, "photo2", Toast.LENGTH_SHORT).show();
                 if(!model.getImageUris().isEmpty()) {
+                    Toast.makeText(context, "photo3", Toast.LENGTH_SHORT).show();
                     ArrayList<SlideModel> list = new ArrayList<>();
                     for (String url : model.getImageUris()) {
                         list.add(new SlideModel(url,  ScaleTypes.CENTER_CROP));
@@ -92,9 +95,10 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             holder.leftChatLayout.setVisibility(View.VISIBLE);
             holder.leftChatTextview.setText(model.getMessage());
             holder.leftChatLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.chat_transition_animation));
-
+            holder.sliderLeft.setVisibility(View.GONE);
             if(model.getImageUris()!= null){
                 if(!model.getImageUris().isEmpty()) {
+                    Toast.makeText(context, "photo", Toast.LENGTH_SHORT).show();
                     ArrayList<SlideModel> list = new ArrayList<>();
                     for (String url : model.getImageUris()) {
                         list.add(new SlideModel(url, ScaleTypes.CENTER_CROP));
@@ -129,6 +133,12 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
     public int getItemCount() {
         return super.getItemCount(); // Ensure the item count is correct
     }
+
+    @Override
+    public void onDataChanged() {
+        super.onDataChanged();
+    }
+
     public interface OnPressed {
         void onGetLocation(GeoPoint location);
     }

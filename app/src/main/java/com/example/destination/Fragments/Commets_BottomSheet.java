@@ -113,7 +113,7 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
                 @Override
                 public void onClick(View v) {
                     String comment = binding.commentEditText.getText().toString();
-                    if(comment == null){
+                    if(comment == null || comment.isEmpty() ){
                          return;
                     }
 
@@ -139,6 +139,7 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
                                 binding.commentEditText.setText("");
+
                             }
                             else {
                                 Toast.makeText(getContext(), "Failed to comment" + task.getException()

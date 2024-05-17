@@ -204,9 +204,11 @@ public class Chat extends BaseApplication {
                 try {
                     if (imageUris != null && !imageUris.isEmpty()) {
                         SendMessage(gettxtMessage, user.getUid());
+                        sendBtn.setClickable(false);
 
                     } else {
                         message(gettxtMessage, user.getUid());
+                        sendBtn.setClickable(false);
                     }
 
                 } catch (IOException e) {
@@ -292,8 +294,10 @@ public class Chat extends BaseApplication {
                 } else {
                     if(message == null  || message.isEmpty()){
                         sendNotification("New messages","");
+                        sendBtn.setClickable(true);
                     }else{
                         sendNotification(message,"");
+                        sendBtn.setClickable(true);
                     }
 
                 }
@@ -308,6 +312,8 @@ public class Chat extends BaseApplication {
                         sendNotification(message,urls.get(0));
                         imageUris = null;
                         urls = null;
+                        sendBtn.setClickable(true);
+                        dialog.dismiss();
                     }else {
                         if(message.isEmpty()){
                             sendNotification("New message",urls.get(0));
@@ -317,7 +323,6 @@ public class Chat extends BaseApplication {
 
                     //sendNotification(message,urls.get(urls.size()-1));
 
-                    dialog.dismiss();
 
 
                 }
