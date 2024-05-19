@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activityes.Add_location"
-   >
-
+    tools:context=".Activityes.Edit_post">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -156,7 +154,7 @@
 
     <Button
 
-        android:id="@+id/share_btn"
+        android:id="@+id/edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -165,7 +163,7 @@
         android:layout_marginBottom="2dp"
         android:backgroundTint="@color/my_3"
         android:visibility="visible"
-        android:text="Share"
+        android:text="Edit"
         android:textSize="20sp" />
 
 
@@ -180,8 +178,17 @@
         android:layout_marginBottom="10dp"
         android:rotation="45"
         android:src="@drawable/add_icon_borderless" />
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/delete"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"/>
+
+
+
 
 
 
 </RelativeLayout>
-

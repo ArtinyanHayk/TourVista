@@ -148,12 +148,7 @@ public class Add_location  extends BaseApplication  {
                 new PickVisualMediaRequest.Builder().setMediaType(
                         ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
         nextBtn.setOnClickListener(v -> {
-            if(imageUris == null){
-                return;
-            } else if (imageUris.isEmpty()) {
-                return;
 
-            }
             Log.d("ButtonClick", "Next button clicked!");
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageReference = storage.getReference().child("Post Images/"

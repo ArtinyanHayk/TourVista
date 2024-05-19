@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/image_send_anim"
+        app:lottie_rawRes="@raw/delete"
 
         app:lottie_repeatCount="20"
         app:lottie_repeatMode="reverse" />

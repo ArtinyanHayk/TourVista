@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,11 +32,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.destination.Activityes.Edit_post;
 import com.example.destination.Activityes.MainActivity;
 import com.example.destination.ImageCropper.CropperActivity;
 import com.example.destination.R;
@@ -89,6 +92,7 @@ public class ProfileFragment extends Fragment {
    // private ImageButton editProfileButton;
     private ActivityResultLauncher<String> mGetContent;
     private Uri selectedImageUri;
+    private NestedScrollView scrollView;
 
     private ProgressDialog progressDialog;
     public  List<String> following;
@@ -183,9 +187,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void init(View view) {
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
-
+        scrollView = view.findViewById(R.id.scrollView);
         nameTv = view.findViewById(R.id.nameTv);
         followingCountTv = view.findViewById(R.id.followingCountTv);
         followersCountTv = view.findViewById(R.id.folowersCountTv);
@@ -198,6 +200,8 @@ public class ProfileFragment extends Fragment {
      //   editProfileButton = view.findViewById(R.id.edit_profileImage);
         postCountTv = view.findViewById(R.id.postsTv);
         profileInfoLayout = view.findViewById(R.id.profile_info);
+
+
     }
 ////////////////////////////////
     /////////////////////
@@ -251,10 +255,10 @@ public class ProfileFragment extends Fragment {
                 if (followers != null) {
                     followersCountTv.setText(Integer.toString(followers.size()));
                 }
-                if (profileURL != null) {
+
                     Glide.with(getApplicationContext())
                             .load(profileURL)
-                            .placeholder(com.denzcoskun.imageslider.R.drawable.default_loading)
+                            .placeholder(R.drawable.ic_person)
                             .timeout(6500)
                             .into(profileImage);
                     DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
@@ -268,7 +272,7 @@ public class ProfileFragment extends Fragment {
                     layoutParams.height = calculatedHeight;
                     profileImage.setLayoutParams(layoutParams);
 
-                }
+
             }
         });
     }
@@ -292,12 +296,22 @@ public class ProfileFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull PostImageHolder holder, int position, @NonNull PostImageModel model) {
                 if (model.getImageUrl() != null) {
+
                     Glide.with(holder.itemView.getContext())
                             .load(model.getImageUrl())
                             .timeout(6500)
                             .into(holder.imageView);
 
                     postCount++;
+                    holder.edit.setVisibility(View.VISIBLE);
+                    holder.edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getContext(), Edit_post.class);
+                            intent.putExtra("id",model.getId());
+                            startActivity(intent);
+                        }
+                    });
 
                 }
             }
@@ -316,13 +330,21 @@ public class ProfileFragment extends Fragment {
                 // Notify adapter about data changes
             }
         };
+      //  scrollView.post(new Runnable() {
+      //      @Override
+      //      public void run() {
+      //          scrollView.scrollTo(0,-50);
+      //      }
+      //  });
     }
     public static class PostImageHolder extends RecyclerView.ViewHolder {
         public final ImageView imageView;
+        public   ImageView edit;
 
         public PostImageHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
+            edit = itemView.findViewById(R.id.edit);
         }
 
     }

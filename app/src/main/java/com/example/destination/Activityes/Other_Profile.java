@@ -35,13 +35,19 @@ package com.example.destination.Activityes;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +58,7 @@ import androidx.constraintlayout.utils.widget.MotionButton;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.destination.R;
 import com.example.destination.model.PostImageModel;
@@ -78,7 +85,7 @@ import java.util.Map;
 public class Other_Profile  extends BaseApplication {
     private TextView nameTv, followersCountTv, postCountTv, followingCountTv;
     private ImageView profileImage;
-    private MotionButton followBtn;
+    private LottieAnimationView followBtn;
     private RecyclerView recyclerView;
     private String uid;
     private FirestoreRecyclerAdapter<PostImageModel, PostImageHolder> adapter;
@@ -96,31 +103,42 @@ public class Other_Profile  extends BaseApplication {
         init();
 
         loadAccountData();
-
         loadPostsImages();
-
+        if (followersList.contains(user.getUid())) {
+            followBtn.setProgress(1f);  // Set to the end of the animation
+        } else {
+            followBtn.setProgress(0f);  // Set to the start of the animation
+        }
 
         followBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
-
-
                 if (followersList.contains(user.getUid())) {
+                    // User is currently following; unfollow them
                     followersList.remove(user.getUid());
                     followingsList.remove(userModel.getUserId());
-                    followBtn.setText("Follow");
+
+                    // Play the animation in reverse
+                    followBtn.cancelAnimation();
+                    followBtn.setProgress(0f);
                 } else {
+                    // User is not currently following; follow them
                     followersList.add(user.getUid());
                     followingsList.add(userModel.getUserId());
-                    followBtn.setText("Unfollow");
+
+                    // Play the animation normally
+                    followBtn.setSpeed(1f);
+                    followBtn.playAnimation();
                 }
+
+                // Prepare the data to update in Firestore
                 Map<String, Object> followers = new HashMap<>();
                 followers.put("followers", followersList);
 
                 Map<String, Object> followings = new HashMap<>();
                 followings.put("following", followingsList);
 
+                // Run the Firestore transaction
                 db.runTransaction(new Transaction.Function<Void>() {
                     @Override
                     public Void apply(Transaction transaction) throws FirebaseFirestoreException {
@@ -132,42 +150,40 @@ public class Other_Profile  extends BaseApplication {
                     @Override
                     public void onSuccess(Void unused) {
                         Log.d(TAG, "Followed!");
-                        loadAccountData();
+                        followersCountTv.setText(Integer.toString(followersList.size()));
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(Exception e) {
                         Log.w(TAG, "Error Following", e);
+
+                        // Revert changes in the lists if the transaction fails
                         if (followersList.contains(user.getUid())) {
-                            followBtn.setText("Unfollow");
-                        }else {
-                            followBtn.setText("Follow");
+                            followersList.remove(user.getUid());
+                            followingsList.remove(userModel.getUserId());
+                            followBtn.setProgress(1f);
+
+                        } else {
+                            followersList.add(user.getUid());
+                            followingsList.add(userModel.getUserId());
+                            followBtn.setProgress(0f);
                         }
                         Toast.makeText(Other_Profile.this, "Failed to follow/unfollow", Toast.LENGTH_SHORT).show();
-                  //      Toast.makeText(Other_Profile.this, "Following error", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
             }
-
-
         });
     }
 
     private void loadAccountData() {
-
-        if(userModel.getUserId().equals(user.getUid())){
+        if (userModel.getUserId().equals(user.getUid())) {
             followBtn.setVisibility(View.INVISIBLE);
         }
+
         nameTv.setText(userModel.getUserName());
         followersCountTv.setText(Integer.toString(followersList.size()));
         followingCountTv.setText(Integer.toString(userModel.getFollowing().size()));
-        if (followersList.contains(user.getUid())) {
-            followBtn.setText("Unfollow");
-        }else {
-            followBtn.setText("Follow");
-        }
+
 
 
         Glide.with(this)
@@ -175,6 +191,17 @@ public class Other_Profile  extends BaseApplication {
                 .placeholder(R.drawable.ic_person)
                 .timeout(6500)
                 .into(profileImage);
+
+        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+        int screenWidth = displayMetrics.widthPixels;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.map_icon, options);
+        float aspectRatio = options.outWidth / (float) options.outHeight;
+        int calculatedHeight = (int) (screenWidth / aspectRatio);
+        ViewGroup.LayoutParams layoutParams = profileImage.getLayoutParams();
+        layoutParams.height = calculatedHeight;
+        profileImage.setLayoutParams(layoutParams);
     }
 
 
@@ -185,7 +212,7 @@ public class Other_Profile  extends BaseApplication {
         followBtn = findViewById(R.id.followbtn);
         recyclerView = findViewById(R.id.recyclerView);
         postCountTv = findViewById(R.id.postsTv);
-        followingCountTv = findViewById(R.id.followingTv);
+        followingCountTv = findViewById(R.id.followingCountTv);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         user = FirebaseAuth.getInstance().getCurrentUser();

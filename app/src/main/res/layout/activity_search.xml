@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search location"
+            android:text="Search"
             android:layout_marginStart="10dp"
             android:textSize="22sp"
             android:textStyle="bold"

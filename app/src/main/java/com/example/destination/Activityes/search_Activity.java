@@ -78,7 +78,10 @@ public class search_Activity  extends BaseApplication {
                intent.putStringArrayListExtra("followers", new ArrayList<>(followers));
                intent.putStringArrayListExtra("following", new ArrayList<>(following));
                intent.putExtra("posts",posts);
+               intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+               intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                startActivity(intent);
+               finish();
 
 
 
