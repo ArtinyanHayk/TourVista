@@ -9,12 +9,13 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.List;
 
 public class MessageModel {
-    private String message,senderId;
+    private String message,senderId,id;
     List<String> imageUris;
     private Timestamp time;
     private String  profileImage,posterId;
     private String username;
     private GeoPoint location;
+
 
 
 
@@ -48,6 +49,13 @@ public class MessageModel {
         this.senderId = senderId;
         this.time = time;
         this.imageUris = imageUris;
+    }
+    public MessageModel(String message, String senderId, Timestamp time, List<String>imageUris,String id) {
+        this.message = message;
+        this.senderId = senderId;
+        this.time = time;
+        this.imageUris = imageUris;
+        this.id = id;
     }
 
     public String getMessage() {
@@ -112,5 +120,13 @@ public class MessageModel {
 
     public void setLocation(GeoPoint location) {
         this.location = location;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

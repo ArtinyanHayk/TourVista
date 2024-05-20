@@ -202,8 +202,8 @@ public class MainActivity extends BaseApplication {
 
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         FirbaseUtil.Online(false);
     }
 }

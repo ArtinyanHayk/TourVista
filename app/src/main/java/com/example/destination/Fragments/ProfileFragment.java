@@ -40,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.destination.Activityes.Edit_post;
 import com.example.destination.Activityes.MainActivity;
+import com.example.destination.Activityes.Settings;
 import com.example.destination.ImageCropper.CropperActivity;
 import com.example.destination.R;
 import com.example.destination.model.PostImageModel;
@@ -99,6 +100,7 @@ public class ProfileFragment extends Fragment {
     public  List<String> followers;
     private int postCount;
     RelativeLayout profileInfoLayout;
+    ImageView settings;
 
 
     @Override
@@ -106,6 +108,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_profile_fragment, container, false);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -200,6 +203,16 @@ public class ProfileFragment extends Fragment {
      //   editProfileButton = view.findViewById(R.id.edit_profileImage);
         postCountTv = view.findViewById(R.id.postsTv);
         profileInfoLayout = view.findViewById(R.id.profile_info);
+        settings = view.findViewById(R.id.settings);
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), Settings.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
 
 
     }
@@ -312,6 +325,7 @@ public class ProfileFragment extends Fragment {
                             startActivity(intent);
                         }
                     });
+
 
                 }
             }

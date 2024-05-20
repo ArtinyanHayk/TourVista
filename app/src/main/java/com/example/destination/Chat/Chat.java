@@ -1,5 +1,6 @@
 package com.example.destination.Chat;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -192,6 +193,24 @@ public class Chat extends BaseApplication {
                     AndroidUtil.showGPSEnableDialog(Chat.this);
                 }
             }
+
+            @Override
+            public void delete(String id) {
+                Toast.makeText(Chat.this, id, Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(Chat.this)
+                        .setTitle("Delete Message")
+                        .setMessage("Do you want to delete this message?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            FirbaseUtil.getChatReference(chatId).collection("messages").document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        })
+                        .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                        .show();
+            }
         });
 
 
@@ -283,7 +302,8 @@ public class Chat extends BaseApplication {
     }
 
     void message(String message, String id) {
-        MessageModel messageModel = new MessageModel(message, id, com.google.firebase.Timestamp.now(), urls);
+        String idMessage = FirbaseUtil.getChatReference(chatId).getId();
+        MessageModel messageModel = new MessageModel(message, id, com.google.firebase.Timestamp.now(), urls,idMessage);
         chatModel.setLastMessage(message);
         chatModel.setLastMessageTime(com.google.firebase.Timestamp.now());
         chatModel.setLastMsgSenderId(user.getUid());
@@ -329,7 +349,7 @@ public class Chat extends BaseApplication {
             });
         }
 
-        FirbaseUtil.getChatMessageReference(chatId).add(messageModel).addOnCompleteListener(task -> {
+        FirebaseFirestore.getInstance().collection("chats").document(chatId).collection("messages").document(id2).set(messageModel).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 messageEditText.setText("");
             }

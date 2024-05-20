@@ -110,26 +110,14 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@id/favorite"
+                android:layout_alignParentEnd="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/add_location"
                 app:tint="@color/my_3"
 
                 />
 
-            <ImageButton
-                android:id="@+id/favorite"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="false"
-                android:src="@drawable/favorite"
-                app:tint="@color/dark_gray"
 
-
-                />
         </RelativeLayout>
 
         <TextView

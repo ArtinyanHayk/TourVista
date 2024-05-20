@@ -1,7 +1,11 @@
 package com.example.destination.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -33,10 +37,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, MessagesAdapter.MessagesViewHolder> {
-    private Context context;
+    private static Context context;
     LatLng location;
 
     static OnPressed onPressed;
+    private Handler handler;
+    private Runnable runnable;
+    private boolean isHolding = false;
 
     public MessagesAdapter(FirestoreRecyclerOptions<MessageModel> options, Context context) {
         super(options);
@@ -58,11 +65,42 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             holder.rightChatTextview.setText(model.getMessage());
             holder.sliderRight.setVisibility(View.GONE);
             holder.rightChatLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.chat_transition_animation));
-            Toast.makeText(context, "photo1", Toast.LENGTH_SHORT).show();
+            holder.rightChatLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            isHolding = true;
+                            handler = new Handler();
+                            handler.postDelayed(runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (isHolding) {
+                                        // Вибрация
+                                        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                                        if (vibrator != null) {
+                                            vibrator.vibrate(500); // Вибрирует 500 мс
+                                        }
+
+                                        // Показываем диалог
+                                        onPressed.delete(model.getId());
+                                    }
+                                }
+                            }, 2000); // Задержка перед выполнением задачи 2 секунды
+                            break;
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_CANCEL:
+                            isHolding = false;
+                            handler.removeCallbacks(runnable); // Остановить выполнение задачи
+                            break;
+                    }
+                    return true; // Обработали событие
+                }
+            });
             if(model.getImageUris()!= null){
-                Toast.makeText(context, "photo2", Toast.LENGTH_SHORT).show();
+
                 if(!model.getImageUris().isEmpty()) {
-                    Toast.makeText(context, "photo3", Toast.LENGTH_SHORT).show();
+
                     ArrayList<SlideModel> list = new ArrayList<>();
                     for (String url : model.getImageUris()) {
                         list.add(new SlideModel(url,  ScaleTypes.CENTER_CROP));
@@ -96,6 +134,8 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             holder.leftChatTextview.setText(model.getMessage());
             holder.leftChatLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.chat_transition_animation));
             holder.sliderLeft.setVisibility(View.GONE);
+
+
             if(model.getImageUris()!= null){
                 if(!model.getImageUris().isEmpty()) {
                     Toast.makeText(context, "photo", Toast.LENGTH_SHORT).show();
@@ -141,6 +181,7 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
 
     public interface OnPressed {
         void onGetLocation(GeoPoint location);
+        void delete(String id);
     }
     public void OnPressed(OnPressed onPressed) {
         this.onPressed = onPressed;
@@ -178,5 +219,16 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             getLocationLeft.setOnClickListener(v -> onPressed.onGetLocation(location));
             getLocationRight.setOnClickListener(v -> onPressed.onGetLocation(location));
         }
+    }
+    private void showDeleteDialog() {
+        new AlertDialog.Builder(context)
+                .setTitle("Delete Message")
+                .setMessage("Do you want to delete this message?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // Логика удаления сообщения
+                    // Например: deleteMessage();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }
