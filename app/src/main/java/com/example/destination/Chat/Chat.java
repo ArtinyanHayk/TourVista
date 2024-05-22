@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -197,10 +198,10 @@ public class Chat extends BaseApplication {
             @Override
             public void delete(String id) {
                 Toast.makeText(Chat.this, id, Toast.LENGTH_SHORT).show();
-                new AlertDialog.Builder(Chat.this)
+                AlertDialog alert = new AlertDialog.Builder(Chat.this)
                         .setTitle("Delete Message")
                         .setMessage("Do you want to delete this message?")
-                        .setPositiveButton("Yes", (dialog, which) -> {
+                        .setPositiveButton("Delete", (dialog, which) -> {
                             FirbaseUtil.getChatReference(chatId).collection("messages").document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
@@ -210,6 +211,14 @@ public class Chat extends BaseApplication {
                         })
                         .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                         .show();
+
+
+                Window window = alert.getWindow();
+                if (window != null) {
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
+                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+                    window.setBackgroundDrawable(getDrawable(R.drawable.dialog_bg));
+                }
             }
         });
 
@@ -302,7 +311,7 @@ public class Chat extends BaseApplication {
     }
 
     void message(String message, String id) {
-        String idMessage = FirbaseUtil.getChatReference(chatId).getId();
+        String idMessage = FirbaseUtil.getChatReference(chatId).collection("messages").document().getId();
         MessageModel messageModel = new MessageModel(message, id, com.google.firebase.Timestamp.now(), urls,idMessage);
         chatModel.setLastMessage(message);
         chatModel.setLastMessageTime(com.google.firebase.Timestamp.now());
@@ -349,7 +358,7 @@ public class Chat extends BaseApplication {
             });
         }
 
-        FirebaseFirestore.getInstance().collection("chats").document(chatId).collection("messages").document(id2).set(messageModel).addOnCompleteListener(task -> {
+        FirebaseFirestore.getInstance().collection("chats").document(chatId).collection("messages").document(idMessage).set(messageModel).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 messageEditText.setText("");
             }

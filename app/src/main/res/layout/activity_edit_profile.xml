@@ -109,6 +109,7 @@
                             android:maxLines="1"
                             android:hint="username"
                             android:textSize="25dp"
+                            android:maxLength="25"
                             android:layout_gravity="center_horizontal"
                             android:textStyle="bold" />
 

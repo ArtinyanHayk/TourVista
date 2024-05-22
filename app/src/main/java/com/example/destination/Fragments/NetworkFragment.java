@@ -3,6 +3,7 @@ package com.example.destination.Fragments;
 
 
 
+import static androidx.appcompat.content.res.AppCompatResources.getDrawable;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.annotation.SuppressLint;
@@ -222,12 +223,16 @@ public class NetworkFragment extends Fragment {
                     .setCancelable(false)
                     .setPositiveButton("Включить GPS", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
                     .setNegativeButton("Отмена", (dialog, id) -> dialog.cancel());
+
             AlertDialog alert = builder.create();
             Window window = alert.getWindow();
-            if (window != null) {
-                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            }
             alert.show();
+            if (window != null) {
+                alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GRAY);
+                window.setBackgroundDrawable(getResources().getDrawable(R.drawable.dialog_bg));
+            }
+
         } else {
             Log.e("showGPSEnableDialog", "Контекст равен null");
         }

@@ -92,7 +92,7 @@
             android:textSize="14dp"
             android:layout_marginStart="3dp"
             android:layout_marginEnd="5dp"
-
+            android:maxLength="500"
             android:hint="Type your message"
             android:background="@drawable/coment_edit_text_rounder_corner"/>
 

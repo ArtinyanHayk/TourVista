@@ -282,7 +282,9 @@ public class Other_Profile  extends BaseApplication {
             @Override
             public void onDataChanged() {
                 super.onDataChanged();
-                adapter.notifyDataSetChanged(); // Notify adapter about data changes
+                adapter.notifyDataSetChanged();
+                postCountTv.setText(String.valueOf(adapter.getItemCount()));
+                // Notify adapter about data changes
             }
         };
 

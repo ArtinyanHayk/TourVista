@@ -147,6 +147,7 @@
             android:layout_marginStart="8dp"
             android:hint="Description"
             android:textColor="@color/dark_gray"
+            android:maxLength="200"
             android:textColorHint="@color/my_3"/>
 
 

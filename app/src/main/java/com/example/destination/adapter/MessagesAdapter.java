@@ -1,9 +1,13 @@
 package com.example.destination.adapter;
 
+import static java.security.AccessController.getContext;
+
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -105,6 +109,17 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
                     for (String url : model.getImageUris()) {
                         list.add(new SlideModel(url,  ScaleTypes.CENTER_CROP));
                     }
+                    DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+                    int screenWidth = displayMetrics.widthPixels;
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeResource(context.getResources(), R.drawable.map_icon, options);
+                    float aspectRatio = options.outWidth / (float) options.outHeight;
+                    int calculatedHeight = (int) (screenWidth / aspectRatio);
+                    ViewGroup.LayoutParams layoutParams = holder.sliderRight.getLayoutParams();
+                    layoutParams.height = calculatedHeight;
+                    holder.sliderRight.setLayoutParams(layoutParams);
+
                     holder.sliderRight.setVisibility(View.VISIBLE);
                     holder.sliderRight.setImageList(list);
                 }
@@ -143,6 +158,17 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
                     for (String url : model.getImageUris()) {
                         list.add(new SlideModel(url, ScaleTypes.CENTER_CROP));
                     }
+                    DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+                    int screenWidth = displayMetrics.widthPixels;
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeResource(context.getResources(), R.drawable.map_icon, options);
+                    float aspectRatio = options.outWidth / (float) options.outHeight;
+                    int calculatedHeight = (int) (screenWidth / aspectRatio);
+                    ViewGroup.LayoutParams layoutParams = holder.sliderLeft.getLayoutParams();
+                    layoutParams.height = calculatedHeight;
+                    holder.sliderLeft.setLayoutParams(layoutParams);
+
                     holder.sliderLeft.setVisibility(View.VISIBLE);
                     holder.sliderLeft.setImageList(list);
                 }

@@ -175,8 +175,8 @@ public class Edit_post extends AppCompatActivity {
                                     public void onClick(View v) {
 
                                         AlertDialog.Builder builder = new AlertDialog.Builder(Edit_post.this);
-                                        builder.setMessage("Вы уверены, что хотите удалить этот пост?");
-                                        builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                                        builder.setMessage("Are you sure you want to delete this post?");
+                                        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
@@ -192,14 +192,18 @@ public class Edit_post extends AppCompatActivity {
                                                 });
                                             }
                                         });
-                                        builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                                        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss(); // Просто закрываем диалог
                                             }
                                         });
                                         AlertDialog dialog = builder.create();
+                                        dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.dialog_bg,null));
                                         dialog.show();
+                                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+                                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
+
                                     }
 
                                 });
@@ -208,30 +212,37 @@ public class Edit_post extends AppCompatActivity {
                                         new PickVisualMediaRequest.Builder().setMediaType(
                                                 ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
                                 nextBtn.setOnClickListener(v -> {
-                                    if (imageUris == null) {
-                                        return;
+                                    if (imageUris == null ) {
+                                        if(descET.getText() == null || descET.getText().length() < 3){
+                                            return;
+                                        }else {
+                                            dialog.show();
+                                            uploadData("");
+                                        }
                                     } else if (imageUris.isEmpty()) {
                                         return;
 
+                                    }else{
+                                        Log.d("ButtonClick", "Next button clicked!");
+                                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                                        StorageReference storageReference = storage.getReference().child("Post Images/"
+                                                + System.currentTimeMillis());
+                                        dialog.show();
+
+
+                                        storageReference.putFile(imageUris.get(0))
+                                                .addOnCompleteListener(task2 -> {
+                                                    if (task2.isSuccessful()) {
+                                                        storageReference.getDownloadUrl().addOnSuccessListener(uri ->
+                                                                uploadData(uri.toString()));
+                                                    } else {
+                                                        dialog.dismiss();
+                                                        Toast.makeText(Edit_post.this,
+                                                                "Failed to upload post", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                     }
-                                    Log.d("ButtonClick", "Next button clicked!");
-                                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                                    StorageReference storageReference = storage.getReference().child("Post Images/"
-                                            + System.currentTimeMillis());
-                                    dialog.show();
 
-
-                                    storageReference.putFile(imageUris.get(0))
-                                            .addOnCompleteListener(task2 -> {
-                                                if (task2.isSuccessful()) {
-                                                    storageReference.getDownloadUrl().addOnSuccessListener(uri ->
-                                                            uploadData(uri.toString()));
-                                                } else {
-                                                    dialog.dismiss();
-                                                    Toast.makeText(Edit_post.this,
-                                                            "Failed to upload post", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
 
                                 });
                                 FirebaseFirestore.getInstance().collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

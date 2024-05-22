@@ -309,6 +309,17 @@ public class ProfileFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull PostImageHolder holder, int position, @NonNull PostImageModel model) {
                 if (model.getImageUrl() != null) {
+                   // DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+                   // int screenWidth = displayMetrics.widthPixels;
+                   // BitmapFactory.Options options = new BitmapFactory.Options();
+                   // options.inJustDecodeBounds = true;
+                   // BitmapFactory.decodeResource(getContext().getResources(), R.drawable.map_icon, options);
+                   // float aspectRatio = options.outWidth / (float) options.outHeight;
+                   // int calculatedHeight = (int) (screenWidth / aspectRatio);
+                   // ViewGroup.LayoutParams layoutParams = holder.imageView.getLayoutParams();
+                   // layoutParams.height = calculatedHeight;
+////
+                   // holder.imageView.setLayoutParams(layoutParams);
 
                     Glide.with(holder.itemView.getContext())
                             .load(model.getImageUrl())
@@ -325,6 +336,7 @@ public class ProfileFragment extends Fragment {
                             startActivity(intent);
                         }
                     });
+
 
 
                 }

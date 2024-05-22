@@ -58,6 +58,7 @@
                     android:layout_marginLeft="35dp"
                     android:layout_marginTop="7dp"
                     android:layout_marginRight="35dp"
+                    android:maxLength="35"
                     android:background="@drawable/forget"
                     android:hint="Enter the Email"
                     android:inputType="textEmailAddress" />
@@ -81,6 +82,7 @@
                     android:layout_marginRight="35dp"
                     android:background="@drawable/forget"
                     android:hint="Enter the Password"
+                    android:maxLength="35"
                     android:inputType="textPassword" />
 
                 <TextView

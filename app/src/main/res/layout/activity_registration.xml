@@ -57,6 +57,7 @@
                 android:layout_marginRight="35dp"
                 android:background="@drawable/forget"
                 android:hint="Enter the Name"
+                android:maxLength="25"
                 android:inputType="text" />
 
             <TextView
@@ -78,6 +79,7 @@
                 android:layout_marginRight="35dp"
                 android:background="@drawable/forget"
                 android:hint="Enter the Email"
+                android:maxLength="35"
                 android:inputType="textEmailAddress" />
 
             <TextView
@@ -99,6 +101,7 @@
                 android:layout_marginRight="35dp"
                 android:background="@drawable/forget"
                 android:hint="Enter the Password"
+                android:maxLength="35"
                 android:inputType="textPassword" />
 
             <TextView
@@ -119,6 +122,7 @@
                 android:layout_marginTop="7dp"
                 android:layout_marginRight="35dp"
                 android:background="@drawable/forget"
+                android:maxLength="35"
                 android:hint="Enter the Confirm Password"
                 android:inputType="textPassword" />
 

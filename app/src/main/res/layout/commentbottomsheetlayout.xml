@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     >
 
     <ImageView
@@ -43,7 +44,8 @@
             android:hint="@string/write_your_comment"
             android:textColorHint="@color/dark_gray"
             android:background="@drawable/coment_edit_text_rounder_corner"
-            android:layout_toStartOf="@+id/send_comment_btn"/>
+            android:layout_toStartOf="@+id/send_comment_btn"
+            android:maxLength="500"/>
 
         <ImageButton
             android:id="@+id/send_comment_btn"

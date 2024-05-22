@@ -101,11 +101,11 @@ public class Registration  extends  AppCompatActivity {
                 String password = Password.getText().toString();
                 String confirmPassword = confirmPass.getText().toString();
 
-                if(TextUtils.isEmpty(name)){
+                if(TextUtils.isEmpty(name) || name.length() < 3){
                     fullName.setError("Full name is empty!");
                     return;
                 }
-                if(TextUtils.isEmpty(email)){
+                if(TextUtils.isEmpty(email) || email.length() < 10){
                     Email.setError("Email is empty!");
                     return;
                 }
