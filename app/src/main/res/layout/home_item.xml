@@ -17,12 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="12dp">
+            android:layout_margin="@dimen/_6sdp">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_profile"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-               android:layout_marginRight="5dp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+               android:layout_marginRight="@dimen/_2sdp"
                 android:backgroundTint="@color/my_primary"
                 android:src="@drawable/person_icon"
                 app:civ_border_color="#DDDDDD"
@@ -37,27 +37,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="username"
-                android:layout_marginTop="10dp"/>
+                android:textSize="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"/>
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_gray"
+                android:textSize="@dimen/_10sdp"
                 android:text="2h"/>
             </LinearLayout>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/_1sdp"
             android:background="@color/light_gray"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            app:cardCornerRadius="1dp"
-            android:layout_marginHorizontal="1dp"
-            app:cardElevation="5dp">
+            android:layout_height="@dimen/_255sdp"
+            app:cardCornerRadius="@dimen/_1sdp"
+            android:layout_marginHorizontal="@dimen/_1sdp"
+            app:cardElevation="@dimen/_5sdp">
             <ImageView
                 android:id="@+id/post_image"
                 android:layout_width="match_parent"
@@ -69,7 +71,7 @@
         </androidx.cardview.widget.CardView>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/_1sdp"
             android:background="@color/light_gray"
             android:layout_marginTop="1.5px"
 
@@ -77,13 +79,13 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"
-            android:layout_marginHorizontal="7dp">
+            android:padding="@dimen/_2sdp"
+            android:layout_marginHorizontal="@dimen/_1sdp">
 
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:id="@+id/like"
                 android:background="@drawable/like"
 
@@ -103,31 +105,30 @@
                 app:lottie_rawRes="@raw/like" />-->
 
             <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:id="@+id/share"
-                android:src="@drawable/share_ic"
+                android:background="@drawable/share_ic"
                 android:layout_toEndOf="@id/comment"
-                android:layout_marginStart="10dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_marginStart="@dimen/_5sdp"
                 />
+
             <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
                 android:id="@+id/comment"
-                android:src="@drawable/comment"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:layout_toEndOf="@id/like"
-                android:layout_marginStart="10dp"
+                android:background="@drawable/comment"
 
                 />
             <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:id="@+id/get_location"
-                android:src="@drawable/add_location"
+                android:background="@drawable/add_location"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_marginEnd="@dimen/_5sdp"
 
                 />
 
@@ -136,9 +137,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:text="10 like"
-            android:layout_marginHorizontal="14dp"
+            android:text="0 like"
+            android:layout_marginHorizontal="@dimen/_6sdp"
             android:textStyle="bold"
+            android:textSize="@dimen/_10sdp"
             android:textColor="@color/dark_gray"
             android:id="@+id/likeCountTv"/>
 
@@ -146,9 +148,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:layout_marginHorizontal="14dp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginHorizontal="@dimen/_6sdp"
             android:text="Description"
+            android:textSize="@dimen/_10sdp"
             android:textColor="@color/dark_gray"
             android:id="@+id/descTv"/>
 

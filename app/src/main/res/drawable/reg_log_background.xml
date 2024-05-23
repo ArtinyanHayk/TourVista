@@ -5,12 +5,11 @@
     <solid android:color="#ECEFF1"/>
 
     <!-- Закругленные углы -->
-    <corners android:topRightRadius="8dp" android:topLeftRadius="8dp"/>
+    <corners android:topRightRadius="@dimen/_40sdp" android:topLeftRadius="@dimen/_40sdp"/>
 
     <!-- Тень для эффекта поднятости комментария -->
-    <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="2dp"/>
-    <size android:width="1dp" android:height="1dp"/>
 
     <!-- Внешняя тень -->
-    <stroke android:color="#BDBDBD" android:width="0.5dp"/>
+    <solid android:color="#EFEFEF"/>
+
 </shape>

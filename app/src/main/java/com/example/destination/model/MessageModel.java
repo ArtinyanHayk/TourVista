@@ -21,7 +21,7 @@ public class MessageModel {
 
     public MessageModel() {
     }
-    public MessageModel(String message, String senderId, String posterId, List<String> imageUris, Timestamp time, String profileImage, String username) {
+    public MessageModel(String message, String senderId, String posterId, List<String> imageUris, Timestamp time, String profileImage, String username,String id) {
         this.message = message;
         this.senderId = senderId;
         this.posterId = posterId;
@@ -29,10 +29,11 @@ public class MessageModel {
         this.time = time;
         this.profileImage = profileImage;
         this.username = username;
+        this.id = id;
 
     }
 
-    public MessageModel(String message, String senderId, String posterId, List<String> imageUris, Timestamp time, String profileImage, String username, GeoPoint location) {
+    public MessageModel(String message, String senderId, String posterId, List<String> imageUris, Timestamp time, String profileImage, String username, GeoPoint location,String id) {
         this.message = message;
         this.senderId = senderId;
         this.posterId = posterId;
@@ -41,6 +42,7 @@ public class MessageModel {
         this.profileImage = profileImage;
         this.username = username;
         this.location = location;
+        this.id = id;
 
     }
 

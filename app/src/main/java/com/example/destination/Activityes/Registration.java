@@ -67,16 +67,16 @@ public class Registration  extends  AppCompatActivity {
         regByPhone = findViewById(R.id.reg_by_phone);
         imageView = findViewById(R.id.imageView);
 
-        DisplayMetrics displayMetrics = Registration.this.getResources().getDisplayMetrics();
-        int screenWidth = displayMetrics.widthPixels;
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(Registration.this.getResources(), R.drawable.map_icon, options);
-        float aspectRatio = options.outWidth / (float) options.outHeight;
-        int calculatedHeight = (int) (screenWidth / aspectRatio);
-        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
-        layoutParams.height = calculatedHeight;
-        imageView.setLayoutParams(layoutParams);
+       //DisplayMetrics displayMetrics = Registration.this.getResources().getDisplayMetrics();
+       //int screenWidth = displayMetrics.widthPixels;
+       //BitmapFactory.Options options = new BitmapFactory.Options();
+       //options.inJustDecodeBounds = true;
+       //BitmapFactory.decodeResource(Registration.this.getResources(), R.drawable.map_icon, options);
+       //float aspectRatio = options.outWidth / (float) options.outHeight;
+       //int calculatedHeight = (int) (screenWidth / aspectRatio);
+       //ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+       //layoutParams.height = calculatedHeight;
+       //imageView.setLayoutParams(layoutParams);
 
         userModel = new UserModel();
 

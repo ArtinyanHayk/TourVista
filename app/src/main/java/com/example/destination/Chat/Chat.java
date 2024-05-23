@@ -1,5 +1,6 @@
 package com.example.destination.Chat;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -74,6 +76,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import www.sanju.motiontoast.MotionToast;
+import www.sanju.motiontoast.MotionToastStyle;
 
 public class Chat extends BaseApplication {
 
@@ -105,8 +109,21 @@ public class Chat extends BaseApplication {
                                 Toast.makeText(Chat.this, "No images Selected", Toast.LENGTH_SHORT).show();
                             } else {
                                 imageUris = new ArrayList<>();
+                                if(uris.size() > 6 ){
+                                    MotionToast.Companion.createColorToast(
+                                            (Activity) Chat.this,
+                                            "Error: Max Limit Reached!",
+                                            "You can only select up to 6 pictures",
+                                            MotionToastStyle.ERROR,
+                                            MotionToast.GRAVITY_BOTTOM,
+                                            MotionToast.LONG_DURATION,
+                                            ResourcesCompat.getFont(Chat.this, www.sanju.motiontoast.R.font.helveticabold)
+                                    );
+                                    imageUris = new ArrayList<>(uris.subList(0, 6)); // Limit to max size
+                                }else{
+                                    imageUris = uris;
+                                }
 
-                                imageUris = uris;
 
                                 // Вызываем clickListener только после выбора изображений
                                 clickListener();
@@ -117,7 +134,22 @@ public class Chat extends BaseApplication {
 
     private void clickListener() {
         galleryAdapter.sendImage(pickUri -> {
-            imageUris = pickUri;
+            if (pickUri.size() > 6) {
+                MotionToast.Companion.createColorToast(
+                        (Activity) Chat.this,
+                        "Error: Max Limit Reached!",
+                        "You can only select up to 6 pictures",
+                        MotionToastStyle.ERROR,
+                        MotionToast.GRAVITY_BOTTOM,
+                        MotionToast.LONG_DURATION,
+                        ResourcesCompat.getFont(Chat.this, www.sanju.motiontoast.R.font.helveticabold)
+                );
+                imageUris = new ArrayList<>(pickUri.subList(0, 6)); // Limit to max size
+
+            } else {
+                Toast.makeText(this, "good", Toast.LENGTH_SHORT).show();
+                imageUris = new ArrayList<>(pickUri);
+            }
         });
     }
 

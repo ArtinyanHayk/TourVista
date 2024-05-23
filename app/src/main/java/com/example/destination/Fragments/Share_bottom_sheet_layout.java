@@ -203,14 +203,15 @@ public class Share_bottom_sheet_layout extends BottomSheetDialogFragment {
                                 String chatId = FirbaseUtil.chatId(FirbaseUtil.currentUsersId(), id);
                                 List<String> postImages = new ArrayList<>();
                                 postImages.add(postImage);
+                                String MessageId =  FirbaseUtil.getChatReference(chatId).collection("messages").document().getId();
                                 MessageModel messageModel = new MessageModel();
                                 if (latitude != 0 || longitude != 0) {
-                                    messageModel = new MessageModel(description, FirbaseUtil.currentUsersId(), posterid, postImages, Timestamp.now(), profilePic, postUsername, new GeoPoint(latitude, longitude));
+                                    messageModel = new MessageModel(description, FirbaseUtil.currentUsersId(), posterid, postImages, Timestamp.now(), profilePic, postUsername, new GeoPoint(latitude, longitude),MessageId);
                                 } else {
-                                    messageModel = new MessageModel(description, FirbaseUtil.currentUsersId(), posterid, postImages, Timestamp.now(), profilePic, postUsername);
+                                    messageModel = new MessageModel(description, FirbaseUtil.currentUsersId(), posterid, postImages, Timestamp.now(), profilePic, postUsername,MessageId);
 
                                 }
-                                FirbaseUtil.getChatReference(chatId).collection("messages").add(messageModel).addOnCompleteListener(task -> {
+                                FirbaseUtil.getChatReference(chatId).collection("messages").document(MessageId).set(messageModel).addOnCompleteListener(task -> {
                                     if (!task.isSuccessful()) {
                                         Toast.makeText(getContext(), "Check your connection", Toast.LENGTH_SHORT).show();
                                     } else {
@@ -225,14 +226,15 @@ public class Share_bottom_sheet_layout extends BottomSheetDialogFragment {
                                 String chatId = FirbaseUtil.chatId(FirbaseUtil.currentUsersId(), id);
                                 List<String> postImages = new ArrayList<>();
                                 postImages.add(postImage);
+                                String MessageId =  FirbaseUtil.getChatReference(chatId).collection("messages").document().getId();
                                 MessageModel messageModel = new MessageModel();
                                 if (latitude != 0 || longitude != 0) {
-                                    messageModel = new MessageModel(description, FirbaseUtil.currentUsersId(), posterid, postImages, Timestamp.now(), profilePic, postUsername, new GeoPoint(latitude, longitude));
+                                    messageModel = new MessageModel(description, FirbaseUtil.currentUsersId(), posterid, postImages, Timestamp.now(), profilePic, postUsername, new GeoPoint(latitude, longitude),MessageId);
                                 } else {
-                                    messageModel = new MessageModel(description, FirbaseUtil.currentUsersId(), posterid, postImages, Timestamp.now(), profilePic, postUsername);
+                                    messageModel = new MessageModel(description, FirbaseUtil.currentUsersId(), posterid, postImages, Timestamp.now(), profilePic, postUsername,MessageId);
 
                                 }
-                                FirbaseUtil.getChatReference(chatId).collection("messages").add(messageModel).addOnCompleteListener(task -> {
+                                FirbaseUtil.getChatReference(chatId).collection("messages").document(MessageId).set(messageModel).addOnCompleteListener(task -> {
                                     if (!task.isSuccessful()) {
                                         Toast.makeText(getContext(), "Check your connection", Toast.LENGTH_SHORT).show();
                                     } else {

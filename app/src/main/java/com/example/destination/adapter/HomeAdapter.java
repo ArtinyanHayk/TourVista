@@ -230,7 +230,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             commentBtn = itemView.findViewById(R.id.comment);
             shareBtn = itemView.findViewById(R.id.share);
             getLocationBtn = itemView.findViewById(R.id.get_location);
-            favoriteBtn = itemView.findViewById(R.id.favorite);
+
            // likeAnim = itemView.findViewById(R.id.likeAnim);
            //likeAnim.setMinAndMaxProgress(0.7f,1.0f);
             cardView = itemView.findViewById(R.id.cardView);

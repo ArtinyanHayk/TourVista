@@ -55,16 +55,16 @@ public class Login extends AppCompatActivity {
         forgetTextLink = findViewById(R.id.forgotPassword);
         imageView = findViewById(R.id.imageView);
 
-        DisplayMetrics displayMetrics = Login.this.getResources().getDisplayMetrics();
-        int screenWidth = displayMetrics.widthPixels;
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(Login.this.getResources(), R.drawable.map_icon, options);
-        float aspectRatio = options.outWidth / (float) options.outHeight;
-        int calculatedHeight = (int) (screenWidth / aspectRatio);
-        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
-        layoutParams.height = calculatedHeight;
-        imageView.setLayoutParams(layoutParams);
+       // DisplayMetrics displayMetrics = Login.this.getResources().getDisplayMetrics();
+       // int screenWidth = displayMetrics.widthPixels;
+       // BitmapFactory.Options options = new BitmapFactory.Options();
+       // options.inJustDecodeBounds = true;
+       // BitmapFactory.decodeResource(Login.this.getResources(), R.drawable.map_icon, options);
+       // float aspectRatio = options.outWidth / (float) options.outHeight;
+       // int calculatedHeight = (int) (screenWidth / aspectRatio);
+       // ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+       // layoutParams.height = calculatedHeight;
+       // imageView.setLayoutParams(layoutParams);
 
         fAuth = FirebaseAuth.getInstance();
         userModel = new UserModel();

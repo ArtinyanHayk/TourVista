@@ -1,176 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activityes.Add_location"
    >
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginVertical="2sp"
-        android:background="@drawable/post_bkg"
-        android:elevation="1dp"
-        android:orientation="vertical"
-        android:padding="12dp"
-
-        >
+        android:layout_height="wrap_content">
 
         <LinearLayout
-
+            android:id="@+id/post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_below="@id/back_delete"
+            android:layout_centerInParent="true"
 
-            <ImageView
-                android:id="@+id/image_profile"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="10dp"
-                android:scaleType="centerCrop" />
+            android:background="@drawable/post_bkg"
+            android:elevation="1dp"
+            android:orientation="vertical"
+            android:padding="12dp">
 
             <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/image_profile"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:backgroundTint="@color/my_primary"
+                    android:src="@drawable/person_icon"
+                    app:civ_border_color="#DDDDDD"
+                    app:civ_border_width="2px"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="username"
+                        android:textSize="@dimen/_10sdp" />
+
+                    <TextView
+                        android:id="@+id/time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2h"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_10sdp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <com.denzcoskun.imageslider.ImageSlider
+                android:id="@+id/post_image"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_300sdp"
+                app:iss_auto_cycle="true"
+                app:iss_delay="1000"
+                app:iss_period="1000"
+                app:iss_text_align="CENTER" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/like"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:background="@drawable/like"
+                    android:clickable="false"
+                    android:backgroundTint="@color/dark_gray"
+
+                    />
+
+                <ImageButton
+                    android:id="@+id/share"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/comment"
+                    android:background="@drawable/share_ic"
+                    android:clickable="false"
+                    android:backgroundTint="@color/dark_gray" />
+
+                <ImageButton
+                    android:id="@+id/comment"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/like"
+                    android:background="@drawable/comment"
+                    android:clickable="false"
+
+                    android:backgroundTint="@color/dark_gray"
+
+                    />
+
+                <ImageButton
+                    android:id="@+id/set_locaion"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/add_location"
+                    android:backgroundTint="@color/my_3"
+
+                    />
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/likeCountTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginStart="8dp"
+                android:text="0 like"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/_10sdp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="username" />
 
-                <TextView
-                    android:id="@+id/time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2h"
-                    android:textColor="@color/dark_gray" />
-            </LinearLayout>
+            <EditText
+                android:id="@+id/descriptionET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:hint="Description"
+                android:maxLength="200"
+                android:maxLines="3"
+                android:textColor="@color/dark_gray"
+                android:textColorHint="@color/my_3"
+                android:textSize="@dimen/_10sdp" />
 
 
         </LinearLayout>
 
-        <com.denzcoskun.imageslider.ImageSlider
-            android:id="@+id/post_image"
-            android:layout_width="wrap_content"
-            android:layout_height="400dp"
-            app:iss_auto_cycle="true"
-            app:iss_period="1000"
-            app:iss_delay="1000"
-            app:iss_text_align="CENTER"/>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp">
-
-            <CheckBox
-                android:id="@+id/like"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:button="@drawable/heart_check"
-                android:clickable="false"
-
-                />
-
-            <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:id="@+id/share"
-                android:src="@drawable/share_ic"
-                android:layout_toEndOf="@id/comment"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_3sdp"
+            android:id="@+id/back_delete">
+            <ImageView
+                android:id="@+id/back_btn"
+                android:layout_width="@dimen/_32sdp"
+                android:layout_height="@dimen/_32sdp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
-                app:tint="@color/dark_gray"
-                android:clickable="false"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                />
-
-            <ImageButton
-                android:id="@+id/comment"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@id/like"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="false"
-                android:src="@drawable/comment"
-                app:tint="@color/dark_gray"
-
-
-                />
-
-            <ImageButton
-                android:id="@+id/set_locaion"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_alignParentEnd="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/add_location"
-                app:tint="@color/my_3"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/add_icon_borderless"
+                android:rotation="45" />
 
-                />
+
+
 
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/likeCountTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="0 like"
-            android:textColor="@color/dark_gray"
-            android:textStyle="bold" />
+        <Button
 
-
-        <EditText
-            android:id="@+id/descriptionET"
+            android:id="@+id/share_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:hint="Description"
-            android:textColor="@color/dark_gray"
-            android:maxLength="200"
-            android:textColorHint="@color/my_3"/>
+
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginBottom="2dp"
+            android:backgroundTint="@color/my_3"
+            android:visibility="visible"
+            android:text="Share"
+            android:layout_below="@id/post"
+            android:textSize="@dimen/_13sdp"/>
 
 
-    </LinearLayout>
-
-    <Button
-
-        android:id="@+id/share_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginBottom="2dp"
-        android:backgroundTint="@color/my_3"
-        android:visibility="visible"
-        android:text="Share"
-        android:textSize="20sp" />
-
-
-    <ImageView
-        android:id="@+id/back_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:rotation="45"
-        android:src="@drawable/add_icon_borderless" />
-
-
-
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
 

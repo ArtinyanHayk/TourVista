@@ -25,8 +25,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_profile"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
                 android:layout_gravity="bottom"
                 android:layout_margin="4dp"
                 android:backgroundTint="@color/my_primary"
@@ -42,7 +42,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="5dp"
                 android:text="Username"
-                android:textSize="17dp"
+                android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -50,22 +50,21 @@
         <com.denzcoskun.imageslider.ImageSlider
             android:id="@+id/image_slider"
             android:layout_width="wrap_content"
-            android:layout_height="300dp"
+            android:layout_height="@dimen/_230sdp"
             android:visibility="gone"
             app:iss_corner_radius="23"
-
             app:iss_delay="1000"
             app:iss_period="1000"
             app:iss_text_align="CENTER" />
 
         <ImageButton
             android:id="@+id/get_location"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
             android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@id/favorite"
-            android:background="@drawable/add_location"
             android:visibility="gone"
+            android:background="@drawable/add_location"
+
 
             />
 
@@ -74,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hello"
-            android:textSize="18sp" />
+            android:textSize="@dimen/_14sdp" />
     </LinearLayout>
 
     <LinearLayout
@@ -98,8 +97,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_profile2"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
                 android:layout_gravity="bottom"
                 android:layout_margin="4dp"
                 android:backgroundTint="@color/my_primary"
@@ -115,7 +114,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="5dp"
                 android:text="Username"
-                android:textSize="17dp"
+                android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -123,7 +122,7 @@
         <com.denzcoskun.imageslider.ImageSlider
             android:id="@+id/image_slider2"
             android:layout_width="wrap_content"
-            android:layout_height="300dp"
+            android:layout_height="@dimen/_230sdp"
             android:visibility="gone"
             app:iss_corner_radius="18"
             app:iss_delay="1000"
@@ -132,21 +131,28 @@
 
         <ImageButton
             android:id="@+id/get_location2"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
             android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@id/favorite"
-            android:background="@drawable/add_location"
-            android:visibility="gone"
 
-            />
+            android:background="@drawable/add_location"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To delete message hold down the text"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/right_chat_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hello"
-            android:textSize="18sp" />
+            android:textSize="@dimen/_14sdp" />
     </LinearLayout>
 
 </RelativeLayout>

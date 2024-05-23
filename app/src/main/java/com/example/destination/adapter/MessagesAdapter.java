@@ -68,7 +68,8 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             holder.rightChatLayout.setVisibility(View.VISIBLE);
             holder.rightChatTextview.setText(model.getMessage());
             holder.sliderRight.setVisibility(View.GONE);
-            holder.rightChatLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.chat_transition_animation));
+            holder.hint.setVisibility(View.GONE);
+       //     holder.rightChatLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.chat_transition_animation));
             holder.rightChatLayout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -83,14 +84,14 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
                                         // Вибрация
                                         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                                         if (vibrator != null) {
-                                            vibrator.vibrate(500); // Вибрирует 500 мс
+                                            vibrator.vibrate(100); // Вибрирует 500 мс
                                         }
 
                                         // Показываем диалог
                                         onPressed.delete(model.getId());
                                     }
                                 }
-                            }, 2000); // Задержка перед выполнением задачи 2 секунды
+                            }, 100); // Задержка перед выполнением задачи 2 секунды
                             break;
                         case MotionEvent.ACTION_UP:
                         case MotionEvent.ACTION_CANCEL:
@@ -122,6 +123,9 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
 
                     holder.sliderRight.setVisibility(View.VISIBLE);
                     holder.sliderRight.setImageList(list);
+
+                    holder.hint.setVisibility(View.VISIBLE);
+                    holder.rightChatTextview.setText(model.getMessage());
                 }
                 if (model.getLocation() == null) {
                     holder.getLocationRight.setVisibility(View.GONE);
@@ -147,7 +151,7 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             holder.rightChatLayout.setVisibility(View.GONE);
             holder.leftChatLayout.setVisibility(View.VISIBLE);
             holder.leftChatTextview.setText(model.getMessage());
-            holder.leftChatLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.chat_transition_animation));
+        //    holder.leftChatLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.chat_transition_animation));
             holder.sliderLeft.setVisibility(View.GONE);
 
 
@@ -216,7 +220,7 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
 
     public static class MessagesViewHolder extends RecyclerView.ViewHolder {
         LinearLayout leftChatLayout,rightChatLayout;
-        TextView leftChatTextview,rightChatTextview,posterNameRight,posterNameLeft;
+        TextView leftChatTextview,rightChatTextview,posterNameRight,posterNameLeft,hint;
         ImageSlider sliderLeft,sliderRight;
         ImageView profilePicLeft,profilePicRight;
         ImageButton getLocationLeft,getLocationRight;
@@ -238,6 +242,7 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
             profilePicRight = itemView.findViewById(R.id.image_profile2);
             posterNameLeft = itemView.findViewById(R.id.poster_name);
             posterNameRight = itemView.findViewById(R.id.poster_name2);
+            hint = itemView.findViewById(R.id.hint);
 
 
         }

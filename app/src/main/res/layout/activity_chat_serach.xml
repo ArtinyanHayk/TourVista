@@ -8,13 +8,10 @@
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_margin="@dimen/_4sdp"
         android:background="@drawable/edit_text_rounder_corner"
-        android:padding="3dp"
+        android:padding="@dimen/_1sdp"
         app:queryHint="Search..."
         app:iconifiedByDefault="false"/>
     <androidx.recyclerview.widget.RecyclerView

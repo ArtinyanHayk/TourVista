@@ -69,10 +69,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Add_location  extends BaseApplication  {
     private TextView nameTv;
     private EditText descET;
-    private ImageView backBtn,profile_image;
+    private ImageView backBtn;
+    CircleImageView profile_image;
     ImageSlider imageView;
     private RecyclerView recyclerView;
     private ImageButton setLocation;
