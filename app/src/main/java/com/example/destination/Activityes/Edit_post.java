@@ -139,7 +139,7 @@ public class Edit_post extends AppCompatActivity {
                                 adapter = new GalleryAdapter(list);
 
                                 descET.setText(model.getDescription());
-                                finallatLang = model.getLocation();
+                               
 
 
                                 DisplayMetrics displayMetrics = Edit_post.this.getResources().getDisplayMetrics();
@@ -354,6 +354,7 @@ public class Edit_post extends AppCompatActivity {
                     map.put("description", description);
                     map.put("imageUrl", finalImageUrl1);
                     if(finallatLang != null) {
+                        Toast.makeText(Edit_post.this, "kk", Toast.LENGTH_SHORT).show();
                         map.put("Location", new GeoPoint(finallatLang.latitude, finallatLang.longitude));
                     }
                     map.put("profileImage", String.valueOf(user.getPhotoUrl()));

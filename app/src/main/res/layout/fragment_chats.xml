@@ -7,43 +7,42 @@
     tools:context=".Fragments.ChatsFragment">
 
     <androidx.appcompat.widget.Toolbar
-
         android:layout_alignParentTop="true"
         android:id="@+id/toolbar"
         app:contentInsetStart="0dp"
         app:contentInsetEnd="0dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
         android:elevation="2dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <RelativeLayout
-
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
-
+                >
                 <TextView
                     android:id="@+id/TourChatTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/font1"
                     android:layout_centerVertical="true"
                     android:text="TourChat"
                     android:textColor="@color/my_secondary"
-                    android:textSize="@dimen/_20sdp"
+                    android:textSize="25dp"
                     android:textStyle="bold" />
-
                 <ImageView
-                    android:layout_width="@dimen/_60sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/TourChatTv"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:src="@drawable/chat"
+                    android:layout_toRightOf="@id/TourChatTv"
+                    android:layout_marginBottom="15dp"
+
+                    android:layout_marginLeft="10dp"
 
 
                     />
@@ -55,13 +54,13 @@
 
             <ImageButton
                 android:id="@+id/search_follower_btn"
-                android:layout_width="@dimen/_17sdp"
-                android:layout_height="@dimen/_17sdp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginStart="12dp"
 
-                android:layout_marginEnd="@dimen/_12sdp"
+                android:layout_marginEnd="12dp"
 
                 android:background="@drawable/search_icon" />
         </RelativeLayout>

@@ -26,6 +26,7 @@ import com.example.destination.model.HomeModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,6 +63,9 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = CommentbottomsheetlayoutBinding.inflate(getLayoutInflater());
+        BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
+
+        View view = View.inflate(getContext(), R.layout.commentbottomsheetlayout, null);
         user = FirebaseAuth.getInstance().getCurrentUser();
         DocumentReference Currentuser = FirebaseFirestore.getInstance().collection("users")
                 .document(user.getUid());
@@ -94,14 +98,17 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
 
             // Например, вы можете установить текст в EditText или выполнить другие действия
             // binding.commentEditText.setText(commentlist);
-            binding.getRoot().post(new Runnable() {
+            view.post(new Runnable() {
                 @Override
                 public void run() {
-                    ViewGroup.LayoutParams layoutParams = binding.getRoot().getLayoutParams();
-                    layoutParams.height = getResources().getDisplayMetrics().heightPixels; // Установите желаемую высоту или используйте другой размер
-                    binding.getRoot().setLayoutParams(layoutParams);
+                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    view.setLayoutParams(layoutParams);
                 }
             });
+
+            dialog.setContentView(view);
             binding.close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

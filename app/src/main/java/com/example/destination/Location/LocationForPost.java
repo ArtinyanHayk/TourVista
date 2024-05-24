@@ -15,6 +15,8 @@ import android.os.Bundle;
 
 import com.example.destination.Activityes.Add_location;
 
+import com.example.destination.Activityes.Edit_post;
+import com.example.destination.Fragments.ProfileFragment;
 import com.example.destination.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -83,6 +85,7 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
                         ////
                         LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
                         Add_location.finallatLang = latLng;
+                        Edit_post.finallatLang = latLng;
                         myMap.clear();
                         myMap.addMarker(new MarkerOptions().position(latLng).title(location));
                         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
@@ -139,6 +142,7 @@ public class LocationForPost extends AppCompatActivity implements OnMapReadyCall
 
         LatLng myLocation = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
         Add_location.finallatLang = myLocation;
+        Edit_post.finallatLang = myLocation;
         myMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
         myMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
 

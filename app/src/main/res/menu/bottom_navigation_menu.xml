@@ -2,17 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <item
         android:id="@+id/network"
         android:title="Network"
         android:titleCondensed="@string/action_cancel"
-        android:icon="@drawable/map_icon"/>
+        android:icon="@drawable/home"/>
 
 
     <item
-        android:id="@+id/notifications"
-        android:title="Notifications"
-        android:icon="@drawable/notification_ic" />
+        android:id="@+id/search"
+        android:title="Search"
+        android:icon="@drawable/search_icon" />
 
 
     <item
@@ -26,7 +27,7 @@
     <item
         android:id="@+id/chats"
         android:title="Chats"
-        android:icon="@drawable/baseline_send_24"
+        android:icon="@drawable/chat"
 
 
         />

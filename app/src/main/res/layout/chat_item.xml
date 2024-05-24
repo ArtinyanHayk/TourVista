@@ -7,7 +7,6 @@
         android:id="@+id/chat_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_2sdp"
         android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -16,15 +15,18 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_margin="@dimen/_3sdp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:layout_marginBottom="@dimen/_3sdp"
 
                 android:backgroundTint="#CFCFCF"
                 android:src="@drawable/person_icon"
                 app:civ_border_color="@color/light_gray"
                 app:civ_border_width="2px" />
-            
+
             <LinearLayout
                 android:layout_toStartOf="@id/unseenMessage"
                 android:layout_width="match_parent"
@@ -43,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="FullName"
-                    android:textSize="@dimen/_14sdp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -52,9 +54,8 @@
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:maxLines="1"
-                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginTop="3dp"
                     android:textColor="@color/light_gray"
-                    android:textSize="@dimen/_10sdp"
                     android:text="last Message"/>
 
             </LinearLayout>
@@ -84,7 +85,7 @@
 
 
 
-            
+
 
     </LinearLayout>
 

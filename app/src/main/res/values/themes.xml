@@ -22,4 +22,5 @@
     <style name="TourVista" parent="Base.Theme.Destination">
         <item name="android:background">@null</item>
     </style>
+    <dimen name="bottom_navigation_icon_size">@dimen/_22sdp</dimen>
 </resources>

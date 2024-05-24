@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -89,6 +90,7 @@ public class LoginOtpActivity extends AppCompatActivity {
            @Override
            public void onVerificationFailed(@NonNull FirebaseException e) {
             AndroidUtil.showToast(getApplicationContext(), "OTP verification is failed");
+            Log.e("OTP error",e.getMessage());
             setInProgress(false);
            }
 

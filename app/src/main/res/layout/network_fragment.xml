@@ -32,22 +32,12 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:text="@string/app_name"
+                android:fontFamily="@font/font1"
                 android:textColor="@color/my_secondary"
-                android:textSize="@dimen/_20sdp"
+                android:textSize="@dimen/_22sdp"
                 android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/search_user_btn"
-                android:layout_width="@dimen/_17sdp"
-                android:layout_height="@dimen/_17sdp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/_12sdp"
-
-                android:layout_marginEnd="@dimen/_12sdp"
-
-                android:background="@drawable/search_icon" />
-        </RelativeLayout>
+            </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@id/toolbar"

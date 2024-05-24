@@ -103,9 +103,9 @@ public class MainActivity extends BaseApplication {
                     
                 }
 
-                if (item.getItemId() == R.id.notifications) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, notificationFragment).commit();
-                    
+                if (item.getItemId() == R.id.search) {
+                    Intent intent2 = new Intent(MainActivity.this, search_Activity.class);
+                    startActivity(intent2);
                 }
                 if (item.getItemId() == R.id.chats){
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, chatsFragment).commit();

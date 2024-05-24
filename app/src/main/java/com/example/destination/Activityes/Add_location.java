@@ -103,6 +103,7 @@ public class Add_location  extends BaseApplication  {
                                 Toast.makeText(Add_location.this, "No images Selected", Toast.LENGTH_SHORT).show();
                             } else {
                                 imageUris = uris;
+                                nextBtn.setVisibility(View.VISIBLE);
 
                                 // Вызываем clickListener только после выбора изображений
                                 clickListener();
@@ -204,7 +205,7 @@ public class Add_location  extends BaseApplication  {
         /////////
         backBtn = findViewById(R.id.back_btn);
         nextBtn = findViewById(R.id.share_btn);
-        nextBtn.setVisibility(View.VISIBLE);
+        nextBtn.setVisibility(View.GONE);
        // recyclerView = findViewById(R.id.recyclerView);
         setLocation = findViewById(R.id.set_locaion);
         user = FirebaseAuth.getInstance().getCurrentUser();
