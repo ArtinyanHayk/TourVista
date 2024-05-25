@@ -40,7 +40,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessagesAdapter extends  FirestoreRecyclerAdapter<MessageModel, MessagesAdapter.MessagesViewHolder> {
+public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, MessagesAdapter.MessagesViewHolder> {
     private static Context context;
     LatLng location;
 

@@ -192,21 +192,24 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
 
         adapter.OnPressed(new CommentAdapter.OnPressed() {
             @Override
-            public void onDelete(String commentId, int position) {
+            public void onDelete(String commentId,int position) {
 
                 AlertDialog alert = new AlertDialog.Builder(getContext())
                         .setTitle("Delete Message")
-                        .setMessage("Do you want to delete this message?")
+                        .setMessage("Do you want to delete this comment?")
                         .setPositiveButton("Delete", (dialog, which) -> {
 
                             FirebaseFirestore.getInstance().collection("userPosts").document(id).collection("comments").document(commentId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    if(position == 0){
+                                    if(position == 1 ){
                                         dismiss();
+                                    }else{
+                                        Toast.makeText(getContext(), "k", Toast.LENGTH_SHORT).show();
+                                        loadDataFromFirestore();
+                                        dialog.dismiss();
                                     }
-                                    loadDataFromFirestore();
-                                    dialog.dismiss();
+
                                 }
                             });
                         })

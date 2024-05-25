@@ -45,7 +45,7 @@ public class CommentAdapter extends  RecyclerView.Adapter<CommentAdapter.Comment
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull CommentAdapter.CommentHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull CommentAdapter.CommentHolder holder, int position) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         holder.userNameTv.setText(list.get(position).getUserName());
         holder.commentTv.setText(list.get(position).getCommentText());
@@ -65,7 +65,7 @@ public class CommentAdapter extends  RecyclerView.Adapter<CommentAdapter.Comment
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onPressed.onDelete(list.get(position).getCommentId(),position);
+                onPressed.onDelete(list.get(position).getCommentId(),list.size());
             }
         });
 
