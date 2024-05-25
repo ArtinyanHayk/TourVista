@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 public class CommentModel {
-    private String userName,  replyComment, commentText, profileImage, Uid;
+    private String userName,  replyComment, commentText, profileImage, Uid,commentId;
     private List<String> likeList;
     @ServerTimestamp
     private Date timestapmp;
@@ -27,6 +27,29 @@ public class CommentModel {
         this.Uid = Uid;
         this.likeList = likeList;
         this.timestapmp = timestapmp;
+    }
+
+    public CommentModel(String commentText, String commentId,List<String> likeList, String replyComment, String profileImage,String uid,String userName,    Date timestapmp) {
+        this.userName = userName;
+        this.replyComment = replyComment;
+        this.commentText = commentText;
+        this.profileImage = profileImage;
+        this.Uid = uid;
+        this.commentId = commentId;
+        this.likeList = likeList;
+        this.timestapmp = timestapmp;
+    }
+
+
+
+
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 
     public String getUserName() {

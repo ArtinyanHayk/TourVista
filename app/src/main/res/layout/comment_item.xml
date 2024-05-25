@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="10dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingTop="8dp"
     android:paddingEnd="16dp"
-    android:paddingBottom="8dp"
-    android:layout_marginTop="10dp"
-    android:gravity="center_vertical">
+    android:paddingBottom="8dp">
 
     <!-- Изображение профиля комментатора -->
     <de.hdodenhof.circleimageview.CircleImageView
@@ -17,9 +17,9 @@
         android:layout_height="50dp"
         android:layout_marginStart="7dp"
 
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="14dp"
         android:layout_marginBottom="14dp"
-        android:layout_marginTop="10dp"
 
         android:backgroundTint="@color/my_primary"
         android:src="@drawable/person_icon"
@@ -31,35 +31,35 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical"
         android:background="@drawable/comment_background"
+        android:orientation="vertical"
         android:padding="8dp">
 
         <!-- Имя комментатора и время написания -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Имя Комментатора"
-                android:textSize="16sp"
                 android:textColor="@android:color/black"
-                android:textStyle="bold"/>
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <TextView
+          <!--  <TextView
                 android:id="@+id/comment_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:text="2 часа назад"
-                android:textSize="12sp"
                 android:textColor="@android:color/darker_gray"
-                android:layout_marginStart="8dp"/>
+                android:textSize="12sp" />-->
 
         </LinearLayout>
 
@@ -68,53 +68,22 @@
             android:id="@+id/comment_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="Текст комментария"
-            android:textSize="14sp"
             android:textColor="@android:color/black"
-            android:layout_marginTop="4dp"/>
-
-        <!-- Кнопки "Нравится", "Ответить", "Три точки" -->
-        <!-- <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="end">
-
-            <CheckBox
-                android:id="@+id/like_button"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:button="@drawable/like_check"
-                android:layout_marginEnd="3dp"/>
-            <TextView
-                android:id="@+id/like_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:layout_marginTop="5dp"
-                android:textSize="13sp"
-                android:textColor="@android:color/darker_gray"
-                android:layout_marginEnd="16dp"/>
-
-            <TextView
-                android:id="@+id/reply_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ответить"
-                android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
-                android:layout_marginEnd="16dp"/>
-
-            <ImageButton
-                android:id="@+id/three_dots_button"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/dots"/>
+            android:textSize="14sp" />
 
 
-        </LinearLayout>
-        -->
+        <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/delete"
+            android:layout_gravity="end"
+            android:visibility="gone"
+            android:orientation="horizontal"/>
+
 
     </LinearLayout>
 

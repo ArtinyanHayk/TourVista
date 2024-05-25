@@ -1,33 +1,32 @@
 package com.example.destination.Activityes;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+
+import com.example.destination.R;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.destination.Chat.Chat;
-import com.example.destination.R;
 import com.example.destination.adapter.SearchUserReciclerAdapter;
 import com.example.destination.model.ChatModel;
 import com.example.destination.model.UserModel;
-import com.example.destination.utils.BaseApplication;
 import com.example.destination.utils.FirbaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -38,12 +37,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-public class Chat_serach  extends BaseApplication {
+public class Chat_serach extends AppCompatActivity {
+
     private RecyclerView recyclerView;
     private SearchView searchView;
     private List<UserModel> filteredList;
@@ -129,13 +127,13 @@ public class Chat_serach  extends BaseApplication {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(Chat_serach.this));
         reference = FirebaseFirestore.getInstance().collection("users");
-         chats = FirebaseFirestore.getInstance().collection("chats");
-         user = FirebaseAuth.getInstance().getCurrentUser();
+        chats = FirebaseFirestore.getInstance().collection("chats");
+        user = FirebaseAuth.getInstance().getCurrentUser();
         following = new ArrayList<>();
         reference.document(user.getUid()).get().addOnSuccessListener(documentSnapshot -> {
             if(documentSnapshot.exists()){
                 following = (List<String>) documentSnapshot.get("following");
-               currentUserName = (String) documentSnapshot.get("userName");
+                currentUserName = (String) documentSnapshot.get("userName");
             }
         });
         searchView.clearFocus();

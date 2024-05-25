@@ -1,11 +1,16 @@
 package com.example.destination.Fragments;
 
+import static androidx.appcompat.content.res.AppCompatResources.getDrawable;
+
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,18 +18,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.destination.Chat.Chat;
 import com.example.destination.R;
 import com.example.destination.adapter.CommentAdapter;
 import com.example.destination.adapter.HomeAdapter;
 import com.example.destination.databinding.CommentbottomsheetlayoutBinding;
 import com.example.destination.model.CommentModel;
 import com.example.destination.model.HomeModel;
+import com.example.destination.utils.FirbaseUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -180,6 +189,39 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
         adapter = new CommentAdapter(list, getContext());
         recyclerView.setAdapter(adapter);
         loadDataFromFirestore();
+
+        adapter.OnPressed(new CommentAdapter.OnPressed() {
+            @Override
+            public void onDelete(String commentId, int position) {
+
+                AlertDialog alert = new AlertDialog.Builder(getContext())
+                        .setTitle("Delete Message")
+                        .setMessage("Do you want to delete this message?")
+                        .setPositiveButton("Delete", (dialog, which) -> {
+
+                            FirebaseFirestore.getInstance().collection("userPosts").document(id).collection("comments").document(commentId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    if(position == 0){
+                                        dismiss();
+                                    }
+                                    loadDataFromFirestore();
+                                    dialog.dismiss();
+                                }
+                            });
+                        })
+                        .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                        .show();
+
+
+                Window window = alert.getWindow();
+                if (window != null) {
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
+                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+                    window.setBackgroundDrawable( AppCompatResources.getDrawable(getContext(), R.drawable.dialog_bg));
+                }
+            }
+        });
     }
 
 
@@ -228,13 +270,15 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
 
 
                 list.add(new CommentModel(
-                        model.getUserName(),
-                        model.getReplyComment(),
                         (String) snapshot.get("comment"),
+                        (String) snapshot.get("commentID"),
+                        model.getLikeList(),
+                        model.getReplyComment(),
                         (String) snapshot.get("profileURL"),
                         model.getUId(),
-                        model.getLikeList(),
+                        model.getUserName(),
                         model.getTimestapmp()
+
                 ));
             }
             // Обновляем адаптер после того, как все данные добавлены
