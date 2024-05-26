@@ -10,6 +10,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -65,6 +66,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import www.sanju.motiontoast.MotionToast;
+import www.sanju.motiontoast.MotionToastStyle;
+
 public class Edit_post extends AppCompatActivity {
     String id;
     private TextView nameTv;
@@ -97,6 +101,15 @@ public class Edit_post extends AppCompatActivity {
                                 Toast.makeText(Edit_post.this, "No images Selected", Toast.LENGTH_SHORT).show();
                             } else {
                                 imageUris = uris;
+                                MotionToast.Companion.createColorToast(
+                                        (Activity) Edit_post.this,
+                                        "Info!",
+                                        "You can only select up only 1 picture",
+                                        MotionToastStyle.INFO,
+                                        MotionToast.GRAVITY_BOTTOM,
+                                        MotionToast.SHORT_DURATION,
+                                        ResourcesCompat.getFont(Edit_post.this, www.sanju.motiontoast.R.font.helveticabold)
+                                );
 
                                 // Вызываем clickListener только после выбора изображений
                                 clickListener();
@@ -208,9 +221,12 @@ public class Edit_post extends AppCompatActivity {
 
                                 });
 
-                                imageView.setOnClickListener(v -> launcher.launch(
+                                imageView.setOnClickListener(v -> {
+                                        launcher.launch(
                                         new PickVisualMediaRequest.Builder().setMediaType(
-                                                ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
+                                                ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
+
+                            });
                                 nextBtn.setOnClickListener(v -> {
                                     if (imageUris == null ) {
                                         if(descET.getText() == null || descET.getText().length() < 3){

@@ -10,6 +10,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -70,6 +71,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import www.sanju.motiontoast.MotionToast;
+import www.sanju.motiontoast.MotionToastStyle;
 
 public class Add_location  extends BaseApplication  {
     private TextView nameTv;
@@ -104,6 +107,16 @@ public class Add_location  extends BaseApplication  {
                             } else {
                                 imageUris = uris;
                                 nextBtn.setVisibility(View.VISIBLE);
+
+                                MotionToast.Companion.createColorToast(
+                                        (Activity) Add_location.this,
+                                        "Info!",
+                                        "You can only select up only 1 picture",
+                                        MotionToastStyle.INFO,
+                                        MotionToast.GRAVITY_BOTTOM,
+                                        MotionToast.SHORT_DURATION,
+                                        ResourcesCompat.getFont(Add_location.this, www.sanju.motiontoast.R.font.helveticabold)
+                                );
 
                                 // Вызываем clickListener только после выбора изображений
                                 clickListener();
@@ -148,9 +161,14 @@ public class Add_location  extends BaseApplication  {
         });
         backBtn.setOnClickListener(v -> onBackPressed());
 
-        imageView.setOnClickListener(v -> launcher.launch(
-                new PickVisualMediaRequest.Builder().setMediaType(
-                        ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
+        imageView.setOnClickListener(v -> {
+            launcher.launch(
+                    new PickVisualMediaRequest.Builder().setMediaType(
+                            ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
+
+
+        });
+
         nextBtn.setOnClickListener(v -> {
 
             Log.d("ButtonClick", "Next button clicked!");
