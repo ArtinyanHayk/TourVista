@@ -61,9 +61,14 @@ import com.google.firebase.storage.UploadTask;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
@@ -189,20 +194,25 @@ public class Chat extends BaseApplication {
         FirebaseFirestore.getInstance().collection("users").document(id2).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (value.exists() && error == null) {
-                     otherUser = value.toObject(UserModel.class);
+                try{
+                    if (value.exists() && error == null) {
+                        otherUser = value.toObject(UserModel.class);
 
-                    if (otherUser.getonline()) {
-                        onlineTv.setText("online");
-                        onlineTv.setTextColor(getResources().getColor(R.color.light_green));
-                    } else {
-                        onlineTv.setText("offline");
-                        onlineTv.setTextColor(getResources().getColor(R.color.light_gray));
+                        if (otherUser.getonline()) {
+                            onlineTv.setText("online");
+                            onlineTv.setTextColor(getResources().getColor(R.color.light_green));
+                        } else {
+                            onlineTv.setText("offline");
+                            onlineTv.setTextColor(getResources().getColor(R.color.light_gray));
+                        }
+                        name.setText(otherUser.getUserName());
+
+
                     }
-                    name.setText(otherUser.getUserName());
-
-
+                }catch (Exception e){
+                    Log.e("Chat",e.getMessage());
                 }
+
             }
         });
         Glide.with(Chat.this)
@@ -343,10 +353,16 @@ public class Chat extends BaseApplication {
     }
 
     void message(String message, String id) {
-        String idMessage = FirbaseUtil.getChatReference(chatId).collection("messages").document().getId();
+        TimeZone tz = TimeZone.getDefault();
+        Calendar calendar = Calendar.getInstance(tz);
+        Log.i("TimeZone",String.valueOf(calendar.getTime()));
+         Timestamp londonTimestamp = new Timestamp(calendar.getTime());
+         Log.i("TimeZone2",String.valueOf(londonTimestamp.toDate()));
+
+       String idMessage = FirbaseUtil.getChatReference(chatId).collection("messages").document().getId();
         MessageModel messageModel = new MessageModel(message, id, com.google.firebase.Timestamp.now(), urls,idMessage);
         chatModel.setLastMessage(message);
-        chatModel.setLastMessageTime(com.google.firebase.Timestamp.now());
+        chatModel.setLastMessageTime(londonTimestamp);
         chatModel.setLastMsgSenderId(user.getUid());
         if (imageUris == null && urls == null || urls.isEmpty()) {
             FirbaseUtil.getChatReference(chatId).set(chatModel).addOnCompleteListener(task -> {
@@ -470,13 +486,16 @@ public class Chat extends BaseApplication {
     }
         void getOrCreateChatroomModel() {
         FirbaseUtil.getChatReference(chatId).get().addOnCompleteListener(task -> {
+            TimeZone tz = TimeZone.getDefault();
+            Calendar calendar = Calendar.getInstance(tz);
+            Timestamp londonTimestamp = new Timestamp(calendar.getTime());
             if (task.isSuccessful()) {
                 chatModel = task.getResult().toObject(ChatModel.class);
                 if (chatModel == null) {
                     // First time chat
                     chatModel = new ChatModel(
                             "",
-                            com.google.firebase.Timestamp.now(),
+                            londonTimestamp,
                             "",
                             Arrays.asList(FirbaseUtil.currentUsersId(), id2)
 

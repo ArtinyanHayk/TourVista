@@ -285,6 +285,8 @@ public class NetworkFragment extends Fragment {
 
 
 
+
+
                 Object likeCountObject = snapshot.get("likeCount");
                 List<String> likeCountList = likeCountObject instanceof List ? (List<String>) likeCountObject : null;
                 if (geoPoint == null) {

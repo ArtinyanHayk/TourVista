@@ -73,8 +73,11 @@ public class Edit_Profile extends AppCompatActivity {
         save.setOnClickListener(v -> {
             if (selectedImageUri != null) {
                 uploadImage(selectedImageUri);
-            } else {
-                Toast.makeText(Edit_Profile.this, "No image selected", Toast.LENGTH_SHORT).show();
+            } else if(!username.getText().toString().isEmpty() || username.getText().toString().length() >= 3) {
+                updateUserProfile(null);
+            }else {
+
+            Toast.makeText(Edit_Profile.this, "No changes", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -102,7 +105,7 @@ public class Edit_Profile extends AppCompatActivity {
         imageRef.putFile(uri)
                 .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri1 -> {
                     String imageURL = uri1.toString();
-                    updateUserProfileImage(uri1);
+                    updateUserProfile(uri1);
                 }))
                 .addOnFailureListener(e -> {
                     progressDialog.dismiss();
@@ -110,36 +113,56 @@ public class Edit_Profile extends AppCompatActivity {
                 });
     }
 
-    private void updateUserProfileImage(Uri uri) {
+    private void updateUserProfile(Uri uri) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                    .setPhotoUri(uri)
-                    .build();
+            if(uri != null){
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setPhotoUri(uri)
+                        .build();
 
-            user.updateProfile(profileUpdates).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("imageURL", uri.toString());
-                    map.put("userName",username.getText().toString());
+                user.updateProfile(profileUpdates).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("imageURL", uri.toString());
+                        if(!username.getText().toString().isEmpty() || username.getText().toString().length() >= 3) {
+                            map.put("userName", username.getText().toString());
+                        }
 
-                    FirebaseFirestore.getInstance().collection("users").document(user.getUid())
-                            .update(map)
-                            .addOnSuccessListener(aVoid -> {
-                                progressDialog.dismiss();
-                                Toast.makeText(Edit_Profile.this, "Обновление прошло успешно", Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnFailureListener(e -> {
-                                progressDialog.dismiss();
-                                Toast.makeText(Edit_Profile.this, "Ошибка: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
-                } else {
-                    progressDialog.dismiss();
-                    Toast.makeText(Edit_Profile.this, "Ошибка при обновлении профиля", Toast.LENGTH_SHORT).show();
-                }
-            });
+                        FirebaseFirestore.getInstance().collection("users").document(user.getUid())
+                                .update(map)
+                                .addOnSuccessListener(aVoid -> {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(Edit_Profile.this, "The update was successful", Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(Edit_Profile.this, "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(Edit_Profile.this, "Error updating profile", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else if (!username.getText().toString().isEmpty() || username.getText().toString().length() >= 3) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("userName",username.getText().toString());
+                FirebaseFirestore.getInstance().collection("users").document(user.getUid())
+                        .update(map)
+                        .addOnSuccessListener(aVoid -> {
+                            progressDialog.dismiss();
+                            Toast.makeText(Edit_Profile.this, "The update was successful", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            progressDialog.dismiss();
+                            Toast.makeText(Edit_Profile.this, "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            }
+
+            }
+
         }
-    }
+
 
     private void init() {
         scrollView = findViewById(R.id.scrollView);

@@ -33,6 +33,8 @@ import com.example.destination.R;
 import com.example.destination.model.HomeModel;
 import com.example.destination.utils.FirbaseUtil;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -87,6 +89,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     @Override
     public void onBindViewHolder(@NonNull HomeHolder holder,  int position) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
 
         if (list.get(position).getLocation() == null) {
             holder.getLocationBtn.setVisibility(View.GONE);
