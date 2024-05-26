@@ -82,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textSize="@dimen/_11sdp"
+            android:textSize="15dp"
             android:orientation="vertical"
 
             >
@@ -94,7 +94,7 @@
                 android:maxLines="1"
                 android:text="username"
                 android:textColor="@color/black"
-                android:textSize="25dp"
+                android:textSize="30dp"
                 android:layout_gravity="center_horizontal"
                 android:textStyle="bold" />
 
@@ -135,7 +135,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:text="0"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="15dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -145,7 +145,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
                 android:text="followeing"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="15dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -164,7 +164,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:text="0"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="15dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -174,7 +174,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
                 android:text="Posts"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="15dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -193,7 +193,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:text="0"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="15dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -203,7 +203,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
                 android:text="followers"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="15dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -247,10 +247,10 @@
 
                 <ImageView
                     android:id="@+id/settings"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_margin="7dp"
                     android:background="@drawable/settings_icon"
                />
 

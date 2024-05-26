@@ -82,26 +82,17 @@
                             android:maxLines="1"
                             android:text="username"
                             android:textColor="@color/black"
-                            android:textSize="25dp"
+                            android:textSize="30dp"
                             android:layout_centerHorizontal="true"
                              android:textStyle="bold" />
                         <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/followbtn"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             app:lottie_rawRes="@raw/follow"
                             android:layout_toRightOf="@id/nameTv"
                             />
-                        <TextView
-                            android:id="@+id/statusTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="hi"
-                            android:layout_centerHorizontal="true"
-                            android:layout_below="@id/nameTv"
-                            android:textColor="@color/dark_gray"
-                            android:textSize="13dp"
-                            android:textStyle="bold" />
+
 
 
                     </RelativeLayout>

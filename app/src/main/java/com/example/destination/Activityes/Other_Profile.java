@@ -248,7 +248,7 @@ public class Other_Profile  extends BaseApplication {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(this,search_Activity.class));
+        finish();
     }
 
     private void loadPostsImages() {

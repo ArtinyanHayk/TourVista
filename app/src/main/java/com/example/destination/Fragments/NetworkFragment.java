@@ -30,13 +30,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.destination.Activityes.Other_Profile;
 import com.example.destination.Location.LocationForUser;
 import com.example.destination.R;
 import com.example.destination.adapter.HomeAdapter;
 import com.example.destination.databinding.ActivityMainBinding;
 import com.example.destination.model.HomeModel;
 import com.example.destination.Activityes.search_Activity;
+import com.example.destination.model.UserModel;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -187,6 +191,32 @@ public class NetworkFragment extends Fragment {
                 fragment.setArguments(args);
 
                 fragment.show(getActivity().getSupportFragmentManager(), "comment bottom sheet dialog");
+
+            }
+
+            @Override
+            public void checkProfile(String uid) {
+                DocumentReference reference = FirebaseFirestore.getInstance().collection("users").document(uid);
+                reference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful() && task.getResult().exists()){
+                            UserModel model = task.getResult().toObject(UserModel.class);
+
+                            Intent intent = new Intent(getContext(), Other_Profile.class);
+                            intent.putExtra("Uid",model.getUserId());
+                            intent.putExtra("username",model.getUserName());
+                            intent.putExtra("imageURL",model.getImageURL());
+                            intent.putStringArrayListExtra("followers", new ArrayList<>(model.getFollowers()));
+                            intent.putStringArrayListExtra("following", new ArrayList<>(model.getFollowing()));
+                            intent.putExtra("posts",0);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+
+                        }
+                    }
+                });
 
             }
 

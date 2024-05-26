@@ -195,6 +195,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
                 list.get(position).getProfileImage(),
                 list.get(position).getDescription());
 
+
+
     }
 
     @Override
@@ -207,6 +209,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         void onComment(int position, String id, String uid);
         void onGetLocation(int position, String id, String uid, LatLng location);
         void onSharePost(int position,String id,String uid,String postImageUrl,String profileImage,String username,String Description,LatLng location);
+        void checkProfile(String uid);
     }
 
     public void OnPressed(OnPressed onPressed) {
@@ -220,6 +223,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         private ImageView likeCheckBox;
         private  ImageButton commentBtn, shareBtn, getLocationBtn, favoriteBtn;
         private CardView cardView;
+        private LinearLayout profile;
        // LottieAnimationView likeAnim;
 
         public HomeHolder(@NonNull View itemView) {
@@ -238,6 +242,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
            // likeAnim = itemView.findViewById(R.id.likeAnim);
            //likeAnim.setMinAndMaxProgress(0.7f,1.0f);
             cardView = itemView.findViewById(R.id.cardView);
+            profile = itemView.findViewById(R.id.profile);
 
 
 
@@ -290,6 +295,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             commentBtn.setOnClickListener(v -> onPressed.onComment(position, id, uid));
 
             shareBtn.setOnClickListener(v -> onPressed.onSharePost(position,id,uid,postImageUrl,profileImage,username,description,location));
+            profile.setOnClickListener(v -> onPressed.checkProfile(uid));
         }
     }
 }
