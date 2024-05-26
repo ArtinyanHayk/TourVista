@@ -61,6 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_300sdp"
                 app:iss_auto_cycle="true"
+                android:background="@drawable/add_icon_borderless"
                 app:iss_delay="1000"
                 app:iss_period="1000"
                 app:iss_text_align="CENTER" />

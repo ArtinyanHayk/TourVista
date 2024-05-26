@@ -63,8 +63,11 @@
                 android:id="@+id/post_image"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_300sdp"
+
                 app:iss_auto_cycle="true"
                 app:iss_delay="1000"
+                android:background="@drawable/edit_ic"
+                android:backgroundTint="@color/my_3"
                 app:iss_period="1000"
                 app:iss_text_align="CENTER" />
 

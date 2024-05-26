@@ -354,7 +354,7 @@ public class Share_bottom_sheet_layout extends BottomSheetDialogFragment {
                 if (filteredList.isEmpty()) {
                     searchRecyclerView.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
-                    Toast.makeText(getActivity(), "Нет данных", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "No Data", Toast.LENGTH_SHORT).show();
                 } else {
                     recyclerView.setVisibility(View.GONE);
                     searchRecyclerView.setVisibility(View.VISIBLE);

@@ -56,6 +56,7 @@ public class SearchUserReciclerAdapter extends RecyclerView.Adapter<SearchUserRe
 
         if(list.get(position).getPhone() == null){
             holder.searchLayout.setVisibility(View.GONE);
+            holder.shareLayout.setVisibility(View.VISIBLE);
             holder.username.setText(list.get(position).getUserName());
             Glide.with(context.getApplicationContext())
                     .load(list.get(position).getImageURL())
@@ -71,6 +72,7 @@ public class SearchUserReciclerAdapter extends RecyclerView.Adapter<SearchUserRe
             holder.setOnClickListener(list.get(position).getUserId());
         }else{
             holder.shareLayout.setVisibility(View.GONE);
+            holder.searchLayout.setVisibility(View.VISIBLE);
             holder.usernameText.setText(list.get(position).getUserName());
             if(!list.get(position).getUserId().equals(FirbaseUtil.currentUsersId())){
                 if(list.get(position).getFollowers().contains(FirbaseUtil.currentUsersId())){

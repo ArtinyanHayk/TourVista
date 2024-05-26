@@ -157,7 +157,7 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<MessageModel, Mess
 
             if(model.getImageUris()!= null){
                 if(!model.getImageUris().isEmpty()) {
-                    Toast.makeText(context, "photo", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(context, "photo", Toast.LENGTH_SHORT).show();
                     ArrayList<SlideModel> list = new ArrayList<>();
                     for (String url : model.getImageUris()) {
                         list.add(new SlideModel(url, ScaleTypes.CENTER_CROP));

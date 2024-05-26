@@ -129,6 +129,7 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
                 @Override
                 public void onClick(View v) {
                     String comment = binding.commentEditText.getText().toString();
+
                     if(comment == null || comment.isEmpty() ){
                          return;
                     }
@@ -149,17 +150,19 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
                     map.put("userName", username);
                     map.put("profileURL", profileImage);
                     map.put("commentLikes",commentLikes);
+                    binding.sendCommentBtn.setClickable(false);
 
                     reference.document(commentID).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
                                 binding.commentEditText.setText("");
+                                binding.sendCommentBtn.setClickable(true);
 
                             }
                             else {
-                                Toast.makeText(getContext(), "Failed to comment" + task.getException()
-                                        .getMessage(), Toast.LENGTH_SHORT).show();
+                      //          Toast.makeText(getContext(), "Failed to comment" + task.getException()
+                      //                  .getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -205,7 +208,7 @@ public class Commets_BottomSheet extends BottomSheetDialogFragment {
                                     if(position == 1 ){
                                         dismiss();
                                     }else{
-                                        Toast.makeText(getContext(), "k", Toast.LENGTH_SHORT).show();
+                                      //  Toast.makeText(getContext(), "k", Toast.LENGTH_SHORT).show();
                                         loadDataFromFirestore();
                                         dialog.dismiss();
                                     }

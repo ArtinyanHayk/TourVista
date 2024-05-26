@@ -165,19 +165,19 @@ public class MainActivity extends BaseApplication {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d("generate Toast", "1");
+       // Log.d("generate Toast", "1");
 
         // Проверяем, был ли запрос на разрешения с нашим кодом запроса
         if (requestCode == REQUEST_CODE) {
-            Log.d("generate Toast", "2");
+           // Log.d("generate Toast", "2");
             // Проверяем, что результаты запроса не пусты
             if (grantResults.length > 0) {
-                Log.d("generate Toast", "3");
+              //  Log.d("generate Toast", "3");
                 // Проверяем, все ли разрешения были предоставлены
                 boolean allPermissionsGranted = true;
                 for (int result : grantResults) {
                     if (result != PackageManager.PERMISSION_GRANTED) {
-                        Log.d("generate Toast", "4");
+                      //  Log.d("generate Toast", "4");
                         allPermissionsGranted = false;
                         break;
                     }
@@ -190,7 +190,7 @@ public class MainActivity extends BaseApplication {
                 //    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Log.d("generate Toast", "5");
+             //   Log.d("generate Toast", "5");
                 // Если результаты запроса пусты, повторно запрашиваем разрешения
                 showPermissionDialog();
             }

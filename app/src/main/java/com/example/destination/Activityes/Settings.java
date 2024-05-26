@@ -38,7 +38,7 @@ public class Settings extends AppCompatActivity {
                 Intent intent = new Intent(Settings.this, Login.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                Toast.makeText(Settings.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(Settings.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
 
             }
         });

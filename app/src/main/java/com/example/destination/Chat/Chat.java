@@ -45,7 +45,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.Timestamp;
+import java.sql.Timestamp;
+import java.time.Instant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -61,7 +62,10 @@ import com.google.firebase.storage.UploadTask;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -315,7 +319,7 @@ public class Chat extends BaseApplication {
     }
 
     void SendMessage(String message, String id) throws IOException {
-        Timestamp timestamp = Timestamp.now();
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference().child("Chats Images/");
 
@@ -353,16 +357,32 @@ public class Chat extends BaseApplication {
     }
 
     void message(String message, String id) {
-        TimeZone tz = TimeZone.getDefault();
-        Calendar calendar = Calendar.getInstance(tz);
-        Log.i("TimeZone",String.valueOf(calendar.getTime()));
-         Timestamp londonTimestamp = new Timestamp(calendar.getTime());
-         Log.i("TimeZone2",String.valueOf(londonTimestamp.toDate()));
 
-       String idMessage = FirbaseUtil.getChatReference(chatId).collection("messages").document().getId();
-        MessageModel messageModel = new MessageModel(message, id, com.google.firebase.Timestamp.now(), urls,idMessage);
+
+// Convert it to an Instant object
+        Instant instant = Instant.now();
+
+// Set the timezone to London (GMT/BST)
+        LocalDate date = LocalDate.now(ZoneId.of("Europe/London"));
+        LocalTime time = LocalTime.now(ZoneId.of("Europe/London"));
+        ZonedDateTime londonDateTime = ZonedDateTime.of(date, time, ZoneId.of("Europe/London"));
+
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        timestamp.setTime(timestamp.getTime() + TimeZone.getTimeZone("Europe/London").getOffset(timestamp.getTime()));
+
+
+
+// Convert the ZonedDateTime to a Timestamp object
+      //  Timestamp londonTimestamp = new Timestamp(Date.from(londonTime.toInstant()));
+        String idMessage = FirbaseUtil.getChatReference(chatId).collection("messages").document().getId();
+
+
+
+        MessageModel messageModel = new MessageModel(message, id, com.google.firebase.Timestamp.now(), urls, idMessage);
+
         chatModel.setLastMessage(message);
-        chatModel.setLastMessageTime(londonTimestamp);
+        chatModel.setLastMessageTime(com.google.firebase.Timestamp.now());
         chatModel.setLastMsgSenderId(user.getUid());
         if (imageUris == null && urls == null || urls.isEmpty()) {
             FirbaseUtil.getChatReference(chatId).set(chatModel).addOnCompleteListener(task -> {
@@ -488,14 +508,18 @@ public class Chat extends BaseApplication {
         FirbaseUtil.getChatReference(chatId).get().addOnCompleteListener(task -> {
             TimeZone tz = TimeZone.getDefault();
             Calendar calendar = Calendar.getInstance(tz);
-            Timestamp londonTimestamp = new Timestamp(calendar.getTime());
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            timestamp.setTime(timestamp.getTime() + TimeZone.getTimeZone("Europe/London").getOffset(timestamp.getTime()));
+
+
+
             if (task.isSuccessful()) {
                 chatModel = task.getResult().toObject(ChatModel.class);
                 if (chatModel == null) {
                     // First time chat
                     chatModel = new ChatModel(
                             "",
-                            londonTimestamp,
+                            com.google.firebase.Timestamp.now(),
                             "",
                             Arrays.asList(FirbaseUtil.currentUsersId(), id2)
 

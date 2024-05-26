@@ -138,7 +138,7 @@ public class LoginOtpActivity extends AppCompatActivity {
     }else{
 
 
-     AndroidUtil.showToast(getApplicationContext(), "OTP verafication failed");
+     AndroidUtil.showToast(getApplicationContext(), "OTP verification failed");
     }
 
 

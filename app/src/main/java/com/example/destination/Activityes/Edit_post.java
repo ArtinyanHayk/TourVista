@@ -126,7 +126,7 @@ public class Edit_post extends AppCompatActivity {
 
         if(getIntent() != null && !getIntent().getExtras().isEmpty()){
             id = getIntent().getStringExtra("id");
-            Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
+
 
             FirebaseFirestore.getInstance().collection("userPosts").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -268,7 +268,7 @@ public class Edit_post extends AppCompatActivity {
 
                             }
                         }else{
-                            Toast.makeText(Edit_post.this, "null", Toast.LENGTH_SHORT).show();
+                     //       Toast.makeText(Edit_post.this, "null", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -333,7 +333,7 @@ public class Edit_post extends AppCompatActivity {
             finalImageUrl  = model.getImageUrl();
         }
 
-        Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+
         ////////////////
         //      Toast.makeText(Edit_post.this, time, Toast.LENGTH_SHORT).show();
 
@@ -348,13 +348,13 @@ public class Edit_post extends AppCompatActivity {
                     username = (String) task.getResult().get("userName");
                     //Toast.makeText(Edit_post.this, username, Toast.LENGTH_SHORT).show();
                     List<String> list = new ArrayList<>();
-                    Toast.makeText(Edit_post.this, "2", Toast.LENGTH_SHORT).show();
+
                     String description = descET.getText().toString();
                     Map<String, Object> map = new HashMap<>();
                     map.put("description", description);
                     map.put("imageUrl", finalImageUrl1);
                     if(finallatLang != null) {
-                        Toast.makeText(Edit_post.this, "kk", Toast.LENGTH_SHORT).show();
+
                         map.put("Location", new GeoPoint(finallatLang.latitude, finallatLang.longitude));
                     }
                     map.put("profileImage", String.valueOf(user.getPhotoUrl()));
@@ -373,7 +373,9 @@ public class Edit_post extends AppCompatActivity {
                                     nextBtn.setVisibility(View.GONE);
                                     descET.setText(null);
                                     finallatLang = null;
-                                    Toast.makeText(Edit_post.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Edit_post.this, "Updated", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(Edit_post.this,MainActivity.class));
+                                    finish();
 
                                 } else {
                                   //  Log.e("Firestore", "Error uploading document: " + task.getException());

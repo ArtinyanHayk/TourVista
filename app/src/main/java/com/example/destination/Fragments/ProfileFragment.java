@@ -136,7 +136,7 @@ public class ProfileFragment extends Fragment {
                 Uri resultUri = Uri.parse(result);
                 uploadImage(resultUri);
             } else {
-                Toast.makeText(getContext(), "Изображение не выбрано", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "No image selected", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -154,7 +154,7 @@ public class ProfileFragment extends Fragment {
                 }))
                 .addOnFailureListener(e -> {
                     progressDialog.dismiss();
-                    Toast.makeText(getContext(), "Ошибка: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -175,15 +175,15 @@ public class ProfileFragment extends Fragment {
                             .addOnSuccessListener(aVoid -> {
                                 loadBasicData();
                                 progressDialog.dismiss();
-                                Toast.makeText(getContext(), "Обновление прошло успешно", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Updated successfully", Toast.LENGTH_SHORT).show();
                             })
                             .addOnFailureListener(e -> {
                                 progressDialog.dismiss();
-                                Toast.makeText(getContext(), "Ошибка: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             });
                 } else {
                     progressDialog.dismiss();
-                    Toast.makeText(getContext(), "Ошибка при обновлении профиля", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error updating profile", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -238,7 +238,7 @@ public class ProfileFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Обновление профиля...");
+        progressDialog.setMessage("Profile update...");
         progressDialog.setCancelable(false);
     }
 
