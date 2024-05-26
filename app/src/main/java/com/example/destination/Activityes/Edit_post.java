@@ -104,7 +104,7 @@ public class Edit_post extends AppCompatActivity {
                                 MotionToast.Companion.createColorToast(
                                         (Activity) Edit_post.this,
                                         "Info!",
-                                        "You can only select up only 1 picture",
+                                        "You can  select up only 1 picture",
                                         MotionToastStyle.INFO,
                                         MotionToast.GRAVITY_BOTTOM,
                                         MotionToast.SHORT_DURATION,

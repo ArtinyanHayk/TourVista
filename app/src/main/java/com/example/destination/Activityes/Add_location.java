@@ -111,7 +111,7 @@ public class Add_location  extends BaseApplication  {
                                 MotionToast.Companion.createColorToast(
                                         (Activity) Add_location.this,
                                         "Info!",
-                                        "You can only select up only 1 picture",
+                                        "You can  select up only 1 picture",
                                         MotionToastStyle.INFO,
                                         MotionToast.GRAVITY_BOTTOM,
                                         MotionToast.SHORT_DURATION,
