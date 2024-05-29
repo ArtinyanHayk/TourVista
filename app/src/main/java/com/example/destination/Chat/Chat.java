@@ -156,7 +156,7 @@ public class Chat extends BaseApplication {
                 imageUris = new ArrayList<>(pickUri.subList(0, 6)); // Limit to max size
 
             } else {
-                Toast.makeText(this, "good", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(this, "good", Toast.LENGTH_SHORT).show();
                 imageUris = new ArrayList<>(pickUri);
             }
         });
@@ -243,7 +243,7 @@ public class Chat extends BaseApplication {
 
             @Override
             public void delete(String id) {
-                Toast.makeText(Chat.this, id, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(Chat.this, id, Toast.LENGTH_SHORT).show();
                 AlertDialog alert = new AlertDialog.Builder(Chat.this)
                         .setTitle("Delete Message")
                         .setMessage("Do you want to delete this message?")
