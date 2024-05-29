@@ -29,6 +29,7 @@
             android:layout_below="@id/profilePic"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="-13dp"
+            android:gravity="center"
             android:textStyle="bold"
             />
         <View
