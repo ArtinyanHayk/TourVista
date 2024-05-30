@@ -389,6 +389,7 @@ public class Edit_post extends AppCompatActivity {
                                     nextBtn.setVisibility(View.GONE);
                                     descET.setText(null);
                                     finallatLang = null;
+                                    Add_location.finallatLang = null;
                                     Toast.makeText(Edit_post.this, "Updated", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(Edit_post.this,MainActivity.class));
                                     finish();
